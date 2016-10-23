@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="dsFactura" targetNamespace="http://tempuri.org/dsFactura.xsd" xmlns:mstns="http://tempuri.org/dsFactura.xsd" xmlns="http://tempuri.org/dsFactura.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="dsFactura" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:Generator_UserDSName="dsFactura" msprop:Generator_DataSetName="dsFactura" msprop:EnableTableAdapterManager="true">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="dtDetallFra" msprop:Generator_UserTableName="dtDetallFra" msprop:Generator_RowDeletedName="dtDetallFraRowDeleted" msprop:Generator_RowChangedName="dtDetallFraRowChanged" msprop:Generator_RowClassName="dtDetallFraRow" msprop:Generator_RowChangingName="dtDetallFraRowChanging" msprop:Generator_RowEvArgName="dtDetallFraRowChangeEvent" msprop:Generator_RowEvHandlerName="dtDetallFraRowChangeEventHandler" msprop:Generator_TableClassName="dtDetallFraDataTable" msprop:Generator_TableVarName="tabledtDetallFra" msprop:Generator_RowDeletingName="dtDetallFraRowDeleting" msprop:Generator_TablePropName="dtDetallFra">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Feina" msprop:Generator_UserColumnName="Feina" msprop:Generator_ColumnVarNameInTable="columnFeina" msprop:Generator_ColumnPropNameInRow="Feina" msprop:Generator_ColumnPropNameInTable="FeinaColumn" type="xs:int" minOccurs="0" />
+              <xs:element name="Quota" msprop:Generator_UserColumnName="Quota" msprop:Generator_ColumnVarNameInTable="columnQuota" msprop:Generator_ColumnPropNameInRow="Quota" msprop:Generator_ColumnPropNameInTable="QuotaColumn" type="xs:float" minOccurs="0" />
+              <xs:element name="Data" msprop:Generator_UserColumnName="Data" msprop:Generator_ColumnVarNameInTable="columnData" msprop:Generator_ColumnPropNameInRow="Data" msprop:Generator_ColumnPropNameInTable="DataColumn" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="Lloc" msprop:Generator_UserColumnName="Lloc" msprop:Generator_ColumnVarNameInTable="columnLloc" msprop:Generator_ColumnPropNameInRow="Lloc" msprop:Generator_ColumnPropNameInTable="LlocColumn" type="xs:string" minOccurs="0" />
+              <xs:element name="Recurs" msprop:Generator_UserColumnName="Recurs" msprop:Generator_ColumnVarNameInTable="columnRecurs" msprop:Generator_ColumnPropNameInRow="Recurs" msprop:Generator_ColumnPropNameInTable="RecursColumn" type="xs:string" minOccurs="0" />
+              <xs:element name="Servei" msprop:Generator_UserColumnName="Servei" msprop:Generator_ColumnVarNameInTable="columnServei" msprop:Generator_ColumnPropNameInRow="Servei" msprop:Generator_ColumnPropNameInTable="ServeiColumn" type="xs:string" minOccurs="0" />
+              <xs:element name="Quantitat" msprop:Generator_UserColumnName="Quantitat" msprop:Generator_ColumnVarNameInTable="columnQuantitat" msprop:Generator_ColumnPropNameInRow="Quantitat" msprop:Generator_ColumnPropNameInTable="QuantitatColumn" type="xs:float" minOccurs="0" />
+              <xs:element name="Unitat" msprop:Generator_UserColumnName="Unitat" msprop:Generator_ColumnVarNameInTable="columnUnitat" msprop:Generator_ColumnPropNameInRow="Unitat" msprop:Generator_ColumnPropNameInTable="UnitatColumn" type="xs:string" minOccurs="0" />
+              <xs:element name="Import" msprop:Generator_UserColumnName="Import" msprop:Generator_ColumnVarNameInTable="columnImport" msprop:Generator_ColumnPropNameInRow="Import" msprop:Generator_ColumnPropNameInTable="ImportColumn" type="xs:float" minOccurs="0" />
+              <xs:element name="Observacions" msprop:Generator_UserColumnName="Observacions" msprop:Generator_ColumnPropNameInRow="Observacions" msprop:Generator_ColumnVarNameInTable="columnObservacions" msprop:Generator_ColumnPropNameInTable="ObservacionsColumn" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="dtResumFracio" msprop:Generator_UserTableName="dtResumFracio" msprop:Generator_RowDeletedName="dtResumFracioRowDeleted" msprop:Generator_RowChangedName="dtResumFracioRowChanged" msprop:Generator_RowClassName="dtResumFracioRow" msprop:Generator_RowChangingName="dtResumFracioRowChanging" msprop:Generator_RowEvArgName="dtResumFracioRowChangeEvent" msprop:Generator_RowEvHandlerName="dtResumFracioRowChangeEventHandler" msprop:Generator_TableClassName="dtResumFracioDataTable" msprop:Generator_TableVarName="tabledtResumFracio" msprop:Generator_RowDeletingName="dtResumFracioRowDeleting" msprop:Generator_TablePropName="dtResumFracio">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Client" msprop:Generator_UserColumnName="Client" msprop:Generator_ColumnVarNameInTable="columnClient" msprop:Generator_ColumnPropNameInRow="Client" msprop:Generator_ColumnPropNameInTable="ClientColumn" type="xs:string" minOccurs="0" />
+              <xs:element name="Lloc" msprop:Generator_UserColumnName="Lloc" msprop:Generator_ColumnVarNameInTable="columnLloc" msprop:Generator_ColumnPropNameInRow="Lloc" msprop:Generator_ColumnPropNameInTable="LlocColumn" type="xs:string" minOccurs="0" />
+              <xs:element name="Servei" msprop:Generator_UserColumnName="Servei" msprop:Generator_ColumnVarNameInTable="columnServei" msprop:Generator_ColumnPropNameInRow="Servei" msprop:Generator_ColumnPropNameInTable="ServeiColumn" type="xs:string" minOccurs="0" />
+              <xs:element name="Quantitat" msprop:Generator_UserColumnName="Quantitat" msprop:Generator_ColumnVarNameInTable="columnQuantitat" msprop:Generator_ColumnPropNameInRow="Quantitat" msprop:Generator_ColumnPropNameInTable="QuantitatColumn" type="xs:float" minOccurs="0" />
+              <xs:element name="Unitat" msprop:Generator_UserColumnName="Unitat" msprop:Generator_ColumnVarNameInTable="columnUnitat" msprop:Generator_ColumnPropNameInRow="Unitat" msprop:Generator_ColumnPropNameInTable="UnitatColumn" type="xs:string" minOccurs="0" />
+              <xs:element name="Import" msprop:Generator_UserColumnName="Import" msprop:Generator_ColumnVarNameInTable="columnImport" msprop:Generator_ColumnPropNameInRow="Import" msprop:Generator_ColumnPropNameInTable="ImportColumn" type="xs:float" minOccurs="0" />
+              <xs:element name="ccc" msprop:Generator_UserColumnName="ccc" msprop:Generator_ColumnVarNameInTable="columnccc" msprop:Generator_ColumnPropNameInRow="ccc" msprop:Generator_ColumnPropNameInTable="cccColumn" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
