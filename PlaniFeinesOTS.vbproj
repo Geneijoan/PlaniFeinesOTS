@@ -337,8 +337,6 @@
     <None Include="PlaniFeinesDataSet.xss">
       <DependentUpon>PlaniFeinesDataSet.xsd</DependentUpon>
     </None>
-    <None Include="PlaniFeinesOTS_1_TemporaryKey.pfx" />
-    <None Include="PlaniFeinesOTS_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="OTS.ico" />
