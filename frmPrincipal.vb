@@ -32,6 +32,8 @@
 
     Dim altPerHoresExtres As Integer = 2 * Me.FontHeight + 10
 
+    Dim textFormMissatges As String = ""    'buffer per formulari missatges
+
     'objectes per accés manual a la BBDD
     Dim CN As OleDbConnection
     Dim CNS As String
@@ -51,7 +53,7 @@
     Private Sub frmPrincipal_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
 
         'no mostrem pantalla fins que acabi de carregar
-        Me.Visible = False
+        'Me.Visible = False
 
         'TODO: esta línea de código carga datos en la tabla 'PlaniFeinesDataSet.Serveis' Puede moverla o quitarla según sea necesario.
         Me.ServeisTableAdapter.Fill(Me.PlaniFeinesDataSet.Serveis)
@@ -129,12 +131,22 @@
         PlaniMonthViewDesDe.SelectedDate = DateAdd(DateInterval.Month, -1, Now.Date)
         PlaniMonthViewFins.SelectedDate = Now.Date
 
-        'carreguem grid de feines
-        AgendaGrid.VisualizationMode = PlaniGrid.PGMode.Month
-        Carrega_Grid_Agenda()
         StatusStrip1.Items("ToolStripStatusLabel2").Text = ""
 
-        Me.Visible = True
+        'inicialitza variables de control de feines carregades
+        PrimerDiaVisualitzatMes = AgendaGrid.DisplayFirstDate
+        If PrimerDiaVisualitzatMes > UltimDiaCarregat Then
+            UltimDiaCarregat = PrimerDiaVisualitzatMes
+        End If
+        If PrimerDiaVisualitzatMes < PrimerDiaCarregat Then
+            PrimerDiaCarregat = PrimerDiaVisualitzatMes
+        End If
+
+        'carreguem grid de feines
+        'AgendaGrid.VisualizationMode = PlaniGrid.PGMode.Month
+        Carrega_Grid_Agenda()
+
+        'Me.Visible = True
         Me.Activate()
 
     End Sub
@@ -194,46 +206,60 @@
         Dim auxColorRecursFeina As Color
         Dim auxDuradaNoComp As TimeSpan
         Dim CNopen As Boolean
+        Dim errorsEnCarrega As Boolean
 
         'si la grid no està posicionada no fem res
-        If AgendaGrid.DisplayFirstDate = Date.MinValue Then Exit Sub
+        If AgendaGrid.DisplayFirstDate = Date.MinValue Then
+            StatusStrip1.Items("ToolStripStatusLabel2").Text = "ERROR: AgendaGrid.DisplayFirstDate no informada."
+            Exit Sub
+        End If
 
-        'obtenim totes les feines del periode visualitzat modo mes
-        If CN Is Nothing Then Exit Sub
+        'si no hi ha connexio, no fem res
+        If CN Is Nothing Then
+            StatusStrip1.Items("ToolStripStatusLabel2").Text = "ERROR: Connexió nul·la."
+            Exit Sub
+        End If
+
+        'obrim connexio
         CNopen = (CN.State = ConnectionState.Open)
         If Not CNopen Then
             Try
                 CN.Open()
             Catch ex As Exception
-                MsgBox("Error al obrir connexió: " & CNS)
+                StatusStrip1.Items("ToolStripStatusLabel2").Text = "ERROR: No es pot obrir connexió."
                 Exit Sub
             End Try
         End If
 
-        'Debug.WriteLine("Inici càrrega ")
         'Dim comptador As Long = Now.Ticks
 
         Cursor.Current = Cursors.WaitCursor
         AgendaGrid.Enabled = False
+        errorsEnCarrega = False
+
+        'seleccionem sortida a formulari missatges
+        textFormMissatges = "ERRORS EN CÀRREGA D'AGENDA " & AgendaGrid.DisplayFirstDate.Date & " - " & AgendaGrid.DisplayLastDate.Date & vbCrLf
 
         'NO netejem AgendaGrid
         'AgendaGrid.PGElementsClearList()
 
         'Debug.WriteLine("Carrega Grid " & AgendaGrid.DisplayFirstDate.ToString)
 
+        'obtenim totes les feines del periode visualitzat modo mes
         CMDSelFeinesRecurs.Connection = CN
-        CMDSelFeinesRecurs.CommandText = "SELECT Feines.*, Recursos.recursos_grup, Recursos.recursos_color " & _
-            "FROM Recursos RIGHT JOIN Feines ON Recursos.recursos_nom = Feines.recursos_nom " & _
+        CMDSelFeinesRecurs.CommandText = "SELECT Feines.*, Recursos.recursos_grup, Recursos.recursos_color " &
+            "FROM Recursos RIGHT JOIN Feines ON Recursos.recursos_nom = Feines.recursos_nom " &
             "WHERE feines_data >= @dataini AND feines_data <= @datafi"
         CMDSelFeinesRecurs.Parameters.Add("@dataini", OleDbType.Date).Value = AgendaGrid.DisplayFirstDate
         CMDSelFeinesRecurs.Parameters.Add("@datafi", OleDbType.Date).Value = DateAdd(DateInterval.Day, 1, AgendaGrid.DisplayLastDate)
 
         CMDComponents.Connection = CN
-        CMDComponents.CommandText = "SELECT Recursos.recursos_nom, Recursos_1.recursos_nom, Recursos_1.recursos_color " & _
-            "FROM ((Recursos INNER JOIN " & _
-            "Recursos_Components ON Recursos.recursos_nom = Recursos_Components.recursos_nom) INNER JOIN " & _
-            "Recursos Recursos_1 ON Recursos_Components.recursos_component_nom = Recursos_1.recursos_nom) " & _
+        CMDComponents.CommandText = "SELECT Recursos.recursos_nom, Recursos_1.recursos_nom, Recursos_1.recursos_color " &
+            "FROM ((Recursos INNER JOIN " &
+            "Recursos_Components ON Recursos.recursos_nom = Recursos_Components.recursos_nom) INNER JOIN " &
+            "Recursos Recursos_1 ON Recursos_Components.recursos_component_nom = Recursos_1.recursos_nom) " &
             "ORDER BY Recursos.recursos_nom, Recursos_1.recursos_nom"
+
         RDComponents = CMDComponents.ExecuteReader
         While RDComponents.Read
             auxRecursComponent.recurs = Convert.ToString(RDComponents.Item("Recursos.recursos_nom"))
@@ -244,16 +270,19 @@
         RDComponents.Close()
 
         CMDServeisFeina.Connection = CN
-        CMDServeisFeina.CommandText = "SELECT Feines_Detall.feines_detall_quantitat, Serveis.serveis_minuts_per_unitat, Serveis.serveis_comu_per_recursos " & _
-            "FROM Serveis INNER JOIN Feines_Detall ON Serveis.serveis_nom = Feines_Detall.serveis_nom " & _
+        CMDServeisFeina.CommandText = "SELECT Feines_Detall.feines_detall_quantitat, Serveis.serveis_minuts_per_unitat, Serveis.serveis_comu_per_recursos " &
+            "FROM Serveis INNER JOIN Feines_Detall ON Serveis.serveis_nom = Feines_Detall.serveis_nom " &
             "WHERE (((Feines_Detall.feines_id)= @feina))"
         CMDServeisFeina.Parameters.Add("@feina", OleDbType.Integer)
 
-        'Debug.WriteLine("Inici proces feines " & Format(Now.Ticks - comptador, "n"))
+        'Debug.WriteLine("Inici proces feines ") ' & Format(Now.Ticks - comptador, "n"))
 
         RDSelFeinesRecurs = CMDSelFeinesRecurs.ExecuteReader
         While RDSelFeinesRecurs.Read
             auxId = Convert.ToInt32(RDSelFeinesRecurs.Item("feines_id"))
+
+            'Debug.WriteLine("Inici proces feina " & auxId)
+
             auxRecurs = Convert.ToString(RDSelFeinesRecurs.Item("recursos_nom"))
             Try
                 auxTsIni = TimeSpan.Parse(Convert.ToString(RDSelFeinesRecurs.Item("feines_hora_inici")))
@@ -304,11 +333,13 @@
             End While
             RDServeisFeina.Close()
 
-            'construim el PGElement
+            'construim el PGElement i el carreguem a la grid
             auxPGElement = New PlaniGrid.PGElement(auxId, Convert.ToString(RDSelFeinesRecurs.Item("llocs_nom")), auxDataHoraIni, auxDataHoraFi, auxDuradaNoComp, Color.Empty, auxPGResources, Convert.ToBoolean(RDSelFeinesRecurs.Item("feines_feta")))
 
             If AgendaGrid.PGElementAddUpdate(auxPGElement) = PlaniGrid.PGReturnCode.PGError Then
-                MsgBox("Error al afegir Feina #" & Convert.ToString(RDSelFeinesRecurs.Item("feines_id")))
+                errorsEnCarrega = True
+                textFormMissatges = textFormMissatges & vbCrLf & "Error al afegir Feina #" & Convert.ToString(RDSelFeinesRecurs.Item("feines_id")) & vbCrLf
+                'frmMissatges.txtMissatges.Text = frmMissatges.txtMissatges.Text & vbCrLf & "Error al afegir Feina #" & Convert.ToString(RDSelFeinesRecurs.Item("feines_id"))
             End If
 
         End While
@@ -323,10 +354,24 @@
         AgendaGrid.Enabled = True
         Cursor.Current = System.Windows.Forms.Cursors.Default
 
-        'Debug.WriteLine("Fet " & Format(Now.Ticks - comptador, "n"))
+        'Debug.WriteLine("Fet ") ' & Format(Now.Ticks - comptador, "n"))
 
-        ''inhabilitem botó x imprimir feines del recurs seleccionat
-        'ImprimirFeines.Enabled = False
+        If errorsEnCarrega Then
+            frmMissatges.Show()
+            frmMissatges.Text = "CÀRREGA DE FEINES DEL MES"
+            frmMissatges.txtMissatges.Text = textFormMissatges
+            frmMissatges.txtMissatges.Refresh()
+            'frmMissatges.txtMissatges.Focus()
+            'frmMissatges.txtMissatges.SelectionStart = frmMissatges.txtMissatges.Text.Length
+            'frmMissatges.txtMissatges.ScrollToCaret()
+            frmMissatges.OK_Button.Visible = True
+            'frmMissatges.OK_Button.Focus()
+            Me.Enabled = False
+        End If
+        textFormMissatges = ""
+
+        ' ''inhabilitem botó x imprimir feines del recurs seleccionat
+        ''ImprimirFeines.Enabled = False
 
     End Sub
 
@@ -1195,7 +1240,11 @@
         End If
 
         If Not frmMissatges.Visible Then
-            StatusStrip1.Items("ToolStripStatusLabel2").Text = "Afegit element #" & pPGElement.Id
+            If textFormMissatges = "" Then
+                StatusStrip1.Items("ToolStripStatusLabel2").Text = "Afegit element #" & pPGElement.Id
+                'Else
+                '    textFormMissatges = textFormMissatges & vbCrLf & "Afegit element #" & pPGElement.Id
+            End If
         End If
 
         AgendaGrid.Focus()
@@ -1316,7 +1365,11 @@
         If frmMissatges.Visible Then
             frmMissatges.txtMissatges.Text = frmMissatges.txtMissatges.Text & vbCrLf & vbCrLf & pTMessage & ": " & pMessage
         Else
-            StatusStrip1.Items("ToolStripStatusLabel2").Text = pTMessage & ": " & pMessage
+            If textFormMissatges = "" Then
+                StatusStrip1.Items("ToolStripStatusLabel2").Text = pTMessage & ": " & pMessage
+            Else
+                textFormMissatges = textFormMissatges & vbCrLf & pTMessage & ": " & pMessage
+            End If
         End If
         'Debug.WriteLine("AgendaGrid_PGMessage: " & pTMessage & ": " & pMessage)
     End Sub
@@ -1329,6 +1382,10 @@
 
         If Calendari.SelectedDate <> pCurrentDate Then
             Calendari.SelectedDate = pCurrentDate
+        End If
+
+        If StatusStrip1.Items.Count > 0 Then
+            StatusStrip1.Items("ToolStripStatusLabel2").Text = ""
         End If
 
         If PrimerDiaVisualitzatMes <> AgendaGrid.DisplayFirstDate Then
@@ -1345,10 +1402,6 @@
         End If
 
         RecursActual = pResource
-
-        If StatusStrip1.Items.Count > 0 Then
-            StatusStrip1.Items("ToolStripStatusLabel2").Text = ""
-        End If
 
         'en modo recurs mostrem hores extra
         If pMode = PlaniGrid.PGMode.Resource And pResource <> "" Then
@@ -1375,6 +1428,10 @@
             Calendari.SelectedDate = pCurrentDate
         End If
 
+        If StatusStrip1.Items.Count > 0 Then
+            StatusStrip1.Items("ToolStripStatusLabel2").Text = ""
+        End If
+
         If PrimerDiaVisualitzatMes <> AgendaGrid.DisplayFirstDate Then
             PrimerDiaVisualitzatMes = AgendaGrid.DisplayFirstDate
             If PrimerDiaVisualitzatMes > UltimDiaCarregat Or PrimerDiaVisualitzatMes < PrimerDiaCarregat Then
@@ -1386,10 +1443,6 @@
                 End If
                 Carrega_Grid_Agenda()
             End If
-        End If
-
-        If StatusStrip1.Items.Count > 0 Then
-            StatusStrip1.Items("ToolStripStatusLabel2").Text = ""
         End If
 
         If pMode = PlaniGrid.PGMode.Resource Then
@@ -1740,22 +1793,21 @@
 
     End Function
 
-    Private Function ActualitzarHoresExtra(ByVal pRecurs As String, ByVal pData As Date, ByVal pHores As Single) As Boolean
+    Private Sub ActualitzarHoresExtra(ByVal pRecurs As String, ByVal pData As Date, ByVal pHores As Single)
         Dim CNopen As Boolean = (CN.State = ConnectionState.Open)
         Dim CMDeliminahores As New OleDbCommand
         Dim CMDafegeixhores As New OleDbCommand
         Dim TRANS As OleDbTransaction
         Dim auxint As Integer
 
-        ActualitzarHoresExtra = True
+        If pRecurs Is Nothing Then Exit Sub
 
         If Not CNopen Then
             Try
                 CN.Open()
             Catch ex As Exception
                 MsgBox("Error al obrir connexió: " & CNS)
-                ActualitzarHoresExtra = False
-                Exit Function
+                Exit Sub
             End Try
         End If
 
@@ -1764,7 +1816,7 @@
 
         'eliminem registre (si existeix)
         CMDeliminahores.Connection = CN
-        CMDeliminahores.CommandText = "DELETE * FROM Hores_Fetes " & _
+        CMDeliminahores.CommandText = "DELETE * FROM Hores_Fetes " &
         "WHERE (((Hores_Fetes.recursos_nom)=@recurs) AND ((Hores_Fetes.hores_data)=@data))"
         CMDeliminahores.Parameters.Add("@recurs", OleDbType.Char, 50).Value = pRecurs
         CMDeliminahores.Parameters.Add("@data", OleDbType.Date).Value = pData
@@ -1775,13 +1827,13 @@
             MsgBox(ex.Message, MsgBoxStyle.OkOnly, "ERROR")
             TRANS.Rollback()
             If CN.State = ConnectionState.Open And Not CNopen Then CN.Close()
-            Return False
+            Exit Sub
         End Try
 
         'si hores > 0 afegim registre
         If pHores > 0 Then
             CMDafegeixhores.Connection = CN
-            CMDafegeixhores.CommandText = "INSERT INTO Hores_Fetes (recursos_nom, hores_data, hores_quantitat) " & _
+            CMDafegeixhores.CommandText = "INSERT INTO Hores_Fetes (recursos_nom, hores_data, hores_quantitat) " &
              "VALUES (@recurs, @data, @quantitat)"
             CMDafegeixhores.Parameters.Add("@recurs", OleDbType.Char, 50).Value = pRecurs
             CMDafegeixhores.Parameters.Add("@data", OleDbType.Date).Value = pData
@@ -1793,14 +1845,14 @@
                 MsgBox(ex.Message, MsgBoxStyle.OkOnly, "ERROR")
                 TRANS.Rollback()
                 If CN.State = ConnectionState.Open And Not CNopen Then CN.Close()
-                Return False
+                Exit Sub
             End Try
 
             If auxint < 1 Then
                 MsgBox("No s'ha pogut afegir hores extres", MsgBoxStyle.OkOnly, "ERROR")
                 TRANS.Rollback()
                 If CN.State = ConnectionState.Open And Not CNopen Then CN.Close()
-                Return False
+                Exit Sub
             End If
         End If
 
@@ -1808,7 +1860,7 @@
 
         If CN.State = ConnectionState.Open And Not CNopen Then CN.Close()
 
-    End Function
+    End Sub
 
     'retorna el recurs a gravar en la feina a partir dels recursos de l'element
     'si és compost i no existeix, el dona d'alta
@@ -4082,7 +4134,7 @@
         frmMissatges.txtMissatges.SelectionStart = frmMissatges.txtMissatges.Text.Length
         frmMissatges.txtMissatges.ScrollToCaret()
         frmMissatges.OK_Button.Enabled = True
-        Me.Enabled = True
+        'Me.Enabled = True
 
     End Function
 
@@ -4897,4 +4949,7 @@
         Me.Cursor = Cursors.Default
     End Sub
 
+    Private Sub Llocs_periodicitat_diesTextBox_TextChanged(sender As Object, e As EventArgs) Handles Llocs_periodicitat_diesTextBox.TextChanged
+        If Llocs_periodicitat_diesTextBox.Text = "" Then Llocs_periodicitat_diesTextBox.Text = "0"
+    End Sub
 End Class
