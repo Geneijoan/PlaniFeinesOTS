@@ -35,7 +35,7 @@ Public Class frmComponents
         Try
             CN.Open()
         Catch ex As Exception
-            MsgBox("Error al obrir connexió: " & CNS)
+            MsgBox("Error al obrir connexió: " & CNS, MsgBoxStyle.OkOnly, "ERROR")
             Exit Sub
         End Try
 
@@ -54,7 +54,7 @@ Public Class frmComponents
         Try
             CMDeliminaComps.ExecuteNonQuery()
         Catch ex As Exception
-            MsgBox(ex.Message)
+            MsgBox(ex.Message, MsgBoxStyle.OkOnly, "ERROR")
             TRANS.Rollback()
             If CN.State = ConnectionState.Open Then CN.Close()
             Exit Sub
@@ -77,13 +77,13 @@ Public Class frmComponents
                     CMDafegeixComps.Parameters("@component").Value = CStr(dgvComponents.Item("cComponent", i).Value)
                     Try
                         If CMDafegeixComps.ExecuteNonQuery < 1 Then
-                            MsgBox("Error al actualitzar component '" & pRecurs & "->" & CStr(dgvComponents.Item("cComponent", i).Value) & "'")
+                            MsgBox("Error al actualitzar component '" & pRecurs & "->" & CStr(dgvComponents.Item("cComponent", i).Value) & "'", MsgBoxStyle.OkOnly, "ERROR")
                             TRANS.Rollback()
                             If CN.State = ConnectionState.Open Then CN.Close()
                             Exit Sub
                         End If
                     Catch ex As Exception
-                        MsgBox(ex.Message)
+                        MsgBox(ex.Message, MsgBoxStyle.OkOnly, "ERROR")
                         TRANS.Rollback()
                         If CN.State = ConnectionState.Open Then CN.Close()
                         Exit Sub
@@ -128,7 +128,7 @@ Public Class frmComponents
         Try
             CN.Open()
         Catch ex As Exception
-            MsgBox("Error al obrir connexió: " & CNS)
+            MsgBox("Error al obrir connexió: " & CNS, MsgBoxStyle.OkOnly, "ERROR")
             Me.Close()
             Exit Sub
         End Try

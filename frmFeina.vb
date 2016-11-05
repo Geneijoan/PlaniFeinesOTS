@@ -81,7 +81,7 @@ Public Class frmFeina
         Try
             CN.Open()
         Catch ex As Exception
-            MsgBox("Error al obrir connexió: " & CNS)
+            MsgBox("Error al obrir connexió: " & CNS, MsgBoxStyle.OkOnly, "ERROR")
             Exit Sub
         End Try
 
@@ -109,13 +109,13 @@ Public Class frmFeina
 
         Try
             If CMDactualitzaFeina.ExecuteNonQuery < 1 Then
-                MsgBox("Error al actualitzar la feina #" & pPGElement.Id)
+                MsgBox("Error al actualitzar la feina #" & pPGElement.Id, MsgBoxStyle.OkOnly, "ERROR")
                 TRANS.Rollback()
                 If CN.State = ConnectionState.Open Then CN.Close()
                 Exit Sub
             End If
         Catch ex As Exception
-            MsgBox(ex.Message)
+            MsgBox(ex.Message, MsgBoxStyle.OkOnly, "ERROR")
             TRANS.Rollback()
             If CN.State = ConnectionState.Open Then CN.Close()
             Exit Sub
@@ -132,7 +132,7 @@ Public Class frmFeina
         Try
             CMDeliminaDetall.ExecuteNonQuery()
         Catch ex As Exception
-            MsgBox(ex.Message)
+            MsgBox(ex.Message, MsgBoxStyle.OkOnly, "ERROR")
             TRANS.Rollback()
             If CN.State = ConnectionState.Open Then CN.Close()
             Exit Sub
@@ -159,13 +159,13 @@ Public Class frmFeina
             CMDactualitzaDetall.Parameters("@unitat").Value = CStr(dgvDetall.Item("clUnitat", i).Value)
             Try
                 If CMDactualitzaDetall.ExecuteNonQuery < 1 Then
-                    MsgBox("Error al actualitzar detall feina #" & pPGElement.Id & " " & CStr(dgvDetall.Item("clServei", i).Value))
+                    MsgBox("Error al actualitzar detall feina #" & pPGElement.Id & " " & CStr(dgvDetall.Item("clServei", i).Value), MsgBoxStyle.OkOnly, "ERROR")
                     TRANS.Rollback()
                     If CN.State = ConnectionState.Open Then CN.Close()
                     Exit Sub
                 End If
             Catch ex As Exception
-                MsgBox(ex.Message)
+                MsgBox(ex.Message, MsgBoxStyle.OkOnly, "ERROR")
                 TRANS.Rollback()
                 If CN.State = ConnectionState.Open Then CN.Close()
                 Exit Sub
@@ -185,7 +185,7 @@ Public Class frmFeina
             Try
                 CMDactualitzaXecs.ExecuteNonQuery()
             Catch ex As Exception
-                MsgBox(ex.Message)
+                MsgBox(ex.Message, MsgBoxStyle.OkOnly, "ERROR")
                 TRANS.Rollback()
                 If CN.State = ConnectionState.Open Then CN.Close()
                 Exit Sub
@@ -278,7 +278,7 @@ Public Class frmFeina
         Try
             CN.Open()
         Catch ex As Exception
-            MsgBox("Error al obrir connexió: " & CNS)
+            MsgBox("Error al obrir connexió: " & CNS, MsgBoxStyle.OkOnly, "ERROR")
             pPGElement = Nothing
             Me.Close()
             Exit Sub
@@ -311,7 +311,7 @@ Public Class frmFeina
             End If
             txtObservacions.Text = RDSelFeina.Item("feines_observacions")
         Else
-            MsgBox("Error al accedir a feina #" & pPGElement.Id)
+            MsgBox("Error al accedir a feina #" & pPGElement.Id, MsgBoxStyle.OkOnly, "ERROR")
             CN.Close()
             pPGElement = Nothing
             Me.Close()

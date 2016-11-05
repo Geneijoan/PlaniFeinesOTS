@@ -97,7 +97,7 @@
         Try
             CN.Open()
         Catch ex As Exception
-            MsgBox("Error al obrir connexió: " & CNS)
+            MsgBox("Error al obrir connexió: " & CNS, MsgBoxStyle.OkOnly, "ERROR")
             Me.Close()
             Exit Sub
         End Try
@@ -406,7 +406,7 @@
             Try
                 CN.Open()
             Catch ex As Exception
-                MsgBox("Error al obrir connexió: " & CNS)
+                MsgBox("Error al obrir connexió: " & CNS, MsgBoxStyle.OkOnly, "ERROR")
                 Return Nothing
             End Try
         End If
@@ -531,7 +531,7 @@
             Try
                 CN.Open()
             Catch ex As Exception
-                MsgBox("Error al obrir connexió: " & CNS)
+                MsgBox("Error al obrir connexió: " & CNS, MsgBoxStyle.OkOnly, "ERROR")
                 Exit Sub
             End Try
         End If
@@ -594,7 +594,7 @@
             Try
                 CN.Open()
             Catch ex As Exception
-                MsgBox("Error al obrir connexió: " & CNS)
+                MsgBox("Error al obrir connexió: " & CNS, MsgBoxStyle.OkOnly, "ERROR")
                 Exit Sub
             End Try
         End If
@@ -1230,11 +1230,11 @@
             If AfegirFeina(pPGElement) Then
                 'actualitzar id feina a PlaniGrid
                 If AgendaGrid.PGElementChangeId("", pPGElement.Id) = PlaniGrid.PGReturnCode.PGError Then
-                    MsgBox("error en PGElementChangeId")
+                    MsgBox("error en PGElementChangeId", MsgBoxStyle.OkOnly, "ERROR")
                     Exit Sub
                 End If
             Else
-                MsgBox("error en AgendaGrid_PGElement_Added " & pPGElement.Id)
+                MsgBox("error en AgendaGrid_PGElement_Added " & pPGElement.Id, MsgBoxStyle.OkOnly, "ERROR")
                 Exit Sub
             End If
         End If
@@ -1267,7 +1267,7 @@
     Private Sub AgendaGrid_PGElement_Deleted(ByVal pPGElement As PlaniGrid.PGElement) Handles AgendaGrid.PGElement_Deleted
 
         If Not EliminarFeina(pPGElement) Then
-            MsgBox("error en AgendaGrid_PGElement_Deleted " & pPGElement.Id)
+            MsgBox("error en AgendaGrid_PGElement_Deleted " & pPGElement.Id, MsgBoxStyle.OkOnly, "ERROR")
             Exit Sub
         End If
 
@@ -1337,7 +1337,7 @@
     Private Sub AgendaGrid_PGElement_Updated(ByVal pPGElement As PlaniGrid.PGElement) Handles AgendaGrid.PGElement_Updated
 
         If Not ActualitzarFeina(pPGElement) Then
-            MsgBox("error en AgendaGrid_PGElement_Updated " & pPGElement.Id)
+            MsgBox("error en AgendaGrid_PGElement_Updated " & pPGElement.Id, MsgBoxStyle.OkOnly, "ERROR")
             Exit Sub
         End If
 
@@ -1455,7 +1455,7 @@
             If MsgBox("Vols generar les feines des del " & DateAdd(DateInterval.Day, 1, ULTDIAGENERAT) & " fins al " & Calendari.SelectedDate & "?", MsgBoxStyle.YesNo, "CONFIRMACIÓ") = MsgBoxResult.Yes Then
                 missatge = Planificar_Feines(DateAdd(DateInterval.Day, 1, ULTDIAGENERAT), Calendari.SelectedDate)
                 If missatge <> "" Then
-                    MsgBox(missatge)
+                    MsgBox(missatge, MsgBoxStyle.OkOnly, "INFORMACIÓ")
                 End If
                 ULTDIAGENERAT = Calendari.SelectedDate
                 'informem el peu de pantalla
@@ -1482,7 +1482,7 @@
             Try
                 CN.Open()
             Catch ex As Exception
-                MsgBox("Error al obrir connexió: " & CNS)
+                MsgBox("Error al obrir connexió: " & CNS, MsgBoxStyle.OkOnly, "ERROR")
                 Return False
             End Try
         End If
@@ -1546,13 +1546,13 @@
             CMDactualitzaDetall.Parameters("@unitat").Value = RDSel.GetString(RDSel.GetOrdinal("serveis_unitat"))
             Try
                 If CMDactualitzaDetall.ExecuteNonQuery < 1 Then
-                    MsgBox("Error al gravar detall feina #" & pPGElement.Id & " " & RDSel.GetString(RDSel.GetOrdinal("serveis_nom")))
+                    MsgBox("Error al gravar detall feina #" & pPGElement.Id & " " & RDSel.GetString(RDSel.GetOrdinal("serveis_nom")), MsgBoxStyle.OkOnly, "ERROR")
                     TRANS.Rollback()
                     If CN.State = ConnectionState.Open Then CN.Close()
                     Return False
                 End If
             Catch ex As Exception
-                MsgBox(ex.Message)
+                MsgBox(ex.Message, MsgBoxStyle.OkOnly, "ERROR")
                 TRANS.Rollback()
                 If CN.State = ConnectionState.Open Then CN.Close()
                 Return False
@@ -1574,7 +1574,7 @@
             Try
                 CN.Open()
             Catch ex As Exception
-                MsgBox("Error al obrir connexió: " & CNS)
+                MsgBox("Error al obrir connexió: " & CNS, MsgBoxStyle.OkOnly, "ERROR")
                 EliminarFeina = False
                 Exit Function
             End Try
@@ -1604,7 +1604,7 @@
             Try
                 CN.Open()
             Catch ex As Exception
-                MsgBox("Error al obrir connexió: " & CNS)
+                MsgBox("Error al obrir connexió: " & CNS, MsgBoxStyle.OkOnly, "ERROR")
                 ActualitzarFeina = False
                 Exit Function
             End Try
@@ -1653,7 +1653,7 @@
             Try
                 CN.Open()
             Catch ex As Exception
-                MsgBox("Error al obrir connexió: " & CNS)
+                MsgBox("Error al obrir connexió: " & CNS, MsgBoxStyle.OkOnly, "ERROR")
                 Exit Function
             End Try
         End If
@@ -1736,7 +1736,7 @@
             Try
                 CN.Open()
             Catch ex As Exception
-                MsgBox("Error al obrir connexió: " & CNS)
+                MsgBox("Error al obrir connexió: " & CNS, MsgBoxStyle.OkOnly, "ERROR")
                 ActualitzarPagament = False
                 Exit Function
             End Try
@@ -1806,7 +1806,7 @@
             Try
                 CN.Open()
             Catch ex As Exception
-                MsgBox("Error al obrir connexió: " & CNS)
+                MsgBox("Error al obrir connexió: " & CNS, MsgBoxStyle.OkOnly, "ERROR")
                 Exit Sub
             End Try
         End If
@@ -1883,7 +1883,7 @@
             Try
                 CN.Open()
             Catch ex As Exception
-                MsgBox("Error al obrir connexió: " & CNS)
+                MsgBox("Error al obrir connexió: " & CNS, MsgBoxStyle.OkOnly, "ERROR")
                 Exit Function
             End Try
         End If
@@ -1897,7 +1897,7 @@
             CMDrecursos.Parameters("@recurs").Value = r.Key
             auxint = CMDrecursos.ExecuteScalar
             If auxint <= 0 Then
-                MsgBox("Recurs '" & r.Key & "' en element " & pPGElement.Id & " inexistent")
+                MsgBox("Recurs '" & r.Key & "' en element " & pPGElement.Id & " inexistent", MsgBoxStyle.OkOnly, "ERROR")
                 If CN.State = ConnectionState.Open And Not CNopen Then CN.Close()
                 Exit Function
             End If
@@ -2018,7 +2018,7 @@
             Try
                 CN.Open()
             Catch ex As Exception
-                MsgBox("Error al obrir connexió: " & CNS)
+                MsgBox("Error al obrir connexió: " & CNS, MsgBoxStyle.OkOnly, "ERROR")
                 ObtenirPagament = False
                 Exit Function
             End Try
@@ -2349,7 +2349,7 @@
             Try
                 CN.Open()
             Catch ex As Exception
-                MsgBox("Error al obrir connexió: " & CNS)
+                MsgBox("Error al obrir connexió: " & CNS, MsgBoxStyle.OkOnly, "ERROR")
                 Exit Sub
             End Try
         End If
@@ -2497,7 +2497,7 @@
             Try
                 CN.Open()
             Catch ex As Exception
-                MsgBox("Error al obrir connexió: " & CNS)
+                MsgBox("Error al obrir connexió: " & CNS, MsgBoxStyle.OkOnly, "ERROR")
                 Exit Sub
             End Try
         End If
@@ -2697,7 +2697,7 @@
                     Llocs_ServeisBindingSource.MoveNext()
                 Next
                 If itemFound = -1 Then
-                    MsgBox("Servei/lloc no trobat: " & auxLloc & " " & auxServei)
+                    MsgBox("Servei/lloc no trobat: " & auxLloc & " " & auxServei, MsgBoxStyle.OkOnly, "ERROR")
                 End If
                 pnlServeis.Visible = True
                 Serveis_nomComboBox.Enabled = False
@@ -3652,7 +3652,7 @@
             frmImpressio.Text = miRpt.SummaryInfo.ReportTitle
 
         Catch ex As Exception
-            MsgBox("Mensaje : " & ex.Message)
+            MsgBox(ex.Message, MsgBoxStyle.OkOnly, "ERROR")
         End Try
 
         Me.Cursor = Cursors.Default
@@ -3808,7 +3808,7 @@
             Try
                 CN.Open()
             Catch ex As Exception
-                MsgBox("Error al obrir connexió: " & CNS)
+                MsgBox("Error al obrir connexió: " & CNS, MsgBoxStyle.OkOnly, "ERROR")
                 Exit Sub
             End Try
 
@@ -3924,7 +3924,7 @@
             Try
                 CN.Open()
             Catch ex As Exception
-                MsgBox("Error al obrir connexió: " & CNS)
+                MsgBox("Error al obrir connexió: " & CNS, MsgBoxStyle.OkOnly, "ERROR")
                 Return False
             End Try
         End If
@@ -4159,7 +4159,7 @@
             Try
                 CN.Open()
             Catch ex As Exception
-                MsgBox("Error al obrir connexió: " & CNS)
+                MsgBox("Error al obrir connexió: " & CNS, MsgBoxStyle.OkOnly, "ERROR")
                 Return Nothing
             End Try
         End If
@@ -4231,7 +4231,7 @@
                 Try
                     CN.Open()
                 Catch ex As Exception
-                    MsgBox("Error al obrir connexió: " & CNS)
+                    MsgBox("Error al obrir connexió: " & CNS, MsgBoxStyle.OkOnly, "ERROR")
                     Exit Sub
                 End Try
             End If
@@ -4251,7 +4251,7 @@
 
                     If CMDactualitzafeina.ExecuteNonQuery < 1 Then
                         'ko
-                        MsgBox("Error al actualitzar feina #" & dgvFactura.Rows(i).Cells("Feina").Value)
+                        MsgBox("Error al actualitzar feina #" & dgvFactura.Rows(i).Cells("Feina").Value, MsgBoxStyle.OkOnly, "ERROR")
                     End If
                 End If
             Next
@@ -4273,7 +4273,7 @@
 
                     If CMDactualitzaxec.ExecuteNonQuery < 1 Then
                         'ko
-                        MsgBox("Error al actualitzar xec #" & dgvXecs.Rows(i).Cells("NroXec").Value)
+                        MsgBox("Error al actualitzar xec #" & dgvXecs.Rows(i).Cells("NroXec").Value, MsgBoxStyle.OkOnly, "ERROR")
                     End If
                 End If
             Next
@@ -4453,7 +4453,7 @@
             frmImpressio.Text = miRpt.SummaryInfo.ReportTitle
 
         Catch ex As Exception
-            MsgBox("Mensaje : " & ex.Message)
+            MsgBox(ex.Message, MsgBoxStyle.OkOnly, "ERROR")
         End Try
 
         Me.Cursor = Cursors.Default
@@ -4546,7 +4546,7 @@
             frmImpressio.Text = miRpt.SummaryInfo.ReportTitle
 
         Catch ex As Exception
-            MsgBox("Mensaje : " & ex.Message)
+            MsgBox(ex.Message, MsgBoxStyle.OkOnly, "ERROR")
         End Try
 
         Me.Cursor = Cursors.Default
@@ -4768,7 +4768,7 @@
             frmImpressio.Text = miRpt.SummaryInfo.ReportTitle
 
         Catch ex As Exception
-            MsgBox("Mensaje : " & ex.Message)
+            MsgBox(ex.Message, MsgBoxStyle.OkOnly, "ERROR")
         End Try
 
         Me.Cursor = Cursors.Default
@@ -4943,7 +4943,7 @@
             frmImpressio.Text = miRpt.SummaryInfo.ReportTitle
 
         Catch ex As Exception
-            MsgBox("Mensaje : " & ex.Message)
+            MsgBox(ex.Message, MsgBoxStyle.OkOnly, "ERROR")
         End Try
 
         Me.Cursor = Cursors.Default
