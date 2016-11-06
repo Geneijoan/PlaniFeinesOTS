@@ -376,7 +376,7 @@
     End Sub
 
 
-    Private Function FeinaaPGElement(ByVal pFeinaId As Long) As PlaniGrid.PGElement
+    Public Function FeinaaPGElement(ByVal pFeinaId As Long) As PlaniGrid.PGElement
         Dim CMDSelFeines As New OleDbCommand
         Dim RDSelFeines As OleDbDataReader
         Dim CMDAccesRecurs As New OleDbCommand
@@ -445,16 +445,16 @@
         CMDAccesRecurs.Parameters.Add("@recurs", OleDbType.VarChar)
 
         CMDComponents.Connection = CN
-        CMDComponents.CommandText = "SELECT Recursos_1.recursos_nom, Recursos_1.recursos_color " & _
-            "FROM ((Recursos INNER JOIN " & _
-            "Recursos_Components ON Recursos.recursos_nom = Recursos_Components.recursos_nom) INNER JOIN " & _
-            "Recursos Recursos_1 ON Recursos_Components.recursos_component_nom = Recursos_1.recursos_nom) " & _
+        CMDComponents.CommandText = "SELECT Recursos_1.recursos_nom, Recursos_1.recursos_color " &
+            "FROM ((Recursos INNER JOIN " &
+            "Recursos_Components ON Recursos.recursos_nom = Recursos_Components.recursos_nom) INNER JOIN " &
+            "Recursos Recursos_1 ON Recursos_Components.recursos_component_nom = Recursos_1.recursos_nom) " &
             "WHERE (Recursos.recursos_nom = @recurs)"
         CMDComponents.Parameters.Add("@recurs", OleDbType.VarChar)
 
         CMDServeis.Connection = CN
-        CMDServeis.CommandText = "SELECT Feines_Detall.feines_detall_quantitat, Serveis.serveis_minuts_per_unitat, Serveis.serveis_comu_per_recursos " & _
-            "FROM Serveis INNER JOIN (Feines INNER JOIN Feines_Detall ON Feines.feines_id = Feines_Detall.feines_id) ON Serveis.serveis_nom = Feines_Detall.serveis_nom " & _
+        CMDServeis.CommandText = "SELECT Feines_Detall.feines_detall_quantitat, Serveis.serveis_minuts_per_unitat, Serveis.serveis_comu_per_recursos " &
+            "FROM Serveis INNER JOIN (Feines INNER JOIN Feines_Detall ON Feines.feines_id = Feines_Detall.feines_id) ON Serveis.serveis_nom = Feines_Detall.serveis_nom " &
             "WHERE (((Feines.feines_id)= @feina))"
         CMDServeis.Parameters.Add("@feina", OleDbType.Integer)
 
@@ -610,14 +610,14 @@
             Label17.Text = "Serveis:"
             'carrega grid factura
             If chkPdtFacturar.Checked Then
-                CMDSel.CommandText = "SELECT Llocs.llocs_quota, Feines.feines_id, Feines.feines_data, Feines.llocs_nom, Feines.recursos_nom, Feines.feines_feta, Feines.feines_data_factura, Feines.feines_quota, Feines.feines_observacions, Feines_Detall.serveis_nom, Feines_Detall.feines_detall_quantitat, Feines_Detall.feines_detall_unitat, Feines_Detall.feines_detall_preu_un, Serveis.serveis_minuts_per_unitat " & _
-                "FROM Serveis INNER JOIN ((Llocs INNER JOIN Feines ON Llocs.llocs_nom = Feines.llocs_nom) INNER JOIN Feines_Detall ON Feines.feines_id = Feines_Detall.feines_id) ON Serveis.serveis_nom = Feines_Detall.serveis_nom " & _
-                "WHERE (Llocs.clients_nom=@client AND Feines.feines_data>=@dataini AND Feines.feines_data<@datafi AND (Feines.feines_data_factura Is Null)) " & _
+                CMDSel.CommandText = "SELECT Llocs.llocs_quota, Feines.feines_id, Feines.feines_data, Feines.llocs_nom, Feines.recursos_nom, Feines.feines_feta, Feines.feines_data_factura, Feines.feines_quota, Feines.feines_observacions, Feines_Detall.serveis_nom, Feines_Detall.feines_detall_quantitat, Feines_Detall.feines_detall_unitat, Feines_Detall.feines_detall_preu_un, Serveis.serveis_minuts_per_unitat " &
+                "FROM Serveis INNER JOIN ((Llocs INNER JOIN Feines ON Llocs.llocs_nom = Feines.llocs_nom) INNER JOIN Feines_Detall ON Feines.feines_id = Feines_Detall.feines_id) ON Serveis.serveis_nom = Feines_Detall.serveis_nom " &
+                "WHERE (Llocs.clients_nom=@client AND Feines.feines_data>=@dataini AND Feines.feines_data<@datafi AND (Feines.feines_data_factura Is Null)) " &
                 "ORDER BY Feines.llocs_nom, Feines.feines_data, Feines.feines_id, Feines_Detall.serveis_nom, Feines_Detall.feines_detall_unitat"
             Else
-                CMDSel.CommandText = "SELECT Llocs.llocs_quota, Feines.feines_id, Feines.feines_data, Feines.llocs_nom, Feines.recursos_nom, Feines.feines_feta, Feines.feines_data_factura, Feines.feines_quota, Feines.feines_observacions, Feines_Detall.serveis_nom, Feines_Detall.feines_detall_quantitat, Feines_Detall.feines_detall_unitat, Feines_Detall.feines_detall_preu_un, Serveis.serveis_minuts_per_unitat " & _
-               "FROM Serveis INNER JOIN ((Llocs INNER JOIN Feines ON Llocs.llocs_nom = Feines.llocs_nom) INNER JOIN Feines_Detall ON Feines.feines_id = Feines_Detall.feines_id) ON Serveis.serveis_nom = Feines_Detall.serveis_nom " & _
-               "WHERE (((Llocs.clients_nom)=@client) AND ((Feines.feines_data)>=@dataini And (Feines.feines_data)<@datafi)) " & _
+                CMDSel.CommandText = "SELECT Llocs.llocs_quota, Feines.feines_id, Feines.feines_data, Feines.llocs_nom, Feines.recursos_nom, Feines.feines_feta, Feines.feines_data_factura, Feines.feines_quota, Feines.feines_observacions, Feines_Detall.serveis_nom, Feines_Detall.feines_detall_quantitat, Feines_Detall.feines_detall_unitat, Feines_Detall.feines_detall_preu_un, Serveis.serveis_minuts_per_unitat " &
+               "FROM Serveis INNER JOIN ((Llocs INNER JOIN Feines ON Llocs.llocs_nom = Feines.llocs_nom) INNER JOIN Feines_Detall ON Feines.feines_id = Feines_Detall.feines_id) ON Serveis.serveis_nom = Feines_Detall.serveis_nom " &
+               "WHERE (((Llocs.clients_nom)=@client) AND ((Feines.feines_data)>=@dataini And (Feines.feines_data)<@datafi)) " &
                "ORDER BY Feines.llocs_nom, Feines.feines_data, Feines.feines_id, Feines_Detall.serveis_nom, Feines_Detall.feines_detall_unitat"
             End If
             CMDSel.Parameters.Add("@client", OleDbType.Char, 50).Value = cmbSelClients.Text
@@ -751,10 +751,10 @@
             'carrega grid xecs amb els del client/mes 
             'els assignats a feines + els no assignats entrats en el mes
             CMDSel.Parameters.Clear()
-            CMDSel.CommandText = "SELECT Xecs.*, Feines.feines_data, Feines.feines_data_factura" & _
-            " FROM Feines RIGHT JOIN Xecs ON Feines.feines_id = Xecs.feines_id" & _
-            " WHERE (((Feines.feines_data)>=@dataini And (Feines.feines_data)<@datafi) AND ((Xecs.clients_nom)=@client))" & _
-            " OR (((Feines.feines_data) Is Null) AND ((Xecs.xecs_data_entrega)>=@dataini And (Xecs.xecs_data_entrega)<@datafi) AND ((Xecs.clients_nom)=@client))" & _
+            CMDSel.CommandText = "SELECT Xecs.*, Feines.feines_data, Feines.feines_data_factura" &
+            " FROM Feines RIGHT JOIN Xecs ON Feines.feines_id = Xecs.feines_id" &
+            " WHERE (((Feines.feines_data)>=@dataini And (Feines.feines_data)<@datafi) AND ((Xecs.clients_nom)=@client))" &
+            " OR (((Feines.feines_data) Is Null) AND ((Xecs.xecs_data_entrega)>=@dataini And (Xecs.xecs_data_entrega)<@datafi) AND ((Xecs.clients_nom)=@client))" &
             " ORDER BY Xecs.xecs_data_liquidat DESC , Xecs.xecs_data_entrega"
             CMDSel.Parameters.Add("@dataini", OleDbType.Date).Value = auxdata
             CMDSel.Parameters.Add("@datafi", OleDbType.Date).Value = DateAdd(DateInterval.Month, 1, auxdata)
@@ -877,9 +877,9 @@
             Label17.Text = "Serveis no fets:"
 
             'carrega grid factura amb feines no fetes del mes
-            CMDSel.CommandText = "SELECT Llocs.llocs_quota, Feines.feines_id, Feines.feines_data, Feines.llocs_nom, Feines.recursos_nom, Feines.feines_feta, Feines.feines_data_factura, Feines.feines_quota, Feines.feines_observacions, Feines_Detall.serveis_nom, Feines_Detall.feines_detall_quantitat, Feines_Detall.feines_detall_unitat, Feines_Detall.feines_detall_preu_un, Serveis.serveis_minuts_per_unitat " & _
-            "FROM Serveis INNER JOIN ((Llocs INNER JOIN Feines ON Llocs.llocs_nom = Feines.llocs_nom) INNER JOIN Feines_Detall ON Feines.feines_id = Feines_Detall.feines_id) ON Serveis.serveis_nom = Feines_Detall.serveis_nom " & _
-            "WHERE (NOT Feines.feines_feta AND ((Feines.feines_data)>=@dataini AND (Feines.feines_data)<@datafi)) " & _
+            CMDSel.CommandText = "SELECT Llocs.llocs_quota, Feines.feines_id, Feines.feines_data, Feines.llocs_nom, Feines.recursos_nom, Feines.feines_feta, Feines.feines_data_factura, Feines.feines_quota, Feines.feines_observacions, Feines_Detall.serveis_nom, Feines_Detall.feines_detall_quantitat, Feines_Detall.feines_detall_unitat, Feines_Detall.feines_detall_preu_un, Serveis.serveis_minuts_per_unitat " &
+            "FROM Serveis INNER JOIN ((Llocs INNER JOIN Feines ON Llocs.llocs_nom = Feines.llocs_nom) INNER JOIN Feines_Detall ON Feines.feines_id = Feines_Detall.feines_id) ON Serveis.serveis_nom = Feines_Detall.serveis_nom " &
+            "WHERE (NOT Feines.feines_feta AND ((Feines.feines_data)>=@dataini AND (Feines.feines_data)<@datafi)) " &
             "ORDER BY Feines.llocs_nom, Feines.feines_data, Feines.feines_id, Feines_Detall.serveis_nom, Feines_Detall.feines_detall_unitat"
             CMDSel.Parameters.Add("@dataini", OleDbType.Date).Value = auxdata
             CMDSel.Parameters.Add("@datafi", OleDbType.Date).Value = DateAdd(DateInterval.Month, 1, auxdata)
@@ -976,8 +976,8 @@
             RDSel.Close()
 
             'carreguem xecs liquidats del mes (els assignats a feines del mes i liquidats)
-            CMDSel.CommandText = "SELECT Xecs.xecs_data_entrega, Xecs.xecs_id, Xecs.clients_nom, Xecs.feines_id, Xecs.xecs_data_liquidat, Xecs.xecs_valor" & _
-            " FROM Feines INNER JOIN Xecs ON Feines.feines_id = Xecs.feines_id" & _
+            CMDSel.CommandText = "SELECT Xecs.xecs_data_entrega, Xecs.xecs_id, Xecs.clients_nom, Xecs.feines_id, Xecs.xecs_data_liquidat, Xecs.xecs_valor" &
+            " FROM Feines INNER JOIN Xecs ON Feines.feines_id = Xecs.feines_id" &
             " WHERE Feines.feines_data>=@dataini And Feines.feines_data<@datafi AND Xecs.xecs_data_liquidat Is Not Null"
             CMDSel.Parameters.Add("@dataini", OleDbType.Date).Value = auxdata
             CMDSel.Parameters.Add("@datafi", OleDbType.Date).Value = DateAdd(DateInterval.Month, 1, auxdata)
@@ -1279,18 +1279,7 @@
 
     Private Sub AgendaGrid_PGElement_DoubleClicked(ByVal pPGElement As PlaniGrid.PGElement) Handles AgendaGrid.PGElement_DoubleClicked
 
-        'passem parametre a frmFeina
-        frmFeina.pPGElement = New PlaniGrid.PGElement(pPGElement)
-
-        If frmFeina.ShowDialog() = Windows.Forms.DialogResult.OK Then
-            AgendaGrid.RefreshGrid()
-            'Carrega_Grid_Agenda()
-            Me.XecsTableAdapter.Fill(Me.PlaniFeinesDataSet.Xecs)
-            Carrega_TreeView_Clients()
-
-            StatusStrip1.Items("ToolStripStatusLabel2").Text = "Actualitzat element #" & pPGElement.Id
-        End If
-
+        MostrarFeina(CLng(pPGElement.Id))
         AgendaGrid.PGElementSelectById(pPGElement.Id)
 
         'desselecciona per poder imprimir agenda
@@ -1302,16 +1291,7 @@
 
         'mostra detall feina
         If e.KeyCode = Keys.Enter Then
-            'passem parametre a frmFeina
-            frmFeina.pPGElement = New PlaniGrid.PGElement(pPGElement)
-
-            If frmFeina.ShowDialog() = Windows.Forms.DialogResult.OK Then
-                AgendaGrid.RefreshGrid()
-                Me.XecsTableAdapter.Fill(Me.PlaniFeinesDataSet.Xecs)
-                Carrega_TreeView_Clients()
-
-                StatusStrip1.Items("ToolStripStatusLabel2").Text = "Actualitzat element #" & pPGElement.Id
-            End If
+            MostrarFeina(CLng(pPGElement.Id))
             AgendaGrid.PGElementSelectById(pPGElement.Id)
         End If
 
@@ -1490,8 +1470,8 @@
         TRANS = CN.BeginTransaction
 
         CMDaddFeina.Connection = CN
-        CMDaddFeina.CommandText = "INSERT INTO Feines " & _
-        "(llocs_nom, feines_data, feines_hora_inici, feines_hora_fi, recursos_nom) " & _
+        CMDaddFeina.CommandText = "INSERT INTO Feines " &
+        "(llocs_nom, feines_data, feines_hora_inici, feines_hora_fi, recursos_nom) " &
         "VALUES(@lloc, @data, @horainici, @horafi, @recurs)"
         CMDaddFeina.Parameters.Add("@lloc", OleDbType.Char, 50).Value = pPGElement.Name
         CMDaddFeina.Parameters.Add("@data", OleDbType.Date).Value = pPGElement.Starts.Date
@@ -1517,8 +1497,8 @@
 
         'afegim el detall de la feina (serveis del lloc)
         CMDactualitzaDetall.Connection = CN
-        CMDactualitzaDetall.CommandText = "INSERT INTO Feines_Detall " & _
-        "(feines_id, serveis_nom, feines_detall_quantitat, feines_detall_preu_un, feines_detall_unitat) " & _
+        CMDactualitzaDetall.CommandText = "INSERT INTO Feines_Detall " &
+        "(feines_id, serveis_nom, feines_detall_quantitat, feines_detall_preu_un, feines_detall_unitat) " &
         "VALUES (@id, @servei, @quantitat, @preu, @unitat)"
         CMDactualitzaDetall.Parameters.Add("@id", OleDbType.Integer)
         CMDactualitzaDetall.Parameters.Add("@servei", OleDbType.Char, 50)
@@ -1530,8 +1510,8 @@
 
         'obtenim els serveis del lloc
         CMDSel.Connection = CN
-        CMDSel.CommandText = "SELECT Llocs_Serveis.serveis_nom, Llocs_Serveis.llocs_serveis_quantitat, Llocs_Serveis.llocs_serveis_preu_un, Serveis.serveis_unitat " & _
-        "FROM Serveis INNER JOIN Llocs_Serveis ON Serveis.serveis_nom = Llocs_Serveis.serveis_nom " & _
+        CMDSel.CommandText = "SELECT Llocs_Serveis.serveis_nom, Llocs_Serveis.llocs_serveis_quantitat, Llocs_Serveis.llocs_serveis_preu_un, Serveis.serveis_unitat " &
+        "FROM Serveis INNER JOIN Llocs_Serveis ON Serveis.serveis_nom = Llocs_Serveis.serveis_nom " &
         "WHERE (((Llocs_Serveis.llocs_nom)= @lloc ))"
         CMDSel.Parameters.Add("@lloc", OleDbType.Char).Value = pPGElement.Name
 
@@ -1581,7 +1561,7 @@
         End If
 
         CMDeliminafeina.Connection = CN
-        CMDeliminafeina.CommandText = "DELETE FROM Feines " & _
+        CMDeliminafeina.CommandText = "DELETE FROM Feines " &
         "WHERE feines_id = @id"
         CMDeliminafeina.Parameters.Add("@id", OleDbType.Integer).Value = CInt(pPGElement.Id)
 
@@ -1611,8 +1591,8 @@
         End If
 
         CMDactualitzafeina.Connection = CN
-        CMDactualitzafeina.CommandText = "UPDATE Feines " & _
-        "SET llocs_nom = @lloc, feines_data = @data, feines_hora_inici = @horainici, feines_hora_fi = @horafi, recursos_nom = @recurs, feines_feta = @feta " & _
+        CMDactualitzafeina.CommandText = "UPDATE Feines " &
+        "SET llocs_nom = @lloc, feines_data = @data, feines_hora_inici = @horainici, feines_hora_fi = @horafi, recursos_nom = @recurs, feines_feta = @feta " &
         "WHERE feines_id = @id"
         CMDactualitzafeina.Parameters.Add("@lloc", OleDbType.Char, 50).Value = pPGElement.Name
         CMDactualitzafeina.Parameters.Add("@data", OleDbType.Date).Value = pPGElement.Starts.Date
@@ -1659,8 +1639,8 @@
         End If
 
         CMDSelFeines.Connection = CN
-        CMDSelFeines.CommandText = "SELECT Feines.* FROM Feines LEFT JOIN Recursos_Components ON Feines.recursos_nom = Recursos_Components.recursos_nom " & _
-        "WHERE (((Feines.feines_data)=@data) AND ((Recursos_Components.recursos_component_nom)=@recurs)) OR (((Feines.feines_data)=@data) AND ((Feines.recursos_nom)=@recurs) AND ((Recursos_Components.recursos_component_nom) Is Null)) " & _
+        CMDSelFeines.CommandText = "SELECT Feines.* FROM Feines LEFT JOIN Recursos_Components ON Feines.recursos_nom = Recursos_Components.recursos_nom " &
+        "WHERE (((Feines.feines_data)=@data) AND ((Recursos_Components.recursos_component_nom)=@recurs)) OR (((Feines.feines_data)=@data) AND ((Feines.recursos_nom)=@recurs) AND ((Recursos_Components.recursos_component_nom) Is Null)) " &
         "ORDER BY Feines.feines_hora_inici"
         CMDSelFeines.Parameters.Add("@data", OleDbType.Date).Value = pData
         CMDSelFeines.Parameters.Add("@recurs", OleDbType.Char).Value = pRecurs
@@ -1747,7 +1727,7 @@
 
         'eliminem registre (si existeix)
         CMDeliminapagament.Connection = CN
-        CMDeliminapagament.CommandText = "DELETE * FROM Pagaments " & _
+        CMDeliminapagament.CommandText = "DELETE * FROM Pagaments " &
         "WHERE (pagaments_mes=@mes AND clients_nom=@client)"
         CMDeliminapagament.Parameters.Add("@mes", OleDbType.Char, 7).Value = pMes
         CMDeliminapagament.Parameters.Add("@client", OleDbType.Char, 50).Value = pClient
@@ -1764,7 +1744,7 @@
         'si hores > 0 afegim registre
         If pImport <> 0 Then
             CMDafegeixpagament.Connection = CN
-            CMDafegeixpagament.CommandText = "INSERT INTO Pagaments (pagaments_mes, clients_nom, pagaments_import) " & _
+            CMDafegeixpagament.CommandText = "INSERT INTO Pagaments (pagaments_mes, clients_nom, pagaments_import) " &
              "VALUES (@mes, @client, @import)"
             CMDafegeixpagament.Parameters.Add("@mes", OleDbType.Char, 7).Value = pMes
             CMDafegeixpagament.Parameters.Add("@client", OleDbType.Char, 50).Value = pClient
@@ -2025,7 +2005,7 @@
         End If
 
         CMDllegeixpagament.Connection = CN
-        CMDllegeixpagament.CommandText = "SELECT * FROM Pagaments " & _
+        CMDllegeixpagament.CommandText = "SELECT * FROM Pagaments " &
         "WHERE (pagaments_mes=@mes AND clients_nom=@client)"
         CMDllegeixpagament.Parameters.Add("@mes", OleDbType.Char, 7).Value = pMes
         CMDllegeixpagament.Parameters.Add("@client", OleDbType.Char, 50).Value = pClient
@@ -2355,8 +2335,8 @@
         End If
 
         CMDFeines.Connection = CN
-        CMDFeines.CommandText = "SELECT * " & _
-            "FROM Feines " & _
+        CMDFeines.CommandText = "SELECT * " &
+            "FROM Feines " &
             "WHERE ((recursos_nom = @recurs))"
         CMDFeines.Parameters.Add("@recurs", OleDbType.Char).Value = e.Row.Cells("cRecurs").Value
 
@@ -2503,8 +2483,8 @@
         End If
 
         CMDDetallFeines.Connection = CN
-        CMDDetallFeines.CommandText = "SELECT * " & _
-            "FROM Feines_Detall " & _
+        CMDDetallFeines.CommandText = "SELECT * " &
+            "FROM Feines_Detall " &
             "WHERE ((serveis_nom = @servei))"
         CMDDetallFeines.Parameters.Add("@servei", OleDbType.Char).Value = e.Row.Cells("cNomServei").Value
 
@@ -3558,16 +3538,8 @@
 
         If e.RowIndex <> -1 Then
             auxint = CInt(dgvFactura.SelectedRows(0).Cells("Feina").Value)
-            If auxint <> 0 Then
-                'passem parametre a frmFeina
-                frmFeina.pPGElement = FeinaaPGElement(auxint)
-                If frmFeina.ShowDialog() = Windows.Forms.DialogResult.OK Then
-                    Carrega_Grids_Factura()
-                    Me.XecsTableAdapter.Fill(Me.PlaniFeinesDataSet.Xecs)
-                    Carrega_TreeView_Clients()
-
-                    StatusStrip1.Items("ToolStripStatusLabel2").Text = "Actualitzat element #" & auxint
-                End If
+            If auxint > 0 Then
+                MostrarFeina(auxint)
             End If
         End If
 
@@ -3701,7 +3673,7 @@
             'imprimir hores recurs seleccionat
             Imprimir_Llista_Feines()
         End If
- 
+
 
     End Sub
 
@@ -3813,8 +3785,8 @@
             End Try
 
             CMDSel.Connection = CN
-            CMDSel.CommandText = "SELECT Llocs_Serveis.llocs_nom, Llocs_Serveis.serveis_nom, Llocs_Serveis.llocs_serveis_quantitat, Serveis.serveis_minuts_per_unitat, Serveis.serveis_comu_per_recursos " & _
-            "FROM Serveis INNER JOIN Llocs_Serveis ON Serveis.serveis_nom = Llocs_Serveis.serveis_nom " & _
+            CMDSel.CommandText = "SELECT Llocs_Serveis.llocs_nom, Llocs_Serveis.serveis_nom, Llocs_Serveis.llocs_serveis_quantitat, Serveis.serveis_minuts_per_unitat, Serveis.serveis_comu_per_recursos " &
+            "FROM Serveis INNER JOIN Llocs_Serveis ON Serveis.serveis_nom = Llocs_Serveis.serveis_nom " &
             "WHERE (((Llocs_Serveis.llocs_nom)= @lloc ))"
             CMDSel.Parameters.Add("@lloc", OleDbType.Char).Value = LlocsSelDataGridView.Item("llocs_nom", e.RowIndex).Value.ToString
 
@@ -3937,7 +3909,7 @@
 
         'per obtenir la ultima feina del lloc
         CMDSelUltFeina.Connection = CN
-        CMDSelUltFeina.CommandText = "SELECT * FROM Feines WHERE Feines.llocs_nom = @lloc " & _
+        CMDSelUltFeina.CommandText = "SELECT * FROM Feines WHERE Feines.llocs_nom = @lloc " &
                         "ORDER BY Feines.feines_data DESC"
         CMDSelUltFeina.Parameters.Add("@lloc", OleDbType.Char)
 
@@ -4108,7 +4080,7 @@
 
                         'sumem la periodicitat
                         datapla = DateAdd(DateInterval.Day, RDSelLlocsPlanif.Item("llocs_periodicitat_dies"), datapla)
-                        End If
+                    End If
 
                 End While
 
@@ -4165,8 +4137,8 @@
         End If
 
         CMDRecursosLloc.Connection = CN
-        CMDRecursosLloc.CommandText = "SELECT Recursos.recursos_nom, Recursos.recursos_color, Recursos_Components.recursos_component_nom, Recursos_1.recursos_color " & _
-        "FROM (Recursos LEFT JOIN Recursos_Components ON Recursos.recursos_nom = Recursos_Components.recursos_nom) LEFT JOIN Recursos AS Recursos_1 ON Recursos_Components.recursos_component_nom = Recursos_1.recursos_nom " & _
+        CMDRecursosLloc.CommandText = "SELECT Recursos.recursos_nom, Recursos.recursos_color, Recursos_Components.recursos_component_nom, Recursos_1.recursos_color " &
+        "FROM (Recursos LEFT JOIN Recursos_Components ON Recursos.recursos_nom = Recursos_Components.recursos_nom) LEFT JOIN Recursos AS Recursos_1 ON Recursos_Components.recursos_component_nom = Recursos_1.recursos_nom " &
         "WHERE (((Recursos.recursos_nom)=@recurs));"
         CMDRecursosLloc.Parameters.Add("@recurs", OleDbType.Char).Value = pLlocReg(11).ToString
 
@@ -4183,8 +4155,8 @@
 
         'obtenim els serveis del lloc per calcular les durades
         CMDServeisLloc.Connection = CN
-        CMDServeisLloc.CommandText = "SELECT Llocs_Serveis.llocs_serveis_quantitat, Serveis.serveis_minuts_per_unitat, Serveis.serveis_comu_per_recursos " & _
-        "FROM Serveis INNER JOIN Llocs_Serveis ON Serveis.serveis_nom = Llocs_Serveis.serveis_nom " & _
+        CMDServeisLloc.CommandText = "SELECT Llocs_Serveis.llocs_serveis_quantitat, Serveis.serveis_minuts_per_unitat, Serveis.serveis_comu_per_recursos " &
+        "FROM Serveis INNER JOIN Llocs_Serveis ON Serveis.serveis_nom = Llocs_Serveis.serveis_nom " &
         "WHERE (((Llocs_Serveis.llocs_nom)=@lloc));"
         CMDServeisLloc.Parameters.Add("@lloc", OleDbType.Char).Value = pLlocReg(0).ToString
 
@@ -4237,7 +4209,7 @@
             End If
 
             CMDactualitzafeina.Connection = CN
-            CMDactualitzafeina.CommandText = "UPDATE Feines " & _
+            CMDactualitzafeina.CommandText = "UPDATE Feines " &
             "SET feines_data_factura = @data, feines_quota = @quota WHERE feines_id = @id"
             CMDactualitzafeina.Parameters.Add("@data", OleDbType.Date)
             CMDactualitzafeina.Parameters.Add("@quota", OleDbType.Single)
@@ -4258,7 +4230,7 @@
 
             'actualitzem xecs del client/mes
             CMDactualitzaxec.Connection = CN
-            CMDactualitzaxec.CommandText = "UPDATE Xecs " & _
+            CMDactualitzaxec.CommandText = "UPDATE Xecs " &
             "SET xecs_data_liquidat = @data, feines_id = @feina WHERE xecs_id = @id"
             CMDactualitzaxec.Parameters.Add("@data", OleDbType.Date)
             CMDactualitzaxec.Parameters.Add("@feina", OleDbType.Integer)
@@ -4420,10 +4392,10 @@
         If RecursosSelDataGridView.SelectedRows(0).Cells("recursos_grup").Value Then
             auxcomandtxt = "SELECT * FROM Feines WHERE (feines_data>=@dataini And feines_data<@datafi And recursos_nom=@recurs) ORDER BY feines_data , feines_hora_inici"
         Else
-            auxcomandtxt = "SELECT Feines.*, IIf(IsNull(Recursos_Components.recursos_component_nom),Feines.recursos_nom,Recursos_Components.recursos_component_nom) AS recurs" & _
-                           " FROM Feines LEFT JOIN Recursos_Components ON Feines.recursos_nom = Recursos_Components.recursos_nom" & _
-                           " WHERE feines_data>=@dataini And feines_data<@datafi" & _
-                           " AND IIf(IsNull(Recursos_Components.recursos_component_nom),Feines.recursos_nom,Recursos_Components.recursos_component_nom)=@recurs" & _
+            auxcomandtxt = "SELECT Feines.*, IIf(IsNull(Recursos_Components.recursos_component_nom),Feines.recursos_nom,Recursos_Components.recursos_component_nom) AS recurs" &
+                           " FROM Feines LEFT JOIN Recursos_Components ON Feines.recursos_nom = Recursos_Components.recursos_nom" &
+                           " WHERE feines_data>=@dataini And feines_data<@datafi" &
+                           " AND IIf(IsNull(Recursos_Components.recursos_component_nom),Feines.recursos_nom,Recursos_Components.recursos_component_nom)=@recurs" &
                            " ORDER BY Feines.feines_data, Feines.feines_hora_inici"
         End If
 
@@ -4502,18 +4474,18 @@
         pDataIniDetall.Value = PlaniMonthViewDesDe.SelectedDate.Date
         pDataFiDetall.Value = PlaniMonthViewFins.SelectedDate.Date
 
-        auxFeinesDACmd = "SELECT DISTINCT Feines.* " & _
-        "FROM Serveis INNER JOIN ((Clients INNER JOIN Llocs ON Clients.clients_nom = Llocs.clients_nom) INNER JOIN (Feines INNER JOIN Feines_Detall ON Feines.feines_id = Feines_Detall.feines_id) ON Llocs.llocs_nom = Feines.llocs_nom) ON Serveis.serveis_nom = Feines_Detall.serveis_nom " & _
-        "WHERE (((Clients.clients_nom) = @client) And ((Feines.feines_data) >= @dataini AND (Feines.feines_data) <= @datafi) AND ((Serveis.serveis_minuts_per_unitat)<>0) AND ((Feines.feines_feta)=True)) " & _
+        auxFeinesDACmd = "SELECT DISTINCT Feines.* " &
+        "FROM Serveis INNER JOIN ((Clients INNER JOIN Llocs ON Clients.clients_nom = Llocs.clients_nom) INNER JOIN (Feines INNER JOIN Feines_Detall ON Feines.feines_id = Feines_Detall.feines_id) ON Llocs.llocs_nom = Feines.llocs_nom) ON Serveis.serveis_nom = Feines_Detall.serveis_nom " &
+        "WHERE (((Clients.clients_nom) = @client) And ((Feines.feines_data) >= @dataini AND (Feines.feines_data) <= @datafi) AND ((Serveis.serveis_minuts_per_unitat)<>0) AND ((Feines.feines_feta)=True)) " &
         "ORDER BY Feines.feines_data"
         auxFeinesDA = New OleDb.OleDbDataAdapter(auxFeinesDACmd, CN)
         auxFeinesDA.SelectCommand.Parameters.Add(pClient)
         auxFeinesDA.SelectCommand.Parameters.Add(pDataIni)
         auxFeinesDA.SelectCommand.Parameters.Add(pDataFi)
 
-        auxFeinesDetallDACmd = "SELECT Feines_Detall.* " & _
-        "FROM Serveis INNER JOIN ((Clients INNER JOIN Llocs ON Clients.clients_nom = Llocs.clients_nom) INNER JOIN (Feines INNER JOIN Feines_Detall ON Feines.feines_id = Feines_Detall.feines_id) ON Llocs.llocs_nom = Feines.llocs_nom) ON Serveis.serveis_nom = Feines_Detall.serveis_nom " & _
-        "WHERE (((Clients.clients_nom) = @client) And ((Feines.feines_data) >= @dataini AND (Feines.feines_data) <= @datafi) AND ((Serveis.serveis_minuts_per_unitat)<>0) AND ((Feines.feines_feta)=True)) " & _
+        auxFeinesDetallDACmd = "SELECT Feines_Detall.* " &
+        "FROM Serveis INNER JOIN ((Clients INNER JOIN Llocs ON Clients.clients_nom = Llocs.clients_nom) INNER JOIN (Feines INNER JOIN Feines_Detall ON Feines.feines_id = Feines_Detall.feines_id) ON Llocs.llocs_nom = Feines.llocs_nom) ON Serveis.serveis_nom = Feines_Detall.serveis_nom " &
+        "WHERE (((Clients.clients_nom) = @client) And ((Feines.feines_data) >= @dataini AND (Feines.feines_data) <= @datafi) AND ((Serveis.serveis_minuts_per_unitat)<>0) AND ((Feines.feines_feta)=True)) " &
         "ORDER BY Feines.feines_data"
         auxFeinesDetallDA = New OleDb.OleDbDataAdapter(auxFeinesDetallDACmd, CN)
         auxFeinesDetallDA.SelectCommand.Parameters.Add(pClientDetall)
@@ -4785,8 +4757,8 @@
         Dim auxHoresDA As New OleDb.OleDbDataAdapter("SELECT * FROM Hores_Fetes WHERE hores_data>=@dataini And hores_data<@datafi ORDER BY hores_data", CN)
         Dim auxHoresCB As OleDbCommandBuilder = New OleDbCommandBuilder(auxHoresDA)
 
-        Dim auxFeinesDA As New OleDb.OleDbDataAdapter("SELECT Feines.*, IIf(IsNull(Recursos_Components.recursos_component_nom),Feines.recursos_nom,Recursos_Components.recursos_component_nom) AS RECURS" & _
-            " FROM Feines LEFT JOIN Recursos_Components ON Feines.recursos_nom = Recursos_Components.recursos_nom" & _
+        Dim auxFeinesDA As New OleDb.OleDbDataAdapter("SELECT Feines.*, IIf(IsNull(Recursos_Components.recursos_component_nom),Feines.recursos_nom,Recursos_Components.recursos_component_nom) AS RECURS" &
+            " FROM Feines LEFT JOIN Recursos_Components ON Feines.recursos_nom = Recursos_Components.recursos_nom" &
             " WHERE Feines.feines_data=@data", CN)
 
         Dim pdataini As New OleDbParameter("@dataini", OleDbType.DBDate)
@@ -4952,4 +4924,43 @@
     Private Sub Llocs_periodicitat_diesTextBox_TextChanged(sender As Object, e As EventArgs) Handles Llocs_periodicitat_diesTextBox.TextChanged
         If Llocs_periodicitat_diesTextBox.Text = "" Then Llocs_periodicitat_diesTextBox.Text = "0"
     End Sub
+
+    Private Sub txtNumFeina_KeyPress(sender As Object, e As KeyPressEventArgs) Handles txtNumFeina.KeyPress
+        'només permetem caracters per numerics
+        If e.KeyChar = "." Or e.KeyChar = "," Then
+            e.Handled = True
+        End If
+        'If Not (e.KeyChar >= "0" And e.KeyChar <= "9") Then
+        ' e.Handled = True
+        'End If
+    End Sub
+
+    Private Sub txtNumFeina_KeyDown(sender As Object, e As KeyEventArgs) Handles txtNumFeina.KeyDown
+
+        If e.KeyCode = Keys.Enter And txtNumFeina.Text <> "" Then
+
+            If IsNumeric(txtNumFeina.Text) Then
+                MostrarFeina(CLng(txtNumFeina.Text))
+            Else
+                MsgBox("Indica un nro. de feina", MsgBoxStyle.OkOnly, "ERROR")
+            End If
+            txtNumFeina.Text = ""
+        End If
+
+    End Sub
+
+    Public Sub MostrarFeina(ByVal idFeina As Long)
+        frmFeina.pPGElement = FeinaaPGElement(idFeina)
+        If IsNothing(frmFeina.pPGElement) Then
+            MsgBox("Feina #" & idFeina & " inexistent", MsgBoxStyle.OkOnly, "ERROR")
+        Else
+            If frmFeina.ShowDialog() = Windows.Forms.DialogResult.OK Then
+                Carrega_Grids_Factura()
+                Me.XecsTableAdapter.Fill(Me.PlaniFeinesDataSet.Xecs)
+                Carrega_TreeView_Clients()
+                StatusStrip1.Items("ToolStripStatusLabel2").Text = "Actualitzada feina #" & idFeina
+            End If
+        End If
+    End Sub
+
 End Class
