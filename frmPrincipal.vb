@@ -11,6 +11,7 @@
     Public HORAINICIDINAR As System.TimeSpan 'horari dinar
     Public HORAFINALDINAR As System.TimeSpan 'horari dinar
 
+
     'auxiliar per components de recurs
     Private Structure RecursComponent
         Public recurs As String
