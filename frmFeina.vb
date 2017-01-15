@@ -433,4 +433,61 @@ Public Class frmFeina
 
     End Sub
 
+    Private Sub Delete_Button_Click(sender As Object, e As EventArgs) Handles Delete_Button.Click
+        Dim CMDeliminaFeina As New OleDbCommand
+        Dim TRANS As OleDbTransaction
+
+        If MsgBox("S'eliminarà la feina.", MsgBoxStyle.OkCancel, "CONFIRMACIÓ") = MsgBoxResult.Cancel Then
+            Exit Sub
+        End If
+
+        'si existeix, eliminem element a grid agenda
+        If frmPrincipal.AgendaGrid.PGElementSelectById(pPGElement.Id) = PlaniGrid.PGReturnCode.PGSelected Then
+            If frmPrincipal.AgendaGrid.PGElementDeleteById(pPGElement.Id) <> PlaniGrid.PGReturnCode.PGDeleted Then
+                MsgBox("Error al eliminar PGElement.", MsgBoxStyle.OkOnly, "ERROR")
+                Exit Sub
+            End If
+        End If
+
+
+        'eliminem feina (i detall) a BBDD
+
+        'provem la connexio
+        Try
+            CN.Open()
+        Catch ex As Exception
+            MsgBox("Error al obrir connexió: " & CNS, MsgBoxStyle.OkOnly, "ERROR")
+            Exit Sub
+        End Try
+
+        'iniciem transaccio
+        TRANS = CN.BeginTransaction
+
+        'eliminem feina
+        CMDeliminaFeina.Connection = CN
+        CMDeliminaFeina.CommandText = "DELETE FROM Feines " &
+        "WHERE feines_id = @id"
+        CMDeliminaFeina.Parameters.Add("@id", OleDbType.Integer).Value = CInt(pPGElement.Id)
+
+        CMDeliminaFeina.Transaction = TRANS
+
+        Try
+            CMDeliminaFeina.ExecuteNonQuery()
+        Catch ex As Exception
+            MsgBox(ex.Message, MsgBoxStyle.OkOnly, "ERROR")
+            TRANS.Rollback()
+            If CN.State = ConnectionState.Open Then CN.Close()
+            Exit Sub
+        End Try
+
+        TRANS.Commit()
+
+        If CN.State = ConnectionState.Open Then CN.Close()
+
+        Me.DialogResult = System.Windows.Forms.DialogResult.OK
+
+        pPGElement = Nothing
+        Me.Close()
+
+    End Sub
 End Class
