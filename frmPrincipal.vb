@@ -1449,6 +1449,8 @@
 
     End Sub
 
+
+
     Private Function AfegirFeina(ByRef pPGElement As PlaniGrid.PGElement) As Boolean
         Dim CNopen As Boolean = (CN.State = ConnectionState.Open)
         Dim CMDaddFeina As New OleDbCommand
@@ -1457,7 +1459,7 @@
         Dim CMDactualitzaDetall As New OleDbCommand
         Dim CMDNewID As New OleDbCommand
         Dim TRANS As OleDbTransaction
-        Dim auxstr As String = ObtenirRecursFeina(pPGElement)
+        Dim auxRecurs As String
 
         If Not CNopen Then
             Try
@@ -1467,6 +1469,8 @@
                 Return False
             End Try
         End If
+
+        auxRecurs = ObtenirRecursFeina(pPGElement)
 
         TRANS = CN.BeginTransaction
 
@@ -1478,7 +1482,7 @@
         CMDaddFeina.Parameters.Add("@data", OleDbType.Date).Value = pPGElement.Starts.Date
         CMDaddFeina.Parameters.Add("@horainici", OleDbType.Char, 5).Value = pPGElement.Starts.TimeOfDay.ToString
         CMDaddFeina.Parameters.Add("@horafi", OleDbType.Char, 5).Value = pPGElement.Ends.TimeOfDay.ToString
-        CMDaddFeina.Parameters.Add("@recurs", OleDbType.Char, 50).Value = IIf(auxstr = "", DBNull.Value, auxstr)
+        CMDaddFeina.Parameters.Add("@recurs", OleDbType.Char, 50).Value = IIf(auxRecurs = "", DBNull.Value, auxRecurs)
 
         CMDaddFeina.Transaction = TRANS
 
@@ -1579,7 +1583,7 @@
     Private Function ActualitzarFeina(ByRef pPGElement As PlaniGrid.PGElement) As Boolean
         Dim CNopen As Boolean = (CN.State = ConnectionState.Open)
         Dim CMDactualitzafeina As New OleDbCommand
-        Dim auxstr As String
+        Dim auxRecurs As String
 
         If Not CNopen Then
             Try
@@ -1591,6 +1595,8 @@
             End Try
         End If
 
+        auxRecurs = ObtenirRecursFeina(pPGElement)
+
         CMDactualitzafeina.Connection = CN
         CMDactualitzafeina.CommandText = "UPDATE Feines " &
         "SET llocs_nom = @lloc, feines_data = @data, feines_hora_inici = @horainici, feines_hora_fi = @horafi, recursos_nom = @recurs, feines_feta = @feta " &
@@ -1599,8 +1605,7 @@
         CMDactualitzafeina.Parameters.Add("@data", OleDbType.Date).Value = pPGElement.Starts.Date
         CMDactualitzafeina.Parameters.Add("@horainici", OleDbType.Char, 5).Value = pPGElement.Starts.TimeOfDay.ToString
         CMDactualitzafeina.Parameters.Add("@horafi", OleDbType.Char, 5).Value = pPGElement.Ends.TimeOfDay.ToString
-        auxstr = ObtenirRecursFeina(pPGElement)
-        CMDactualitzafeina.Parameters.Add("@recurs", OleDbType.Char, 50).Value = IIf(auxstr = "", DBNull.Value, auxstr)
+        CMDactualitzafeina.Parameters.Add("@recurs", OleDbType.Char, 50).Value = IIf(auxRecurs = "", DBNull.Value, auxRecurs)
         CMDactualitzafeina.Parameters.Add("@feta", OleDbType.Boolean).Value = pPGElement.Done
         CMDactualitzafeina.Parameters.Add("@id", OleDbType.Integer).Value = CInt(pPGElement.Id)
 
@@ -1850,11 +1855,11 @@
         Dim CMDrecursos As OleDbCommand
         Dim CMDrecursosicomps As OleDbCommand
         Dim RDrecursosicomps As OleDbDataReader
-        Dim cmdText As String = "SELECT * FROM Recursos_Components ORDER BY recursos_nom, recursos_component_nom"
-        Dim nrectrobats As Integer = 0
-        Dim compostactual As String = ""
-        Dim auxint As Integer
-        Dim nomnoucompost As String = ""
+        Dim cmdText As String = ""
+        Dim nRecTrobats As Integer = 0
+        Dim compostActual As String = ""
+        Dim auxInt As Integer
+        Dim nomNouCompost As String = ""
         Dim colornoucompost As Color = Color.Empty
         Dim drvRecurs As DataRowView
 
@@ -1876,16 +1881,16 @@
         CMDrecursos.Parameters.Add("@recurs", OleDbType.Char)
         For Each r In pPGElement.Resources
             CMDrecursos.Parameters("@recurs").Value = r.Key
-            auxint = CMDrecursos.ExecuteScalar
-            If auxint <= 0 Then
+            auxInt = CMDrecursos.ExecuteScalar
+            If auxInt <= 0 Then
                 MsgBox("Recurs '" & r.Key & "' en element " & pPGElement.Id & " inexistent", MsgBoxStyle.OkOnly, "ERROR")
                 If CN.State = ConnectionState.Open And Not CNopen Then CN.Close()
                 Exit Function
             End If
-            If nomnoucompost = "" Then
-                nomnoucompost = r.Key
+            If nomNouCompost = "" Then
+                nomNouCompost = r.Key
             Else
-                nomnoucompost &= ("+" & r.Key)
+                nomNouCompost &= ("+" & r.Key)
             End If
         Next
         colornoucompost = AgendaGrid.PGResourcesColor(pPGElement.Resources)
@@ -1898,38 +1903,38 @@
                 ObtenirRecursFeina = pPGElement.Resources.First.Key
 
             Case Else
+                'busquem recurs compost dels recursos del PGE
+                cmdText = "SELECT * FROM Recursos_Components ORDER BY recursos_nom, recursos_component_nom"
                 CMDrecursosicomps = New OleDbCommand(cmdText, CN)
                 RDrecursosicomps = CMDrecursosicomps.ExecuteReader
                 While RDrecursosicomps.Read
-                    If nrectrobats = pPGElement.Resources.Count And compostactual <> "" And compostactual <> RDrecursosicomps.Item("recursos_nom") Then
+                    If nRecTrobats = pPGElement.Resources.Count And compostActual <> "" And compostActual <> RDrecursosicomps.Item("recursos_nom") Then
                         Exit While
                     End If
-                    If compostactual <> RDrecursosicomps.Item("recursos_nom") Then
-                        compostactual = RDrecursosicomps.Item("recursos_nom")
-                        nrectrobats = 0
+                    If compostActual <> RDrecursosicomps.Item("recursos_nom") Then
+                        compostActual = RDrecursosicomps.Item("recursos_nom")
+                        nRecTrobats = 0
                     End If
                     If pPGElement.Resources.ContainsKey(RDrecursosicomps.Item("recursos_component_nom")) Then
-                        If nrectrobats >= 0 Then nrectrobats += 1
+                        If nRecTrobats >= 0 Then nRecTrobats += 1
                     Else
-                        nrectrobats = -1
+                        nRecTrobats = -1
                     End If
                 End While
                 RDrecursosicomps.Close()
-
-                If nrectrobats = pPGElement.Resources.Count Then
-                    ObtenirRecursFeina = compostactual
+                If nRecTrobats = pPGElement.Resources.Count Then
+                    ObtenirRecursFeina = compostActual
                 End If
 
+                'si no trobat creem el nou recurs compost i la seva composició
                 If ObtenirRecursFeina = "" Then
-                    ObtenirRecursFeina = nomnoucompost
-
-                    'creem el nou recurs compost i la seva composició
+                    ObtenirRecursFeina = nomNouCompost
 
                     'Cal fer-ho al bindingsource pq si no al donar-se d'alta al datagrid a traves
                     'del dataadapter.fill es torna a donar d'alta a la BBDD i dona duplicat
 
                     drvRecurs = CType(RecursosBindingSource.AddNew(), DataRowView)
-                    drvRecurs("Recursos_nom") = nomnoucompost
+                    drvRecurs("Recursos_nom") = nomNouCompost
                     drvRecurs("Recursos_grup") = True
                     'drvRecurs("Recursos_color") = colornoucompost.ToArgb
                     drvRecurs("Recursos_color") = ColorTranslator.ToWin32(colornoucompost)
@@ -1939,7 +1944,7 @@
                     RecursosTableAdapter.Update(PlaniFeinesDataSet.Recursos)
 
                     For Each r In pPGElement.Resources
-                        Recursos_ComponentsTableAdapter.Insert(nomnoucompost, r.Key)
+                        Recursos_ComponentsTableAdapter.Insert(nomNouCompost, r.Key)
                     Next
                     'actualitzem la BBDD components
                     Recursos_ComponentsTableAdapter.Update(PlaniFeinesDataSet.Recursos_Components)
@@ -2319,7 +2324,7 @@
         'si te llocs associats
         auxLlocs = PlaniFeinesDataSet.Llocs.Select("recursos_nom ='" & Replace(e.Row.Cells("cRecurs").Value, "'", "''") & "'")
         If auxLlocs.Count > 0 Then
-            RecursosDataGridView.Rows(e.Row.Index).ErrorText = "El recurs està assignat als lloc '" & auxLlocs.First.recursos_nom & "'. No es pot eliminar."
+            RecursosDataGridView.Rows(e.Row.Index).ErrorText = "El recurs està assignat al lloc '" & auxLlocs.First.llocs_nom & "'. No es pot eliminar."
             e.Cancel = True
             Exit Sub
         End If
@@ -4963,5 +4968,6 @@
             End If
         End If
     End Sub
+
 
 End Class

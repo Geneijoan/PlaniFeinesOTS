@@ -761,7 +761,7 @@ Partial Class frmPrincipal
         Me.Calendari.MinimumSize = New System.Drawing.Size(234, 150)
         Me.Calendari.Name = "Calendari"
         Me.Calendari.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.Calendari.SelectedDate = New Date(2017, 1, 15, 0, 0, 0, 0)
+        Me.Calendari.SelectedDate = New Date(2017, 2, 4, 0, 0, 0, 0)
         Me.Calendari.Size = New System.Drawing.Size(234, 150)
         Me.Calendari.TabIndex = 7
         '
@@ -1031,7 +1031,7 @@ Partial Class frmPrincipal
         Me.AgendaGrid.AllowMultiDayElements = False
         Me.AgendaGrid.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
         Me.AgendaGrid.BackColor = System.Drawing.SystemColors.ControlDark
-        Me.AgendaGrid.DisplayDate = New Date(2017, 1, 15, 0, 0, 0, 0)
+        Me.AgendaGrid.DisplayDate = New Date(2017, 2, 4, 0, 0, 0, 0)
         Me.AgendaGrid.Dock = System.Windows.Forms.DockStyle.Top
         Me.AgendaGrid.EndTimeOfDay = "24:00"
         Me.AgendaGrid.ExtResourceOverlap = True
@@ -2739,7 +2739,7 @@ Partial Class frmPrincipal
         Me.PlaniMonthViewFins.MaximumSize = New System.Drawing.Size(234, 150)
         Me.PlaniMonthViewFins.MinimumSize = New System.Drawing.Size(234, 150)
         Me.PlaniMonthViewFins.Name = "PlaniMonthViewFins"
-        Me.PlaniMonthViewFins.SelectedDate = New Date(2017, 1, 15, 0, 0, 0, 0)
+        Me.PlaniMonthViewFins.SelectedDate = New Date(2017, 2, 4, 0, 0, 0, 0)
         Me.PlaniMonthViewFins.Size = New System.Drawing.Size(234, 150)
         Me.PlaniMonthViewFins.TabIndex = 10
         '
@@ -2753,7 +2753,7 @@ Partial Class frmPrincipal
         Me.PlaniMonthViewDesDe.MaximumSize = New System.Drawing.Size(234, 150)
         Me.PlaniMonthViewDesDe.MinimumSize = New System.Drawing.Size(234, 150)
         Me.PlaniMonthViewDesDe.Name = "PlaniMonthViewDesDe"
-        Me.PlaniMonthViewDesDe.SelectedDate = New Date(2017, 1, 15, 0, 0, 0, 0)
+        Me.PlaniMonthViewDesDe.SelectedDate = New Date(2017, 2, 4, 0, 0, 0, 0)
         Me.PlaniMonthViewDesDe.Size = New System.Drawing.Size(234, 150)
         Me.PlaniMonthViewDesDe.TabIndex = 9
         '
