@@ -5,11 +5,8 @@ Public Class frmFeina
     Public Shared pPGElement As PlaniGrid.PGElement 'parametre d'entrada al form
 
     'objectes per accés manual a la BBDD
-    'per accedir al .ini 
-    Dim mINI As New cIniArray
-    Dim ficINI As String = ".\PlaniFeines.ini"
     Dim CN As OleDbConnection
-    Dim CNS As String = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & mINI.IniGet(ficINI, "General", "BaseDatos") 'per .mdb "Microsoft.Jet.OLEDB.4.0"
+    Dim CNS As String = My.Settings.PlaniFeinesConnectionString
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
         Dim CMDactualitzaFeina As New OleDbCommand

@@ -1861,7 +1861,7 @@
         Dim auxInt As Integer
         Dim nomNouCompost As String = ""
         Dim colornoucompost As Color = Color.Empty
-        Dim drvRecurs As DataRowView
+        'Dim drvRecurs As DataRowView
 
         ObtenirRecursFeina = ""
 
@@ -1928,29 +1928,55 @@
 
                 'si no trobat creem el nou recurs compost i la seva composició
                 If ObtenirRecursFeina = "" Then
-                    ObtenirRecursFeina = nomNouCompost
 
-                    'Cal fer-ho al bindingsource pq si no al donar-se d'alta al datagrid a traves
-                    'del dataadapter.fill es torna a donar d'alta a la BBDD i dona duplicat
-
-                    drvRecurs = CType(RecursosBindingSource.AddNew(), DataRowView)
-                    drvRecurs("Recursos_nom") = nomNouCompost
-                    drvRecurs("Recursos_grup") = True
-                    'drvRecurs("Recursos_color") = colornoucompost.ToArgb
-                    drvRecurs("Recursos_color") = ColorTranslator.ToWin32(colornoucompost)
-                    drvRecurs.EndEdit()
-
-                    'actualitzem la BBDD recurs abans de posar-hi els components
-                    RecursosTableAdapter.Update(PlaniFeinesDataSet.Recursos)
-
+                    'muntem parametres pel dao
+                    Dim auxComps As New Collection
                     For Each r In pPGElement.Resources
-                        Recursos_ComponentsTableAdapter.Insert(nomNouCompost, r.Key)
+                        auxComps.Add(r.Key)
                     Next
-                    'actualitzem la BBDD components
-                    Recursos_ComponentsTableAdapter.Update(PlaniFeinesDataSet.Recursos_Components)
 
-                    'reordenem el grid de seleccio de recursos
-                    RecursosSelDataGridView.Sort(RecursosSelDataGridView.Columns.Item("recursos_nom"), System.ComponentModel.ListSortDirection.Ascending)
+                    If AfegirRecursCompost(nomNouCompost, colornoucompost, auxComps) Then
+                        'recarreguem les grids de recursos RecursosDataGridView i RecursosSelDataGridView
+                        'clear out the datasource for the Grid view
+                        RecursosDataGridView.DataSource = Nothing
+                        RecursosSelDataGridView.DataSource = Nothing
+                        'refill the table adapter from the dataset table 
+                        RecursosTableAdapter.Fill(PlaniFeinesDataSet.Recursos)
+                        'reset the datasource from the binding source
+                        RecursosBindingSource.Sort = "recursos_nom"
+                        RecursosDataGridView.DataSource = RecursosBindingSource
+                        RecursosSelDataGridView.DataSource = RecursosBindingSource
+                        'should redraw with the new data
+                        RecursosDataGridView.Refresh()
+                        RecursosSelDataGridView.Refresh()
+
+                        MsgBox("S'ha creat el grup de recursos '" & nomNouCompost & "'", MsgBoxStyle.OkOnly, "INFORMACIÓ")
+                        ObtenirRecursFeina = nomNouCompost
+
+                    End If
+
+                    ''Cal fer-ho al bindingsource pq si no al donar-se d'alta al datagrid a traves
+                    ''del dataadapter.fill es torna a donar d'alta a la BBDD i dona duplicat
+
+                    'drvRecurs = CType(RecursosBindingSource.AddNew(), DataRowView)
+                    'drvRecurs("Recursos_nom") = nomNouCompost
+                    'drvRecurs("Recursos_grup") = True
+                    ''drvRecurs("Recursos_color") = colornoucompost.ToArgb
+                    'drvRecurs("Recursos_color") = ColorTranslator.ToWin32(colornoucompost)
+                    'drvRecurs.EndEdit()
+
+                    ''actualitzem la BBDD recurs abans de posar-hi els components
+                    'RecursosTableAdapter.Update(PlaniFeinesDataSet.Recursos)
+
+                    'For Each r In pPGElement.Resources
+                    '    Recursos_ComponentsTableAdapter.Insert(nomNouCompost, r.Key)
+                    'Next
+
+                    ''actualitzem la BBDD components
+                    'Recursos_ComponentsTableAdapter.Update(PlaniFeinesDataSet.Recursos_Components)
+
+                    ''reordenem el grid de seleccio de recursos
+                    'RecursosSelDataGridView.Sort(RecursosSelDataGridView.Columns.Item("recursos_nom"), System.ComponentModel.ListSortDirection.Ascending)
                 End If
 
         End Select

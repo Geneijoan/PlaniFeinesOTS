@@ -173,6 +173,7 @@
       <DependentUpon>crpXecsLiquidatsMes.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="DAOs.vb" />
     <Compile Include="dsFactura.Designer.vb">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
