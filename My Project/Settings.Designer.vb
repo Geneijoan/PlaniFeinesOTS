@@ -54,16 +54,14 @@ Namespace My
             End Get
         End Property
         
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=.\PlaniFeines.accdb")>  _
-        Public Property PlaniFeinesConnectionString() As String
+         Global.System.Configuration.SpecialSettingAttribute(Global.System.Configuration.SpecialSetting.ConnectionString),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=|DataDirectory|\PlaniFeines.accdb")>  _
+        Public ReadOnly Property PlaniFeinesConnectionString() As String
             Get
                 Return CType(Me("PlaniFeinesConnectionString"),String)
             End Get
-            Set
-                Me("PlaniFeinesConnectionString") = value
-            End Set
         End Property
     End Class
 End Namespace

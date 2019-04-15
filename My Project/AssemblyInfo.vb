@@ -8,17 +8,17 @@ Imports System.Runtime.InteropServices
 
 ' Revisar los valores de los atributos del ensamblado
 
-<Assembly: AssemblyTitle("PlaniFeinesOTS")> 
-<Assembly: AssemblyDescription("Planificador de feines per OTS en .NET")> 
+<Assembly: AssemblyTitle("PlaniFeinesOTS")>
+<Assembly: AssemblyDescription("Planificador de feines en .NET 2015 per OTS")>
 <Assembly: AssemblyCompany("PlaniSoftware")> 
-<Assembly: AssemblyProduct("PlaniFeinesOTS")> 
-<Assembly: AssemblyCopyright("Copyright © PlaniSoftware 2016")> 
+<Assembly: AssemblyProduct("PlaniFeinesOTS")>
+<Assembly: AssemblyCopyright("Copyright © PlaniSoftware 2018")>
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>
 
 'El siguiente GUID sirve como identificador de typelib si este proyecto se expone a COM
-<Assembly: Guid("c632d33c-8a28-41ab-83bd-bc190f0f0a3f")> 
+<Assembly: Guid("c632d33c-8a28-41ab-83bd-bc190f0f0a3f")>
 
 ' La información de versión de un ensamblado consta de los cuatro valores siguientes:
 '
@@ -31,5 +31,5 @@ Imports System.Runtime.InteropServices
 ' mediante el asterisco ('*'), como se muestra a continuación:
 ' <Assembly: AssemblyVersion("1.0.*")> 
 
-<Assembly: AssemblyVersion("40.0.0.0")> 
+<Assembly: AssemblyVersion("41.0.0.0")>
 <Assembly: AssemblyFileVersion("0.0.0.0")> 

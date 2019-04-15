@@ -27,6 +27,8 @@ Partial Public Class PlaniFeinesDataSet
     
     Private tableClients As ClientsDataTable
     
+    Private tableXecs As XecsDataTable
+    
     Private tableFeines As FeinesDataTable
     
     Private tableFeines_Detall As Feines_DetallDataTable
@@ -45,15 +47,15 @@ Partial Public Class PlaniFeinesDataSet
     
     Private tableServeis As ServeisDataTable
     
-    Private tableXecs As XecsDataTable
-    
-    Private relationRecursosFeines As Global.System.Data.DataRelation
+    Private relationFeinesXecs As Global.System.Data.DataRelation
     
     Private relationLlocsFeines As Global.System.Data.DataRelation
     
-    Private relationServeisFeines_Detall As Global.System.Data.DataRelation
+    Private relationRecursosFeines As Global.System.Data.DataRelation
     
     Private relationFeinesFeines_Detall As Global.System.Data.DataRelation
+    
+    Private relationServeisFeines_Detall As Global.System.Data.DataRelation
     
     Private relationRecursosHores_Fetes As Global.System.Data.DataRelation
     
@@ -67,11 +69,9 @@ Partial Public Class PlaniFeinesDataSet
     
     Private relationRecursosRecursos_Components1 As Global.System.Data.DataRelation
     
-    Private relationRecursosRecursos_Components As Global.System.Data.DataRelation
-    
     Private relationClientsXecs As Global.System.Data.DataRelation
     
-    Private relationFeinesXecs As Global.System.Data.DataRelation
+    Private relationRecursosRecursos_Components As Global.System.Data.DataRelation
     
     Private relationServeisLlocs_Serveis As Global.System.Data.DataRelation
     
@@ -107,6 +107,9 @@ Partial Public Class PlaniFeinesDataSet
             If (Not (ds.Tables("Clients")) Is Nothing) Then
                 MyBase.Tables.Add(New ClientsDataTable(ds.Tables("Clients")))
             End If
+            If (Not (ds.Tables("Xecs")) Is Nothing) Then
+                MyBase.Tables.Add(New XecsDataTable(ds.Tables("Xecs")))
+            End If
             If (Not (ds.Tables("Feines")) Is Nothing) Then
                 MyBase.Tables.Add(New FeinesDataTable(ds.Tables("Feines")))
             End If
@@ -134,9 +137,6 @@ Partial Public Class PlaniFeinesDataSet
             If (Not (ds.Tables("Serveis")) Is Nothing) Then
                 MyBase.Tables.Add(New ServeisDataTable(ds.Tables("Serveis")))
             End If
-            If (Not (ds.Tables("Xecs")) Is Nothing) Then
-                MyBase.Tables.Add(New XecsDataTable(ds.Tables("Xecs")))
-            End If
             Me.DataSetName = ds.DataSetName
             Me.Prefix = ds.Prefix
             Me.Namespace = ds.Namespace
@@ -161,6 +161,16 @@ Partial Public Class PlaniFeinesDataSet
     Public ReadOnly Property Clients() As ClientsDataTable
         Get
             Return Me.tableClients
+        End Get
+    End Property
+    
+    <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+     Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0"),  _
+     Global.System.ComponentModel.Browsable(false),  _
+     Global.System.ComponentModel.DesignerSerializationVisibility(Global.System.ComponentModel.DesignerSerializationVisibility.Content)>  _
+    Public ReadOnly Property Xecs() As XecsDataTable
+        Get
+            Return Me.tableXecs
         End Get
     End Property
     
@@ -256,16 +266,6 @@ Partial Public Class PlaniFeinesDataSet
     
     <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
      Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0"),  _
-     Global.System.ComponentModel.Browsable(false),  _
-     Global.System.ComponentModel.DesignerSerializationVisibility(Global.System.ComponentModel.DesignerSerializationVisibility.Content)>  _
-    Public ReadOnly Property Xecs() As XecsDataTable
-        Get
-            Return Me.tableXecs
-        End Get
-    End Property
-    
-    <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0"),  _
      Global.System.ComponentModel.BrowsableAttribute(true),  _
      Global.System.ComponentModel.DesignerSerializationVisibilityAttribute(Global.System.ComponentModel.DesignerSerializationVisibility.Visible)>  _
     Public Overrides Property SchemaSerializationMode() As Global.System.Data.SchemaSerializationMode
@@ -334,6 +334,9 @@ Partial Public Class PlaniFeinesDataSet
             If (Not (ds.Tables("Clients")) Is Nothing) Then
                 MyBase.Tables.Add(New ClientsDataTable(ds.Tables("Clients")))
             End If
+            If (Not (ds.Tables("Xecs")) Is Nothing) Then
+                MyBase.Tables.Add(New XecsDataTable(ds.Tables("Xecs")))
+            End If
             If (Not (ds.Tables("Feines")) Is Nothing) Then
                 MyBase.Tables.Add(New FeinesDataTable(ds.Tables("Feines")))
             End If
@@ -360,9 +363,6 @@ Partial Public Class PlaniFeinesDataSet
             End If
             If (Not (ds.Tables("Serveis")) Is Nothing) Then
                 MyBase.Tables.Add(New ServeisDataTable(ds.Tables("Serveis")))
-            End If
-            If (Not (ds.Tables("Xecs")) Is Nothing) Then
-                MyBase.Tables.Add(New XecsDataTable(ds.Tables("Xecs")))
             End If
             Me.DataSetName = ds.DataSetName
             Me.Prefix = ds.Prefix
@@ -400,6 +400,12 @@ Partial Public Class PlaniFeinesDataSet
         If (initTable = true) Then
             If (Not (Me.tableClients) Is Nothing) Then
                 Me.tableClients.InitVars
+            End If
+        End If
+        Me.tableXecs = CType(MyBase.Tables("Xecs"),XecsDataTable)
+        If (initTable = true) Then
+            If (Not (Me.tableXecs) Is Nothing) Then
+                Me.tableXecs.InitVars
             End If
         End If
         Me.tableFeines = CType(MyBase.Tables("Feines"),FeinesDataTable)
@@ -456,25 +462,19 @@ Partial Public Class PlaniFeinesDataSet
                 Me.tableServeis.InitVars
             End If
         End If
-        Me.tableXecs = CType(MyBase.Tables("Xecs"),XecsDataTable)
-        If (initTable = true) Then
-            If (Not (Me.tableXecs) Is Nothing) Then
-                Me.tableXecs.InitVars
-            End If
-        End If
-        Me.relationRecursosFeines = Me.Relations("RecursosFeines")
+        Me.relationFeinesXecs = Me.Relations("FeinesXecs")
         Me.relationLlocsFeines = Me.Relations("LlocsFeines")
-        Me.relationServeisFeines_Detall = Me.Relations("ServeisFeines_Detall")
+        Me.relationRecursosFeines = Me.Relations("RecursosFeines")
         Me.relationFeinesFeines_Detall = Me.Relations("FeinesFeines_Detall")
+        Me.relationServeisFeines_Detall = Me.Relations("ServeisFeines_Detall")
         Me.relationRecursosHores_Fetes = Me.Relations("RecursosHores_Fetes")
         Me.relationClientsLlocs = Me.Relations("ClientsLlocs")
         Me.relationRecursosLlocs = Me.Relations("RecursosLlocs")
         Me.relationLlocsLlocs_Serveis = Me.Relations("LlocsLlocs_Serveis")
         Me.relationClientsPagaments = Me.Relations("ClientsPagaments")
         Me.relationRecursosRecursos_Components1 = Me.Relations("RecursosRecursos_Components1")
-        Me.relationRecursosRecursos_Components = Me.Relations("RecursosRecursos_Components")
         Me.relationClientsXecs = Me.Relations("ClientsXecs")
-        Me.relationFeinesXecs = Me.Relations("FeinesXecs")
+        Me.relationRecursosRecursos_Components = Me.Relations("RecursosRecursos_Components")
         Me.relationServeisLlocs_Serveis = Me.Relations("ServeisLlocs_Serveis")
     End Sub
     
@@ -488,6 +488,8 @@ Partial Public Class PlaniFeinesDataSet
         Me.SchemaSerializationMode = Global.System.Data.SchemaSerializationMode.IncludeSchema
         Me.tableClients = New ClientsDataTable()
         MyBase.Tables.Add(Me.tableClients)
+        Me.tableXecs = New XecsDataTable()
+        MyBase.Tables.Add(Me.tableXecs)
         Me.tableFeines = New FeinesDataTable()
         MyBase.Tables.Add(Me.tableFeines)
         Me.tableFeines_Detall = New Feines_DetallDataTable()
@@ -506,77 +508,16 @@ Partial Public Class PlaniFeinesDataSet
         MyBase.Tables.Add(Me.tableRecursos_Components)
         Me.tableServeis = New ServeisDataTable()
         MyBase.Tables.Add(Me.tableServeis)
-        Me.tableXecs = New XecsDataTable()
-        MyBase.Tables.Add(Me.tableXecs)
-        Dim fkc As Global.System.Data.ForeignKeyConstraint
-        fkc = New Global.System.Data.ForeignKeyConstraint("RecursosFeines", New Global.System.Data.DataColumn() {Me.tableRecursos.recursos_nomColumn}, New Global.System.Data.DataColumn() {Me.tableFeines.recursos_nomColumn})
-        Me.tableFeines.Constraints.Add(fkc)
-        fkc.AcceptRejectRule = Global.System.Data.AcceptRejectRule.None
-        fkc.DeleteRule = Global.System.Data.Rule.None
-        fkc.UpdateRule = Global.System.Data.Rule.Cascade
-        fkc = New Global.System.Data.ForeignKeyConstraint("LlocsFeines", New Global.System.Data.DataColumn() {Me.tableLlocs.llocs_nomColumn}, New Global.System.Data.DataColumn() {Me.tableFeines.llocs_nomColumn})
-        Me.tableFeines.Constraints.Add(fkc)
-        fkc.AcceptRejectRule = Global.System.Data.AcceptRejectRule.None
-        fkc.DeleteRule = Global.System.Data.Rule.None
-        fkc.UpdateRule = Global.System.Data.Rule.Cascade
-        fkc = New Global.System.Data.ForeignKeyConstraint("ServeisFeines_Detall", New Global.System.Data.DataColumn() {Me.tableServeis.serveis_nomColumn}, New Global.System.Data.DataColumn() {Me.tableFeines_Detall.serveis_nomColumn})
-        Me.tableFeines_Detall.Constraints.Add(fkc)
-        fkc.AcceptRejectRule = Global.System.Data.AcceptRejectRule.Cascade
-        fkc.DeleteRule = Global.System.Data.Rule.None
-        fkc.UpdateRule = Global.System.Data.Rule.Cascade
-        fkc = New Global.System.Data.ForeignKeyConstraint("FeinesFeines_Detall", New Global.System.Data.DataColumn() {Me.tableFeines.feines_idColumn}, New Global.System.Data.DataColumn() {Me.tableFeines_Detall.feines_idColumn})
-        Me.tableFeines_Detall.Constraints.Add(fkc)
-        fkc.AcceptRejectRule = Global.System.Data.AcceptRejectRule.Cascade
-        fkc.DeleteRule = Global.System.Data.Rule.Cascade
-        fkc.UpdateRule = Global.System.Data.Rule.Cascade
-        fkc = New Global.System.Data.ForeignKeyConstraint("RecursosHores_Fetes", New Global.System.Data.DataColumn() {Me.tableRecursos.recursos_nomColumn}, New Global.System.Data.DataColumn() {Me.tableHores_Fetes.recursos_nomColumn})
-        Me.tableHores_Fetes.Constraints.Add(fkc)
-        fkc.AcceptRejectRule = Global.System.Data.AcceptRejectRule.Cascade
-        fkc.DeleteRule = Global.System.Data.Rule.Cascade
-        fkc.UpdateRule = Global.System.Data.Rule.Cascade
-        fkc = New Global.System.Data.ForeignKeyConstraint("ClientsLlocs", New Global.System.Data.DataColumn() {Me.tableClients.clients_nomColumn}, New Global.System.Data.DataColumn() {Me.tableLlocs.clients_nomColumn})
-        Me.tableLlocs.Constraints.Add(fkc)
-        fkc.AcceptRejectRule = Global.System.Data.AcceptRejectRule.Cascade
-        fkc.DeleteRule = Global.System.Data.Rule.Cascade
-        fkc.UpdateRule = Global.System.Data.Rule.Cascade
-        fkc = New Global.System.Data.ForeignKeyConstraint("RecursosLlocs", New Global.System.Data.DataColumn() {Me.tableRecursos.recursos_nomColumn}, New Global.System.Data.DataColumn() {Me.tableLlocs.recursos_nomColumn})
-        Me.tableLlocs.Constraints.Add(fkc)
-        fkc.AcceptRejectRule = Global.System.Data.AcceptRejectRule.None
-        fkc.DeleteRule = Global.System.Data.Rule.None
-        fkc.UpdateRule = Global.System.Data.Rule.Cascade
-        fkc = New Global.System.Data.ForeignKeyConstraint("LlocsLlocs_Serveis", New Global.System.Data.DataColumn() {Me.tableLlocs.llocs_nomColumn}, New Global.System.Data.DataColumn() {Me.tableLlocs_Serveis.llocs_nomColumn})
-        Me.tableLlocs_Serveis.Constraints.Add(fkc)
-        fkc.AcceptRejectRule = Global.System.Data.AcceptRejectRule.Cascade
-        fkc.DeleteRule = Global.System.Data.Rule.Cascade
-        fkc.UpdateRule = Global.System.Data.Rule.Cascade
-        fkc = New Global.System.Data.ForeignKeyConstraint("ClientsPagaments", New Global.System.Data.DataColumn() {Me.tableClients.clients_nomColumn}, New Global.System.Data.DataColumn() {Me.tablePagaments.clients_nomColumn})
-        Me.tablePagaments.Constraints.Add(fkc)
-        fkc.AcceptRejectRule = Global.System.Data.AcceptRejectRule.Cascade
-        fkc.DeleteRule = Global.System.Data.Rule.Cascade
-        fkc.UpdateRule = Global.System.Data.Rule.Cascade
-        fkc = New Global.System.Data.ForeignKeyConstraint("RecursosRecursos_Components1", New Global.System.Data.DataColumn() {Me.tableRecursos.recursos_nomColumn}, New Global.System.Data.DataColumn() {Me.tableRecursos_Components.recursos_component_nomColumn})
-        Me.tableRecursos_Components.Constraints.Add(fkc)
-        fkc.AcceptRejectRule = Global.System.Data.AcceptRejectRule.Cascade
-        fkc.DeleteRule = Global.System.Data.Rule.Cascade
-        fkc.UpdateRule = Global.System.Data.Rule.Cascade
-        fkc = New Global.System.Data.ForeignKeyConstraint("RecursosRecursos_Components", New Global.System.Data.DataColumn() {Me.tableRecursos.recursos_nomColumn}, New Global.System.Data.DataColumn() {Me.tableRecursos_Components.recursos_nomColumn})
-        Me.tableRecursos_Components.Constraints.Add(fkc)
-        fkc.AcceptRejectRule = Global.System.Data.AcceptRejectRule.Cascade
-        fkc.DeleteRule = Global.System.Data.Rule.Cascade
-        fkc.UpdateRule = Global.System.Data.Rule.Cascade
-        fkc = New Global.System.Data.ForeignKeyConstraint("ClientsXecs", New Global.System.Data.DataColumn() {Me.tableClients.clients_nomColumn}, New Global.System.Data.DataColumn() {Me.tableXecs.clients_nomColumn})
-        Me.tableXecs.Constraints.Add(fkc)
-        fkc.AcceptRejectRule = Global.System.Data.AcceptRejectRule.Cascade
-        fkc.DeleteRule = Global.System.Data.Rule.None
-        fkc.UpdateRule = Global.System.Data.Rule.Cascade
-        Me.relationRecursosFeines = New Global.System.Data.DataRelation("RecursosFeines", New Global.System.Data.DataColumn() {Me.tableRecursos.recursos_nomColumn}, New Global.System.Data.DataColumn() {Me.tableFeines.recursos_nomColumn}, false)
-        Me.Relations.Add(Me.relationRecursosFeines)
+        Me.relationFeinesXecs = New Global.System.Data.DataRelation("FeinesXecs", New Global.System.Data.DataColumn() {Me.tableFeines.feines_idColumn}, New Global.System.Data.DataColumn() {Me.tableXecs.feines_idColumn}, false)
+        Me.Relations.Add(Me.relationFeinesXecs)
         Me.relationLlocsFeines = New Global.System.Data.DataRelation("LlocsFeines", New Global.System.Data.DataColumn() {Me.tableLlocs.llocs_nomColumn}, New Global.System.Data.DataColumn() {Me.tableFeines.llocs_nomColumn}, false)
         Me.Relations.Add(Me.relationLlocsFeines)
-        Me.relationServeisFeines_Detall = New Global.System.Data.DataRelation("ServeisFeines_Detall", New Global.System.Data.DataColumn() {Me.tableServeis.serveis_nomColumn}, New Global.System.Data.DataColumn() {Me.tableFeines_Detall.serveis_nomColumn}, false)
-        Me.Relations.Add(Me.relationServeisFeines_Detall)
+        Me.relationRecursosFeines = New Global.System.Data.DataRelation("RecursosFeines", New Global.System.Data.DataColumn() {Me.tableRecursos.recursos_nomColumn}, New Global.System.Data.DataColumn() {Me.tableFeines.recursos_nomColumn}, false)
+        Me.Relations.Add(Me.relationRecursosFeines)
         Me.relationFeinesFeines_Detall = New Global.System.Data.DataRelation("FeinesFeines_Detall", New Global.System.Data.DataColumn() {Me.tableFeines.feines_idColumn}, New Global.System.Data.DataColumn() {Me.tableFeines_Detall.feines_idColumn}, false)
         Me.Relations.Add(Me.relationFeinesFeines_Detall)
+        Me.relationServeisFeines_Detall = New Global.System.Data.DataRelation("ServeisFeines_Detall", New Global.System.Data.DataColumn() {Me.tableServeis.serveis_nomColumn}, New Global.System.Data.DataColumn() {Me.tableFeines_Detall.serveis_nomColumn}, false)
+        Me.Relations.Add(Me.relationServeisFeines_Detall)
         Me.relationRecursosHores_Fetes = New Global.System.Data.DataRelation("RecursosHores_Fetes", New Global.System.Data.DataColumn() {Me.tableRecursos.recursos_nomColumn}, New Global.System.Data.DataColumn() {Me.tableHores_Fetes.recursos_nomColumn}, false)
         Me.Relations.Add(Me.relationRecursosHores_Fetes)
         Me.relationClientsLlocs = New Global.System.Data.DataRelation("ClientsLlocs", New Global.System.Data.DataColumn() {Me.tableClients.clients_nomColumn}, New Global.System.Data.DataColumn() {Me.tableLlocs.clients_nomColumn}, false)
@@ -589,12 +530,10 @@ Partial Public Class PlaniFeinesDataSet
         Me.Relations.Add(Me.relationClientsPagaments)
         Me.relationRecursosRecursos_Components1 = New Global.System.Data.DataRelation("RecursosRecursos_Components1", New Global.System.Data.DataColumn() {Me.tableRecursos.recursos_nomColumn}, New Global.System.Data.DataColumn() {Me.tableRecursos_Components.recursos_component_nomColumn}, false)
         Me.Relations.Add(Me.relationRecursosRecursos_Components1)
-        Me.relationRecursosRecursos_Components = New Global.System.Data.DataRelation("RecursosRecursos_Components", New Global.System.Data.DataColumn() {Me.tableRecursos.recursos_nomColumn}, New Global.System.Data.DataColumn() {Me.tableRecursos_Components.recursos_nomColumn}, false)
-        Me.Relations.Add(Me.relationRecursosRecursos_Components)
         Me.relationClientsXecs = New Global.System.Data.DataRelation("ClientsXecs", New Global.System.Data.DataColumn() {Me.tableClients.clients_nomColumn}, New Global.System.Data.DataColumn() {Me.tableXecs.clients_nomColumn}, false)
         Me.Relations.Add(Me.relationClientsXecs)
-        Me.relationFeinesXecs = New Global.System.Data.DataRelation("FeinesXecs", New Global.System.Data.DataColumn() {Me.tableFeines.feines_idColumn}, New Global.System.Data.DataColumn() {Me.tableXecs.feines_idColumn}, false)
-        Me.Relations.Add(Me.relationFeinesXecs)
+        Me.relationRecursosRecursos_Components = New Global.System.Data.DataRelation("RecursosRecursos_Components", New Global.System.Data.DataColumn() {Me.tableRecursos.recursos_nomColumn}, New Global.System.Data.DataColumn() {Me.tableRecursos_Components.recursos_nomColumn}, false)
+        Me.Relations.Add(Me.relationRecursosRecursos_Components)
         Me.relationServeisLlocs_Serveis = New Global.System.Data.DataRelation("ServeisLlocs_Serveis", New Global.System.Data.DataColumn() {Me.tableServeis.serveis_nomColumn}, New Global.System.Data.DataColumn() {Me.tableLlocs_Serveis.serveis_nomColumn}, false)
         Me.Relations.Add(Me.relationServeisLlocs_Serveis)
     End Sub
@@ -602,6 +541,12 @@ Partial Public Class PlaniFeinesDataSet
     <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
      Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
     Private Function ShouldSerializeClients() As Boolean
+        Return false
+    End Function
+    
+    <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+     Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+    Private Function ShouldSerializeXecs() As Boolean
         Return false
     End Function
     
@@ -656,12 +601,6 @@ Partial Public Class PlaniFeinesDataSet
     <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
      Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
     Private Function ShouldSerializeServeis() As Boolean
-        Return false
-    End Function
-    
-    <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-    Private Function ShouldSerializeXecs() As Boolean
         Return false
     End Function
     
@@ -727,6 +666,9 @@ Partial Public Class PlaniFeinesDataSet
     Public Delegate Sub ClientsRowChangeEventHandler(ByVal sender As Object, ByVal e As ClientsRowChangeEvent)
     
     <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+    Public Delegate Sub XecsRowChangeEventHandler(ByVal sender As Object, ByVal e As XecsRowChangeEvent)
+    
+    <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
     Public Delegate Sub FeinesRowChangeEventHandler(ByVal sender As Object, ByVal e As FeinesRowChangeEvent)
     
     <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
@@ -752,9 +694,6 @@ Partial Public Class PlaniFeinesDataSet
     
     <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
     Public Delegate Sub ServeisRowChangeEventHandler(ByVal sender As Object, ByVal e As ServeisRowChangeEvent)
-    
-    <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-    Public Delegate Sub XecsRowChangeEventHandler(ByVal sender As Object, ByVal e As XecsRowChangeEvent)
     
     '''<summary>
     '''Represents the strongly named DataTable class.
@@ -1018,7 +957,6 @@ Partial Public Class PlaniFeinesDataSet
             Me.Constraints.Add(New Global.System.Data.UniqueConstraint("Constraint1", New Global.System.Data.DataColumn() {Me.columnclients_nom}, true))
             Me.columnclients_nom.AllowDBNull = false
             Me.columnclients_nom.Unique = true
-            Me.columnclients_nom.DefaultValue = CType("",String)
             Me.columnclients_nom.MaxLength = 50
             Me.columnclients_NIF.MaxLength = 10
             Me.columnclients_adreça.MaxLength = 50
@@ -1115,6 +1053,339 @@ Partial Public Class PlaniFeinesDataSet
             Dim attribute2 As Global.System.Xml.Schema.XmlSchemaAttribute = New Global.System.Xml.Schema.XmlSchemaAttribute()
             attribute2.Name = "tableTypeName"
             attribute2.FixedValue = "ClientsDataTable"
+            type.Attributes.Add(attribute2)
+            type.Particle = sequence
+            Dim dsSchema As Global.System.Xml.Schema.XmlSchema = ds.GetSchemaSerializable
+            If xs.Contains(dsSchema.TargetNamespace) Then
+                Dim s1 As Global.System.IO.MemoryStream = New Global.System.IO.MemoryStream()
+                Dim s2 As Global.System.IO.MemoryStream = New Global.System.IO.MemoryStream()
+                Try 
+                    Dim schema As Global.System.Xml.Schema.XmlSchema = Nothing
+                    dsSchema.Write(s1)
+                    Dim schemas As Global.System.Collections.IEnumerator = xs.Schemas(dsSchema.TargetNamespace).GetEnumerator
+                    Do While schemas.MoveNext
+                        schema = CType(schemas.Current,Global.System.Xml.Schema.XmlSchema)
+                        s2.SetLength(0)
+                        schema.Write(s2)
+                        If (s1.Length = s2.Length) Then
+                            s1.Position = 0
+                            s2.Position = 0
+                            
+                            Do While ((s1.Position <> s1.Length)  _
+                                        AndAlso (s1.ReadByte = s2.ReadByte))
+                                
+                                
+                            Loop
+                            If (s1.Position = s1.Length) Then
+                                Return type
+                            End If
+                        End If
+                        
+                    Loop
+                Finally
+                    If (Not (s1) Is Nothing) Then
+                        s1.Close
+                    End If
+                    If (Not (s2) Is Nothing) Then
+                        s2.Close
+                    End If
+                End Try
+            End If
+            xs.Add(dsSchema)
+            Return type
+        End Function
+    End Class
+    
+    '''<summary>
+    '''Represents the strongly named DataTable class.
+    '''</summary>
+    <Global.System.Serializable(),  _
+     Global.System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")>  _
+    Partial Public Class XecsDataTable
+        Inherits Global.System.Data.TypedTableBase(Of XecsRow)
+        
+        Private columnxecs_id As Global.System.Data.DataColumn
+        
+        Private columnclients_nom As Global.System.Data.DataColumn
+        
+        Private columnxecs_data_entrega As Global.System.Data.DataColumn
+        
+        Private columnxecs_valor As Global.System.Data.DataColumn
+        
+        Private columnxecs_data_liquidat As Global.System.Data.DataColumn
+        
+        Private columnfeines_id As Global.System.Data.DataColumn
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Sub New()
+            MyBase.New
+            Me.TableName = "Xecs"
+            Me.BeginInit
+            Me.InitClass
+            Me.EndInit
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Friend Sub New(ByVal table As Global.System.Data.DataTable)
+            MyBase.New
+            Me.TableName = table.TableName
+            If (table.CaseSensitive <> table.DataSet.CaseSensitive) Then
+                Me.CaseSensitive = table.CaseSensitive
+            End If
+            If (table.Locale.ToString <> table.DataSet.Locale.ToString) Then
+                Me.Locale = table.Locale
+            End If
+            If (table.Namespace <> table.DataSet.Namespace) Then
+                Me.Namespace = table.Namespace
+            End If
+            Me.Prefix = table.Prefix
+            Me.MinimumCapacity = table.MinimumCapacity
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Protected Sub New(ByVal info As Global.System.Runtime.Serialization.SerializationInfo, ByVal context As Global.System.Runtime.Serialization.StreamingContext)
+            MyBase.New(info, context)
+            Me.InitVars
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public ReadOnly Property xecs_idColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnxecs_id
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public ReadOnly Property clients_nomColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnclients_nom
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public ReadOnly Property xecs_data_entregaColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnxecs_data_entrega
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public ReadOnly Property xecs_valorColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnxecs_valor
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public ReadOnly Property xecs_data_liquidatColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnxecs_data_liquidat
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public ReadOnly Property feines_idColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnfeines_id
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0"),  _
+         Global.System.ComponentModel.Browsable(false)>  _
+        Public ReadOnly Property Count() As Integer
+            Get
+                Return Me.Rows.Count
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Default ReadOnly Property Item(ByVal index As Integer) As XecsRow
+            Get
+                Return CType(Me.Rows(index),XecsRow)
+            End Get
+        End Property
+        
+        <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Event XecsRowChanging As XecsRowChangeEventHandler
+        
+        <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Event XecsRowChanged As XecsRowChangeEventHandler
+        
+        <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Event XecsRowDeleting As XecsRowChangeEventHandler
+        
+        <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Event XecsRowDeleted As XecsRowChangeEventHandler
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Overloads Sub AddXecsRow(ByVal row As XecsRow)
+            Me.Rows.Add(row)
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Overloads Function AddXecsRow(ByVal xecs_id As Integer, ByVal parentClientsRowByClientsXecs As ClientsRow, ByVal xecs_data_entrega As Date, ByVal xecs_valor As Single, ByVal xecs_data_liquidat As Date, ByVal parentFeinesRowByFeinesXecs As FeinesRow) As XecsRow
+            Dim rowXecsRow As XecsRow = CType(Me.NewRow,XecsRow)
+            Dim columnValuesArray() As Object = New Object() {xecs_id, Nothing, xecs_data_entrega, xecs_valor, xecs_data_liquidat, Nothing}
+            If (Not (parentClientsRowByClientsXecs) Is Nothing) Then
+                columnValuesArray(1) = parentClientsRowByClientsXecs(0)
+            End If
+            If (Not (parentFeinesRowByFeinesXecs) Is Nothing) Then
+                columnValuesArray(5) = parentFeinesRowByFeinesXecs(0)
+            End If
+            rowXecsRow.ItemArray = columnValuesArray
+            Me.Rows.Add(rowXecsRow)
+            Return rowXecsRow
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Function FindByxecs_id(ByVal xecs_id As Integer) As XecsRow
+            Return CType(Me.Rows.Find(New Object() {xecs_id}),XecsRow)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Overrides Function Clone() As Global.System.Data.DataTable
+            Dim cln As XecsDataTable = CType(MyBase.Clone,XecsDataTable)
+            cln.InitVars
+            Return cln
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Protected Overrides Function CreateInstance() As Global.System.Data.DataTable
+            Return New XecsDataTable()
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Friend Sub InitVars()
+            Me.columnxecs_id = MyBase.Columns("xecs_id")
+            Me.columnclients_nom = MyBase.Columns("clients_nom")
+            Me.columnxecs_data_entrega = MyBase.Columns("xecs_data_entrega")
+            Me.columnxecs_valor = MyBase.Columns("xecs_valor")
+            Me.columnxecs_data_liquidat = MyBase.Columns("xecs_data_liquidat")
+            Me.columnfeines_id = MyBase.Columns("feines_id")
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Private Sub InitClass()
+            Me.columnxecs_id = New Global.System.Data.DataColumn("xecs_id", GetType(Integer), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnxecs_id)
+            Me.columnclients_nom = New Global.System.Data.DataColumn("clients_nom", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnclients_nom)
+            Me.columnxecs_data_entrega = New Global.System.Data.DataColumn("xecs_data_entrega", GetType(Date), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnxecs_data_entrega)
+            Me.columnxecs_valor = New Global.System.Data.DataColumn("xecs_valor", GetType(Single), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnxecs_valor)
+            Me.columnxecs_data_liquidat = New Global.System.Data.DataColumn("xecs_data_liquidat", GetType(Date), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnxecs_data_liquidat)
+            Me.columnfeines_id = New Global.System.Data.DataColumn("feines_id", GetType(Integer), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnfeines_id)
+            Me.Constraints.Add(New Global.System.Data.UniqueConstraint("Constraint1", New Global.System.Data.DataColumn() {Me.columnxecs_id}, true))
+            Me.columnxecs_id.AllowDBNull = false
+            Me.columnxecs_id.Unique = true
+            Me.columnclients_nom.MaxLength = 50
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Function NewXecsRow() As XecsRow
+            Return CType(Me.NewRow,XecsRow)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Protected Overrides Function NewRowFromBuilder(ByVal builder As Global.System.Data.DataRowBuilder) As Global.System.Data.DataRow
+            Return New XecsRow(builder)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Protected Overrides Function GetRowType() As Global.System.Type
+            Return GetType(XecsRow)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Protected Overrides Sub OnRowChanged(ByVal e As Global.System.Data.DataRowChangeEventArgs)
+            MyBase.OnRowChanged(e)
+            If (Not (Me.XecsRowChangedEvent) Is Nothing) Then
+                RaiseEvent XecsRowChanged(Me, New XecsRowChangeEvent(CType(e.Row,XecsRow), e.Action))
+            End If
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Protected Overrides Sub OnRowChanging(ByVal e As Global.System.Data.DataRowChangeEventArgs)
+            MyBase.OnRowChanging(e)
+            If (Not (Me.XecsRowChangingEvent) Is Nothing) Then
+                RaiseEvent XecsRowChanging(Me, New XecsRowChangeEvent(CType(e.Row,XecsRow), e.Action))
+            End If
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Protected Overrides Sub OnRowDeleted(ByVal e As Global.System.Data.DataRowChangeEventArgs)
+            MyBase.OnRowDeleted(e)
+            If (Not (Me.XecsRowDeletedEvent) Is Nothing) Then
+                RaiseEvent XecsRowDeleted(Me, New XecsRowChangeEvent(CType(e.Row,XecsRow), e.Action))
+            End If
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Protected Overrides Sub OnRowDeleting(ByVal e As Global.System.Data.DataRowChangeEventArgs)
+            MyBase.OnRowDeleting(e)
+            If (Not (Me.XecsRowDeletingEvent) Is Nothing) Then
+                RaiseEvent XecsRowDeleting(Me, New XecsRowChangeEvent(CType(e.Row,XecsRow), e.Action))
+            End If
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Sub RemoveXecsRow(ByVal row As XecsRow)
+            Me.Rows.Remove(row)
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Shared Function GetTypedTableSchema(ByVal xs As Global.System.Xml.Schema.XmlSchemaSet) As Global.System.Xml.Schema.XmlSchemaComplexType
+            Dim type As Global.System.Xml.Schema.XmlSchemaComplexType = New Global.System.Xml.Schema.XmlSchemaComplexType()
+            Dim sequence As Global.System.Xml.Schema.XmlSchemaSequence = New Global.System.Xml.Schema.XmlSchemaSequence()
+            Dim ds As PlaniFeinesDataSet = New PlaniFeinesDataSet()
+            Dim any1 As Global.System.Xml.Schema.XmlSchemaAny = New Global.System.Xml.Schema.XmlSchemaAny()
+            any1.Namespace = "http://www.w3.org/2001/XMLSchema"
+            any1.MinOccurs = New Decimal(0)
+            any1.MaxOccurs = Decimal.MaxValue
+            any1.ProcessContents = Global.System.Xml.Schema.XmlSchemaContentProcessing.Lax
+            sequence.Items.Add(any1)
+            Dim any2 As Global.System.Xml.Schema.XmlSchemaAny = New Global.System.Xml.Schema.XmlSchemaAny()
+            any2.Namespace = "urn:schemas-microsoft-com:xml-diffgram-v1"
+            any2.MinOccurs = New Decimal(1)
+            any2.ProcessContents = Global.System.Xml.Schema.XmlSchemaContentProcessing.Lax
+            sequence.Items.Add(any2)
+            Dim attribute1 As Global.System.Xml.Schema.XmlSchemaAttribute = New Global.System.Xml.Schema.XmlSchemaAttribute()
+            attribute1.Name = "namespace"
+            attribute1.FixedValue = ds.Namespace
+            type.Attributes.Add(attribute1)
+            Dim attribute2 As Global.System.Xml.Schema.XmlSchemaAttribute = New Global.System.Xml.Schema.XmlSchemaAttribute()
+            attribute2.Name = "tableTypeName"
+            attribute2.FixedValue = "XecsDataTable"
             type.Attributes.Add(attribute2)
             type.Particle = sequence
             Dim dsSchema As Global.System.Xml.Schema.XmlSchema = ds.GetSchemaSerializable
@@ -2511,7 +2782,6 @@ Partial Public Class PlaniFeinesDataSet
             Me.Constraints.Add(New Global.System.Data.UniqueConstraint("Constraint1", New Global.System.Data.DataColumn() {Me.columnllocs_nom}, true))
             Me.columnllocs_nom.AllowDBNull = false
             Me.columnllocs_nom.Unique = true
-            Me.columnllocs_nom.DefaultValue = CType("",String)
             Me.columnllocs_nom.MaxLength = 50
             Me.columnclients_nom.MaxLength = 50
             Me.columnllocs_adreça.MaxLength = 50
@@ -2519,10 +2789,8 @@ Partial Public Class PlaniFeinesDataSet
             Me.columnllocs_telefon.MaxLength = 15
             Me.columnllocs_minuts_previst.DefaultValue = CType(0,Short)
             Me.columnllocs_periodicitat_dies.DefaultValue = CType(0,Short)
-            Me.columnllocs_dia_setmana.DefaultValue = CType(0,Short)
             Me.columnllocs_dissabte.DefaultValue = CType(false,Boolean)
             Me.columnllocs_diumenge.DefaultValue = CType(false,Boolean)
-            Me.columnllocs_hora.DefaultValue = CType("",String)
             Me.columnllocs_hora.MaxLength = 5
             Me.columnrecursos_nom.MaxLength = 50
             Me.columnllocs_observacions.MaxLength = 536870910
@@ -2834,13 +3102,9 @@ Partial Public Class PlaniFeinesDataSet
             MyBase.Columns.Add(Me.columnllocs_serveis_preu_un)
             Me.Constraints.Add(New Global.System.Data.UniqueConstraint("Constraint1", New Global.System.Data.DataColumn() {Me.columnllocs_nom, Me.columnserveis_nom}, true))
             Me.columnllocs_nom.AllowDBNull = false
-            Me.columnllocs_nom.DefaultValue = CType("",String)
             Me.columnllocs_nom.MaxLength = 50
             Me.columnserveis_nom.AllowDBNull = false
-            Me.columnserveis_nom.DefaultValue = CType("",String)
             Me.columnserveis_nom.MaxLength = 50
-            Me.columnllocs_serveis_quantitat.DefaultValue = CType(0!,Single)
-            Me.columnllocs_serveis_preu_un.DefaultValue = CType(0!,Single)
         End Sub
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -4161,341 +4425,6 @@ Partial Public Class PlaniFeinesDataSet
     End Class
     
     '''<summary>
-    '''Represents the strongly named DataTable class.
-    '''</summary>
-    <Global.System.Serializable(),  _
-     Global.System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")>  _
-    Partial Public Class XecsDataTable
-        Inherits Global.System.Data.TypedTableBase(Of XecsRow)
-        
-        Private columnxecs_id As Global.System.Data.DataColumn
-        
-        Private columnclients_nom As Global.System.Data.DataColumn
-        
-        Private columnxecs_data_entrega As Global.System.Data.DataColumn
-        
-        Private columnxecs_valor As Global.System.Data.DataColumn
-        
-        Private columnxecs_data_liquidat As Global.System.Data.DataColumn
-        
-        Private columnfeines_id As Global.System.Data.DataColumn
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Public Sub New()
-            MyBase.New
-            Me.TableName = "Xecs"
-            Me.BeginInit
-            Me.InitClass
-            Me.EndInit
-        End Sub
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Friend Sub New(ByVal table As Global.System.Data.DataTable)
-            MyBase.New
-            Me.TableName = table.TableName
-            If (table.CaseSensitive <> table.DataSet.CaseSensitive) Then
-                Me.CaseSensitive = table.CaseSensitive
-            End If
-            If (table.Locale.ToString <> table.DataSet.Locale.ToString) Then
-                Me.Locale = table.Locale
-            End If
-            If (table.Namespace <> table.DataSet.Namespace) Then
-                Me.Namespace = table.Namespace
-            End If
-            Me.Prefix = table.Prefix
-            Me.MinimumCapacity = table.MinimumCapacity
-        End Sub
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Protected Sub New(ByVal info As Global.System.Runtime.Serialization.SerializationInfo, ByVal context As Global.System.Runtime.Serialization.StreamingContext)
-            MyBase.New(info, context)
-            Me.InitVars
-        End Sub
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Public ReadOnly Property xecs_idColumn() As Global.System.Data.DataColumn
-            Get
-                Return Me.columnxecs_id
-            End Get
-        End Property
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Public ReadOnly Property clients_nomColumn() As Global.System.Data.DataColumn
-            Get
-                Return Me.columnclients_nom
-            End Get
-        End Property
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Public ReadOnly Property xecs_data_entregaColumn() As Global.System.Data.DataColumn
-            Get
-                Return Me.columnxecs_data_entrega
-            End Get
-        End Property
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Public ReadOnly Property xecs_valorColumn() As Global.System.Data.DataColumn
-            Get
-                Return Me.columnxecs_valor
-            End Get
-        End Property
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Public ReadOnly Property xecs_data_liquidatColumn() As Global.System.Data.DataColumn
-            Get
-                Return Me.columnxecs_data_liquidat
-            End Get
-        End Property
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Public ReadOnly Property feines_idColumn() As Global.System.Data.DataColumn
-            Get
-                Return Me.columnfeines_id
-            End Get
-        End Property
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0"),  _
-         Global.System.ComponentModel.Browsable(false)>  _
-        Public ReadOnly Property Count() As Integer
-            Get
-                Return Me.Rows.Count
-            End Get
-        End Property
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Public Default ReadOnly Property Item(ByVal index As Integer) As XecsRow
-            Get
-                Return CType(Me.Rows(index),XecsRow)
-            End Get
-        End Property
-        
-        <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Public Event XecsRowChanging As XecsRowChangeEventHandler
-        
-        <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Public Event XecsRowChanged As XecsRowChangeEventHandler
-        
-        <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Public Event XecsRowDeleting As XecsRowChangeEventHandler
-        
-        <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Public Event XecsRowDeleted As XecsRowChangeEventHandler
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Public Overloads Sub AddXecsRow(ByVal row As XecsRow)
-            Me.Rows.Add(row)
-        End Sub
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Public Overloads Function AddXecsRow(ByVal xecs_id As Integer, ByVal parentClientsRowByClientsXecs As ClientsRow, ByVal xecs_data_entrega As Date, ByVal xecs_valor As Single, ByVal xecs_data_liquidat As Date, ByVal parentFeinesRowByFeinesXecs As FeinesRow) As XecsRow
-            Dim rowXecsRow As XecsRow = CType(Me.NewRow,XecsRow)
-            Dim columnValuesArray() As Object = New Object() {xecs_id, Nothing, xecs_data_entrega, xecs_valor, xecs_data_liquidat, Nothing}
-            If (Not (parentClientsRowByClientsXecs) Is Nothing) Then
-                columnValuesArray(1) = parentClientsRowByClientsXecs(0)
-            End If
-            If (Not (parentFeinesRowByFeinesXecs) Is Nothing) Then
-                columnValuesArray(5) = parentFeinesRowByFeinesXecs(0)
-            End If
-            rowXecsRow.ItemArray = columnValuesArray
-            Me.Rows.Add(rowXecsRow)
-            Return rowXecsRow
-        End Function
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Public Function FindByxecs_id(ByVal xecs_id As Integer) As XecsRow
-            Return CType(Me.Rows.Find(New Object() {xecs_id}),XecsRow)
-        End Function
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Public Overrides Function Clone() As Global.System.Data.DataTable
-            Dim cln As XecsDataTable = CType(MyBase.Clone,XecsDataTable)
-            cln.InitVars
-            Return cln
-        End Function
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Protected Overrides Function CreateInstance() As Global.System.Data.DataTable
-            Return New XecsDataTable()
-        End Function
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Friend Sub InitVars()
-            Me.columnxecs_id = MyBase.Columns("xecs_id")
-            Me.columnclients_nom = MyBase.Columns("clients_nom")
-            Me.columnxecs_data_entrega = MyBase.Columns("xecs_data_entrega")
-            Me.columnxecs_valor = MyBase.Columns("xecs_valor")
-            Me.columnxecs_data_liquidat = MyBase.Columns("xecs_data_liquidat")
-            Me.columnfeines_id = MyBase.Columns("feines_id")
-        End Sub
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Private Sub InitClass()
-            Me.columnxecs_id = New Global.System.Data.DataColumn("xecs_id", GetType(Integer), Nothing, Global.System.Data.MappingType.Element)
-            MyBase.Columns.Add(Me.columnxecs_id)
-            Me.columnclients_nom = New Global.System.Data.DataColumn("clients_nom", GetType(String), Nothing, Global.System.Data.MappingType.Element)
-            MyBase.Columns.Add(Me.columnclients_nom)
-            Me.columnxecs_data_entrega = New Global.System.Data.DataColumn("xecs_data_entrega", GetType(Date), Nothing, Global.System.Data.MappingType.Element)
-            MyBase.Columns.Add(Me.columnxecs_data_entrega)
-            Me.columnxecs_valor = New Global.System.Data.DataColumn("xecs_valor", GetType(Single), Nothing, Global.System.Data.MappingType.Element)
-            MyBase.Columns.Add(Me.columnxecs_valor)
-            Me.columnxecs_data_liquidat = New Global.System.Data.DataColumn("xecs_data_liquidat", GetType(Date), Nothing, Global.System.Data.MappingType.Element)
-            MyBase.Columns.Add(Me.columnxecs_data_liquidat)
-            Me.columnfeines_id = New Global.System.Data.DataColumn("feines_id", GetType(Integer), Nothing, Global.System.Data.MappingType.Element)
-            MyBase.Columns.Add(Me.columnfeines_id)
-            Me.Constraints.Add(New Global.System.Data.UniqueConstraint("Constraint1", New Global.System.Data.DataColumn() {Me.columnxecs_id}, true))
-            Me.columnxecs_id.AllowDBNull = false
-            Me.columnxecs_id.Unique = true
-            Me.columnxecs_id.DefaultValue = CType(0,Integer)
-            Me.columnclients_nom.MaxLength = 50
-            Me.columnxecs_valor.DefaultValue = CType(0!,Single)
-        End Sub
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Public Function NewXecsRow() As XecsRow
-            Return CType(Me.NewRow,XecsRow)
-        End Function
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Protected Overrides Function NewRowFromBuilder(ByVal builder As Global.System.Data.DataRowBuilder) As Global.System.Data.DataRow
-            Return New XecsRow(builder)
-        End Function
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Protected Overrides Function GetRowType() As Global.System.Type
-            Return GetType(XecsRow)
-        End Function
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Protected Overrides Sub OnRowChanged(ByVal e As Global.System.Data.DataRowChangeEventArgs)
-            MyBase.OnRowChanged(e)
-            If (Not (Me.XecsRowChangedEvent) Is Nothing) Then
-                RaiseEvent XecsRowChanged(Me, New XecsRowChangeEvent(CType(e.Row,XecsRow), e.Action))
-            End If
-        End Sub
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Protected Overrides Sub OnRowChanging(ByVal e As Global.System.Data.DataRowChangeEventArgs)
-            MyBase.OnRowChanging(e)
-            If (Not (Me.XecsRowChangingEvent) Is Nothing) Then
-                RaiseEvent XecsRowChanging(Me, New XecsRowChangeEvent(CType(e.Row,XecsRow), e.Action))
-            End If
-        End Sub
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Protected Overrides Sub OnRowDeleted(ByVal e As Global.System.Data.DataRowChangeEventArgs)
-            MyBase.OnRowDeleted(e)
-            If (Not (Me.XecsRowDeletedEvent) Is Nothing) Then
-                RaiseEvent XecsRowDeleted(Me, New XecsRowChangeEvent(CType(e.Row,XecsRow), e.Action))
-            End If
-        End Sub
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Protected Overrides Sub OnRowDeleting(ByVal e As Global.System.Data.DataRowChangeEventArgs)
-            MyBase.OnRowDeleting(e)
-            If (Not (Me.XecsRowDeletingEvent) Is Nothing) Then
-                RaiseEvent XecsRowDeleting(Me, New XecsRowChangeEvent(CType(e.Row,XecsRow), e.Action))
-            End If
-        End Sub
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Public Sub RemoveXecsRow(ByVal row As XecsRow)
-            Me.Rows.Remove(row)
-        End Sub
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Public Shared Function GetTypedTableSchema(ByVal xs As Global.System.Xml.Schema.XmlSchemaSet) As Global.System.Xml.Schema.XmlSchemaComplexType
-            Dim type As Global.System.Xml.Schema.XmlSchemaComplexType = New Global.System.Xml.Schema.XmlSchemaComplexType()
-            Dim sequence As Global.System.Xml.Schema.XmlSchemaSequence = New Global.System.Xml.Schema.XmlSchemaSequence()
-            Dim ds As PlaniFeinesDataSet = New PlaniFeinesDataSet()
-            Dim any1 As Global.System.Xml.Schema.XmlSchemaAny = New Global.System.Xml.Schema.XmlSchemaAny()
-            any1.Namespace = "http://www.w3.org/2001/XMLSchema"
-            any1.MinOccurs = New Decimal(0)
-            any1.MaxOccurs = Decimal.MaxValue
-            any1.ProcessContents = Global.System.Xml.Schema.XmlSchemaContentProcessing.Lax
-            sequence.Items.Add(any1)
-            Dim any2 As Global.System.Xml.Schema.XmlSchemaAny = New Global.System.Xml.Schema.XmlSchemaAny()
-            any2.Namespace = "urn:schemas-microsoft-com:xml-diffgram-v1"
-            any2.MinOccurs = New Decimal(1)
-            any2.ProcessContents = Global.System.Xml.Schema.XmlSchemaContentProcessing.Lax
-            sequence.Items.Add(any2)
-            Dim attribute1 As Global.System.Xml.Schema.XmlSchemaAttribute = New Global.System.Xml.Schema.XmlSchemaAttribute()
-            attribute1.Name = "namespace"
-            attribute1.FixedValue = ds.Namespace
-            type.Attributes.Add(attribute1)
-            Dim attribute2 As Global.System.Xml.Schema.XmlSchemaAttribute = New Global.System.Xml.Schema.XmlSchemaAttribute()
-            attribute2.Name = "tableTypeName"
-            attribute2.FixedValue = "XecsDataTable"
-            type.Attributes.Add(attribute2)
-            type.Particle = sequence
-            Dim dsSchema As Global.System.Xml.Schema.XmlSchema = ds.GetSchemaSerializable
-            If xs.Contains(dsSchema.TargetNamespace) Then
-                Dim s1 As Global.System.IO.MemoryStream = New Global.System.IO.MemoryStream()
-                Dim s2 As Global.System.IO.MemoryStream = New Global.System.IO.MemoryStream()
-                Try 
-                    Dim schema As Global.System.Xml.Schema.XmlSchema = Nothing
-                    dsSchema.Write(s1)
-                    Dim schemas As Global.System.Collections.IEnumerator = xs.Schemas(dsSchema.TargetNamespace).GetEnumerator
-                    Do While schemas.MoveNext
-                        schema = CType(schemas.Current,Global.System.Xml.Schema.XmlSchema)
-                        s2.SetLength(0)
-                        schema.Write(s2)
-                        If (s1.Length = s2.Length) Then
-                            s1.Position = 0
-                            s2.Position = 0
-                            
-                            Do While ((s1.Position <> s1.Length)  _
-                                        AndAlso (s1.ReadByte = s2.ReadByte))
-                                
-                                
-                            Loop
-                            If (s1.Position = s1.Length) Then
-                                Return type
-                            End If
-                        End If
-                        
-                    Loop
-                Finally
-                    If (Not (s1) Is Nothing) Then
-                        s1.Close
-                    End If
-                    If (Not (s2) Is Nothing) Then
-                        s2.Close
-                    End If
-                End Try
-            End If
-            xs.Add(dsSchema)
-            Return type
-        End Function
-    End Class
-    
-    '''<summary>
     '''Represents strongly named DataRow class.
     '''</summary>
     Partial Public Class ClientsRow
@@ -4793,11 +4722,11 @@ Partial Public Class PlaniFeinesDataSet
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Public Function GetXecsRows() As XecsRow()
-            If (Me.Table.ChildRelations("ClientsXecs") Is Nothing) Then
-                Return New XecsRow(-1) {}
+        Public Function GetLlocsRows() As LlocsRow()
+            If (Me.Table.ChildRelations("ClientsLlocs") Is Nothing) Then
+                Return New LlocsRow(-1) {}
             Else
-                Return CType(MyBase.GetChildRows(Me.Table.ChildRelations("ClientsXecs")),XecsRow())
+                Return CType(MyBase.GetChildRows(Me.Table.ChildRelations("ClientsLlocs")),LlocsRow())
             End If
         End Function
         
@@ -4813,13 +4742,197 @@ Partial Public Class PlaniFeinesDataSet
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Public Function GetLlocsRows() As LlocsRow()
-            If (Me.Table.ChildRelations("ClientsLlocs") Is Nothing) Then
-                Return New LlocsRow(-1) {}
+        Public Function GetXecsRows() As XecsRow()
+            If (Me.Table.ChildRelations("ClientsXecs") Is Nothing) Then
+                Return New XecsRow(-1) {}
             Else
-                Return CType(MyBase.GetChildRows(Me.Table.ChildRelations("ClientsLlocs")),LlocsRow())
+                Return CType(MyBase.GetChildRows(Me.Table.ChildRelations("ClientsXecs")),XecsRow())
             End If
         End Function
+    End Class
+    
+    '''<summary>
+    '''Represents strongly named DataRow class.
+    '''</summary>
+    Partial Public Class XecsRow
+        Inherits Global.System.Data.DataRow
+        
+        Private tableXecs As XecsDataTable
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Friend Sub New(ByVal rb As Global.System.Data.DataRowBuilder)
+            MyBase.New(rb)
+            Me.tableXecs = CType(Me.Table,XecsDataTable)
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Property xecs_id() As Integer
+            Get
+                Return CType(Me(Me.tableXecs.xecs_idColumn),Integer)
+            End Get
+            Set
+                Me(Me.tableXecs.xecs_idColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Property clients_nom() As String
+            Get
+                Try 
+                    Return CType(Me(Me.tableXecs.clients_nomColumn),String)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("El valor de la columna 'clients_nom' de la tabla 'Xecs' es DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableXecs.clients_nomColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Property xecs_data_entrega() As Date
+            Get
+                Try 
+                    Return CType(Me(Me.tableXecs.xecs_data_entregaColumn),Date)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("El valor de la columna 'xecs_data_entrega' de la tabla 'Xecs' es DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableXecs.xecs_data_entregaColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Property xecs_valor() As Single
+            Get
+                Try 
+                    Return CType(Me(Me.tableXecs.xecs_valorColumn),Single)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("El valor de la columna 'xecs_valor' de la tabla 'Xecs' es DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableXecs.xecs_valorColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Property xecs_data_liquidat() As Date
+            Get
+                Try 
+                    Return CType(Me(Me.tableXecs.xecs_data_liquidatColumn),Date)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("El valor de la columna 'xecs_data_liquidat' de la tabla 'Xecs' es DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableXecs.xecs_data_liquidatColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Property feines_id() As Integer
+            Get
+                Try 
+                    Return CType(Me(Me.tableXecs.feines_idColumn),Integer)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("El valor de la columna 'feines_id' de la tabla 'Xecs' es DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableXecs.feines_idColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Property FeinesRow() As FeinesRow
+            Get
+                Return CType(Me.GetParentRow(Me.Table.ParentRelations("FeinesXecs")),FeinesRow)
+            End Get
+            Set
+                Me.SetParentRow(value, Me.Table.ParentRelations("FeinesXecs"))
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Property ClientsRow() As ClientsRow
+            Get
+                Return CType(Me.GetParentRow(Me.Table.ParentRelations("ClientsXecs")),ClientsRow)
+            End Get
+            Set
+                Me.SetParentRow(value, Me.Table.ParentRelations("ClientsXecs"))
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Function Isclients_nomNull() As Boolean
+            Return Me.IsNull(Me.tableXecs.clients_nomColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Sub Setclients_nomNull()
+            Me(Me.tableXecs.clients_nomColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Function Isxecs_data_entregaNull() As Boolean
+            Return Me.IsNull(Me.tableXecs.xecs_data_entregaColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Sub Setxecs_data_entregaNull()
+            Me(Me.tableXecs.xecs_data_entregaColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Function Isxecs_valorNull() As Boolean
+            Return Me.IsNull(Me.tableXecs.xecs_valorColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Sub Setxecs_valorNull()
+            Me(Me.tableXecs.xecs_valorColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Function Isxecs_data_liquidatNull() As Boolean
+            Return Me.IsNull(Me.tableXecs.xecs_data_liquidatColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Sub Setxecs_data_liquidatNull()
+            Me(Me.tableXecs.xecs_data_liquidatColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Function Isfeines_idNull() As Boolean
+            Return Me.IsNull(Me.tableXecs.feines_idColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Sub Setfeines_idNull()
+            Me(Me.tableXecs.feines_idColumn) = Global.System.Convert.DBNull
+        End Sub
     End Class
     
     '''<summary>
@@ -4985,23 +5098,23 @@ Partial Public Class PlaniFeinesDataSet
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Public Property RecursosRow() As RecursosRow
-            Get
-                Return CType(Me.GetParentRow(Me.Table.ParentRelations("RecursosFeines")),RecursosRow)
-            End Get
-            Set
-                Me.SetParentRow(value, Me.Table.ParentRelations("RecursosFeines"))
-            End Set
-        End Property
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
         Public Property LlocsRow() As LlocsRow
             Get
                 Return CType(Me.GetParentRow(Me.Table.ParentRelations("LlocsFeines")),LlocsRow)
             End Get
             Set
                 Me.SetParentRow(value, Me.Table.ParentRelations("LlocsFeines"))
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Property RecursosRow() As RecursosRow
+            Get
+                Return CType(Me.GetParentRow(Me.Table.ParentRelations("RecursosFeines")),RecursosRow)
+            End Get
+            Set
+                Me.SetParentRow(value, Me.Table.ParentRelations("RecursosFeines"))
             End Set
         End Property
         
@@ -5115,21 +5228,21 @@ Partial Public Class PlaniFeinesDataSet
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Public Function GetFeines_DetallRows() As Feines_DetallRow()
-            If (Me.Table.ChildRelations("FeinesFeines_Detall") Is Nothing) Then
-                Return New Feines_DetallRow(-1) {}
-            Else
-                Return CType(MyBase.GetChildRows(Me.Table.ChildRelations("FeinesFeines_Detall")),Feines_DetallRow())
-            End If
-        End Function
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
         Public Function GetXecsRows() As XecsRow()
             If (Me.Table.ChildRelations("FeinesXecs") Is Nothing) Then
                 Return New XecsRow(-1) {}
             Else
                 Return CType(MyBase.GetChildRows(Me.Table.ChildRelations("FeinesXecs")),XecsRow())
+            End If
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Function GetFeines_DetallRows() As Feines_DetallRow()
+            If (Me.Table.ChildRelations("FeinesFeines_Detall") Is Nothing) Then
+                Return New Feines_DetallRow(-1) {}
+            Else
+                Return CType(MyBase.GetChildRows(Me.Table.ChildRelations("FeinesFeines_Detall")),Feines_DetallRow())
             End If
         End Function
     End Class
@@ -5221,23 +5334,23 @@ Partial Public Class PlaniFeinesDataSet
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Public Property ServeisRow() As ServeisRow
-            Get
-                Return CType(Me.GetParentRow(Me.Table.ParentRelations("ServeisFeines_Detall")),ServeisRow)
-            End Get
-            Set
-                Me.SetParentRow(value, Me.Table.ParentRelations("ServeisFeines_Detall"))
-            End Set
-        End Property
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
         Public Property FeinesRow() As FeinesRow
             Get
                 Return CType(Me.GetParentRow(Me.Table.ParentRelations("FeinesFeines_Detall")),FeinesRow)
             End Get
             Set
                 Me.SetParentRow(value, Me.Table.ParentRelations("FeinesFeines_Detall"))
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Property ServeisRow() As ServeisRow
+            Get
+                Return CType(Me.GetParentRow(Me.Table.ParentRelations("ServeisFeines_Detall")),ServeisRow)
+            End Get
+            Set
+                Me.SetParentRow(value, Me.Table.ParentRelations("ServeisFeines_Detall"))
             End Set
         End Property
         
@@ -5534,11 +5647,11 @@ Partial Public Class PlaniFeinesDataSet
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
         Public Property recursos_nom() As String
             Get
-                If Me.Isrecursos_nomNull Then
-                    Return String.Empty
-                Else
+                Try 
                     Return CType(Me(Me.tableLlocs.recursos_nomColumn),String)
-                End If
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("El valor de la columna 'recursos_nom' de la tabla 'Llocs' es DBNull.", e)
+                End Try
             End Get
             Set
                 Me(Me.tableLlocs.recursos_nomColumn) = value
@@ -5809,21 +5922,21 @@ Partial Public Class PlaniFeinesDataSet
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Public Function GetLlocs_ServeisRows() As Llocs_ServeisRow()
-            If (Me.Table.ChildRelations("LlocsLlocs_Serveis") Is Nothing) Then
-                Return New Llocs_ServeisRow(-1) {}
-            Else
-                Return CType(MyBase.GetChildRows(Me.Table.ChildRelations("LlocsLlocs_Serveis")),Llocs_ServeisRow())
-            End If
-        End Function
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
         Public Function GetFeinesRows() As FeinesRow()
             If (Me.Table.ChildRelations("LlocsFeines") Is Nothing) Then
                 Return New FeinesRow(-1) {}
             Else
                 Return CType(MyBase.GetChildRows(Me.Table.ChildRelations("LlocsFeines")),FeinesRow())
+            End If
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Function GetLlocs_ServeisRows() As Llocs_ServeisRow()
+            If (Me.Table.ChildRelations("LlocsLlocs_Serveis") Is Nothing) Then
+                Return New Llocs_ServeisRow(-1) {}
+            Else
+                Return CType(MyBase.GetChildRows(Me.Table.ChildRelations("LlocsLlocs_Serveis")),Llocs_ServeisRow())
             End If
         End Function
     End Class
@@ -6129,31 +6242,11 @@ Partial Public Class PlaniFeinesDataSet
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Public Function GetRecursos_ComponentsRowsByRecursosRecursos_Components1() As Recursos_ComponentsRow()
-            If (Me.Table.ChildRelations("RecursosRecursos_Components1") Is Nothing) Then
-                Return New Recursos_ComponentsRow(-1) {}
+        Public Function GetFeinesRows() As FeinesRow()
+            If (Me.Table.ChildRelations("RecursosFeines") Is Nothing) Then
+                Return New FeinesRow(-1) {}
             Else
-                Return CType(MyBase.GetChildRows(Me.Table.ChildRelations("RecursosRecursos_Components1")),Recursos_ComponentsRow())
-            End If
-        End Function
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Public Function GetRecursos_ComponentsRowsByRecursosRecursos_Components() As Recursos_ComponentsRow()
-            If (Me.Table.ChildRelations("RecursosRecursos_Components") Is Nothing) Then
-                Return New Recursos_ComponentsRow(-1) {}
-            Else
-                Return CType(MyBase.GetChildRows(Me.Table.ChildRelations("RecursosRecursos_Components")),Recursos_ComponentsRow())
-            End If
-        End Function
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Public Function GetLlocsRows() As LlocsRow()
-            If (Me.Table.ChildRelations("RecursosLlocs") Is Nothing) Then
-                Return New LlocsRow(-1) {}
-            Else
-                Return CType(MyBase.GetChildRows(Me.Table.ChildRelations("RecursosLlocs")),LlocsRow())
+                Return CType(MyBase.GetChildRows(Me.Table.ChildRelations("RecursosFeines")),FeinesRow())
             End If
         End Function
         
@@ -6169,11 +6262,31 @@ Partial Public Class PlaniFeinesDataSet
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Public Function GetFeinesRows() As FeinesRow()
-            If (Me.Table.ChildRelations("RecursosFeines") Is Nothing) Then
-                Return New FeinesRow(-1) {}
+        Public Function GetLlocsRows() As LlocsRow()
+            If (Me.Table.ChildRelations("RecursosLlocs") Is Nothing) Then
+                Return New LlocsRow(-1) {}
             Else
-                Return CType(MyBase.GetChildRows(Me.Table.ChildRelations("RecursosFeines")),FeinesRow())
+                Return CType(MyBase.GetChildRows(Me.Table.ChildRelations("RecursosLlocs")),LlocsRow())
+            End If
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Function GetRecursos_ComponentsRowsByRecursosRecursos_Components1() As Recursos_ComponentsRow()
+            If (Me.Table.ChildRelations("RecursosRecursos_Components1") Is Nothing) Then
+                Return New Recursos_ComponentsRow(-1) {}
+            Else
+                Return CType(MyBase.GetChildRows(Me.Table.ChildRelations("RecursosRecursos_Components1")),Recursos_ComponentsRow())
+            End If
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Function GetRecursos_ComponentsRowsByRecursosRecursos_Components() As Recursos_ComponentsRow()
+            If (Me.Table.ChildRelations("RecursosRecursos_Components") Is Nothing) Then
+                Return New Recursos_ComponentsRow(-1) {}
+            Else
+                Return CType(MyBase.GetChildRows(Me.Table.ChildRelations("RecursosRecursos_Components")),Recursos_ComponentsRow())
             End If
         End Function
     End Class
@@ -6396,190 +6509,6 @@ Partial Public Class PlaniFeinesDataSet
     End Class
     
     '''<summary>
-    '''Represents strongly named DataRow class.
-    '''</summary>
-    Partial Public Class XecsRow
-        Inherits Global.System.Data.DataRow
-        
-        Private tableXecs As XecsDataTable
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Friend Sub New(ByVal rb As Global.System.Data.DataRowBuilder)
-            MyBase.New(rb)
-            Me.tableXecs = CType(Me.Table,XecsDataTable)
-        End Sub
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Public Property xecs_id() As Integer
-            Get
-                Return CType(Me(Me.tableXecs.xecs_idColumn),Integer)
-            End Get
-            Set
-                Me(Me.tableXecs.xecs_idColumn) = value
-            End Set
-        End Property
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Public Property clients_nom() As String
-            Get
-                Try 
-                    Return CType(Me(Me.tableXecs.clients_nomColumn),String)
-                Catch e As Global.System.InvalidCastException
-                    Throw New Global.System.Data.StrongTypingException("El valor de la columna 'clients_nom' de la tabla 'Xecs' es DBNull.", e)
-                End Try
-            End Get
-            Set
-                Me(Me.tableXecs.clients_nomColumn) = value
-            End Set
-        End Property
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Public Property xecs_data_entrega() As Date
-            Get
-                Try 
-                    Return CType(Me(Me.tableXecs.xecs_data_entregaColumn),Date)
-                Catch e As Global.System.InvalidCastException
-                    Throw New Global.System.Data.StrongTypingException("El valor de la columna 'xecs_data_entrega' de la tabla 'Xecs' es DBNull.", e)
-                End Try
-            End Get
-            Set
-                Me(Me.tableXecs.xecs_data_entregaColumn) = value
-            End Set
-        End Property
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Public Property xecs_valor() As Single
-            Get
-                Try 
-                    Return CType(Me(Me.tableXecs.xecs_valorColumn),Single)
-                Catch e As Global.System.InvalidCastException
-                    Throw New Global.System.Data.StrongTypingException("El valor de la columna 'xecs_valor' de la tabla 'Xecs' es DBNull.", e)
-                End Try
-            End Get
-            Set
-                Me(Me.tableXecs.xecs_valorColumn) = value
-            End Set
-        End Property
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Public Property xecs_data_liquidat() As Date
-            Get
-                Try 
-                    Return CType(Me(Me.tableXecs.xecs_data_liquidatColumn),Date)
-                Catch e As Global.System.InvalidCastException
-                    Throw New Global.System.Data.StrongTypingException("El valor de la columna 'xecs_data_liquidat' de la tabla 'Xecs' es DBNull.", e)
-                End Try
-            End Get
-            Set
-                Me(Me.tableXecs.xecs_data_liquidatColumn) = value
-            End Set
-        End Property
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Public Property feines_id() As Integer
-            Get
-                Try 
-                    Return CType(Me(Me.tableXecs.feines_idColumn),Integer)
-                Catch e As Global.System.InvalidCastException
-                    Throw New Global.System.Data.StrongTypingException("El valor de la columna 'feines_id' de la tabla 'Xecs' es DBNull.", e)
-                End Try
-            End Get
-            Set
-                Me(Me.tableXecs.feines_idColumn) = value
-            End Set
-        End Property
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Public Property ClientsRow() As ClientsRow
-            Get
-                Return CType(Me.GetParentRow(Me.Table.ParentRelations("ClientsXecs")),ClientsRow)
-            End Get
-            Set
-                Me.SetParentRow(value, Me.Table.ParentRelations("ClientsXecs"))
-            End Set
-        End Property
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Public Property FeinesRow() As FeinesRow
-            Get
-                Return CType(Me.GetParentRow(Me.Table.ParentRelations("FeinesXecs")),FeinesRow)
-            End Get
-            Set
-                Me.SetParentRow(value, Me.Table.ParentRelations("FeinesXecs"))
-            End Set
-        End Property
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Public Function Isclients_nomNull() As Boolean
-            Return Me.IsNull(Me.tableXecs.clients_nomColumn)
-        End Function
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Public Sub Setclients_nomNull()
-            Me(Me.tableXecs.clients_nomColumn) = Global.System.Convert.DBNull
-        End Sub
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Public Function Isxecs_data_entregaNull() As Boolean
-            Return Me.IsNull(Me.tableXecs.xecs_data_entregaColumn)
-        End Function
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Public Sub Setxecs_data_entregaNull()
-            Me(Me.tableXecs.xecs_data_entregaColumn) = Global.System.Convert.DBNull
-        End Sub
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Public Function Isxecs_valorNull() As Boolean
-            Return Me.IsNull(Me.tableXecs.xecs_valorColumn)
-        End Function
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Public Sub Setxecs_valorNull()
-            Me(Me.tableXecs.xecs_valorColumn) = Global.System.Convert.DBNull
-        End Sub
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Public Function Isxecs_data_liquidatNull() As Boolean
-            Return Me.IsNull(Me.tableXecs.xecs_data_liquidatColumn)
-        End Function
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Public Sub Setxecs_data_liquidatNull()
-            Me(Me.tableXecs.xecs_data_liquidatColumn) = Global.System.Convert.DBNull
-        End Sub
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Public Function Isfeines_idNull() As Boolean
-            Return Me.IsNull(Me.tableXecs.feines_idColumn)
-        End Function
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Public Sub Setfeines_idNull()
-            Me(Me.tableXecs.feines_idColumn) = Global.System.Convert.DBNull
-        End Sub
-    End Class
-    
-    '''<summary>
     '''Row event argument class
     '''</summary>
     <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
@@ -6601,6 +6530,42 @@ Partial Public Class PlaniFeinesDataSet
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
         Public ReadOnly Property Row() As ClientsRow
+            Get
+                Return Me.eventRow
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public ReadOnly Property Action() As Global.System.Data.DataRowAction
+            Get
+                Return Me.eventAction
+            End Get
+        End Property
+    End Class
+    
+    '''<summary>
+    '''Row event argument class
+    '''</summary>
+    <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+    Public Class XecsRowChangeEvent
+        Inherits Global.System.EventArgs
+        
+        Private eventRow As XecsRow
+        
+        Private eventAction As Global.System.Data.DataRowAction
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Sub New(ByVal row As XecsRow, ByVal action As Global.System.Data.DataRowAction)
+            MyBase.New
+            Me.eventRow = row
+            Me.eventAction = action
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public ReadOnly Property Row() As XecsRow
             Get
                 Return Me.eventRow
             End Get
@@ -6938,42 +6903,6 @@ Partial Public Class PlaniFeinesDataSet
             End Get
         End Property
     End Class
-    
-    '''<summary>
-    '''Row event argument class
-    '''</summary>
-    <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-    Public Class XecsRowChangeEvent
-        Inherits Global.System.EventArgs
-        
-        Private eventRow As XecsRow
-        
-        Private eventAction As Global.System.Data.DataRowAction
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Public Sub New(ByVal row As XecsRow, ByVal action As Global.System.Data.DataRowAction)
-            MyBase.New
-            Me.eventRow = row
-            Me.eventAction = action
-        End Sub
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Public ReadOnly Property Row() As XecsRow
-            Get
-                Return Me.eventRow
-            End Get
-        End Property
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Public ReadOnly Property Action() As Global.System.Data.DataRowAction
-            Get
-                Return Me.eventAction
-            End Get
-        End Property
-    End Class
 End Class
 
 Namespace PlaniFeinesDataSetTableAdapters
@@ -7226,10 +7155,9 @@ Namespace PlaniFeinesDataSetTableAdapters
             Me._commandCollection = New Global.System.Data.OleDb.OleDbCommand(0) {}
             Me._commandCollection(0) = New Global.System.Data.OleDb.OleDbCommand()
             Me._commandCollection(0).Connection = Me.Connection
-            Me._commandCollection(0).CommandText = "SELECT        clients_nom, clients_NIF, [clients_adreça], clients_poblacio, clien"& _ 
-                "ts_codi_postal, clients_telefons, clients_data_alta, clients_observacions, clien"& _ 
-                "ts_xecs, clients_ccc, "&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"                         clients_email"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"FROM            "& _ 
-                "Clients"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"ORDER BY clients_nom"
+            Me._commandCollection(0).CommandText = "SELECT clients_nom, clients_NIF, clients_adreça, clients_poblacio, clients_codi_p"& _ 
+                "ostal, clients_telefons, clients_data_alta, clients_observacions, clients_xecs, "& _ 
+                "clients_ccc, clients_email FROM Clients"
             Me._commandCollection(0).CommandType = Global.System.Data.CommandType.Text
         End Sub
         
@@ -7632,6 +7560,424 @@ Namespace PlaniFeinesDataSetTableAdapters
      Global.System.ComponentModel.DesignerAttribute("Microsoft.VSDesigner.DataSource.Design.TableAdapterDesigner, Microsoft.VSDesigner"& _ 
         ", Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"),  _
      Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")>  _
+    Partial Public Class XecsTableAdapter
+        Inherits Global.System.ComponentModel.Component
+        
+        Private WithEvents _adapter As Global.System.Data.OleDb.OleDbDataAdapter
+        
+        Private _connection As Global.System.Data.OleDb.OleDbConnection
+        
+        Private _transaction As Global.System.Data.OleDb.OleDbTransaction
+        
+        Private _commandCollection() As Global.System.Data.OleDb.OleDbCommand
+        
+        Private _clearBeforeFill As Boolean
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Sub New()
+            MyBase.New
+            Me.ClearBeforeFill = true
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Protected Friend ReadOnly Property Adapter() As Global.System.Data.OleDb.OleDbDataAdapter
+            Get
+                If (Me._adapter Is Nothing) Then
+                    Me.InitAdapter
+                End If
+                Return Me._adapter
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Friend Property Connection() As Global.System.Data.OleDb.OleDbConnection
+            Get
+                If (Me._connection Is Nothing) Then
+                    Me.InitConnection
+                End If
+                Return Me._connection
+            End Get
+            Set
+                Me._connection = value
+                If (Not (Me.Adapter.InsertCommand) Is Nothing) Then
+                    Me.Adapter.InsertCommand.Connection = value
+                End If
+                If (Not (Me.Adapter.DeleteCommand) Is Nothing) Then
+                    Me.Adapter.DeleteCommand.Connection = value
+                End If
+                If (Not (Me.Adapter.UpdateCommand) Is Nothing) Then
+                    Me.Adapter.UpdateCommand.Connection = value
+                End If
+                Dim i As Integer = 0
+                Do While (i < Me.CommandCollection.Length)
+                    If (Not (Me.CommandCollection(i)) Is Nothing) Then
+                        CType(Me.CommandCollection(i),Global.System.Data.OleDb.OleDbCommand).Connection = value
+                    End If
+                    i = (i + 1)
+                Loop
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Friend Property Transaction() As Global.System.Data.OleDb.OleDbTransaction
+            Get
+                Return Me._transaction
+            End Get
+            Set
+                Me._transaction = value
+                Dim i As Integer = 0
+                Do While (i < Me.CommandCollection.Length)
+                    Me.CommandCollection(i).Transaction = Me._transaction
+                    i = (i + 1)
+                Loop
+                If ((Not (Me.Adapter) Is Nothing)  _
+                            AndAlso (Not (Me.Adapter.DeleteCommand) Is Nothing)) Then
+                    Me.Adapter.DeleteCommand.Transaction = Me._transaction
+                End If
+                If ((Not (Me.Adapter) Is Nothing)  _
+                            AndAlso (Not (Me.Adapter.InsertCommand) Is Nothing)) Then
+                    Me.Adapter.InsertCommand.Transaction = Me._transaction
+                End If
+                If ((Not (Me.Adapter) Is Nothing)  _
+                            AndAlso (Not (Me.Adapter.UpdateCommand) Is Nothing)) Then
+                    Me.Adapter.UpdateCommand.Transaction = Me._transaction
+                End If
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Protected ReadOnly Property CommandCollection() As Global.System.Data.OleDb.OleDbCommand()
+            Get
+                If (Me._commandCollection Is Nothing) Then
+                    Me.InitCommandCollection
+                End If
+                Return Me._commandCollection
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Property ClearBeforeFill() As Boolean
+            Get
+                Return Me._clearBeforeFill
+            End Get
+            Set
+                Me._clearBeforeFill = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Private Sub InitAdapter()
+            Me._adapter = New Global.System.Data.OleDb.OleDbDataAdapter()
+            Dim tableMapping As Global.System.Data.Common.DataTableMapping = New Global.System.Data.Common.DataTableMapping()
+            tableMapping.SourceTable = "Table"
+            tableMapping.DataSetTable = "Xecs"
+            tableMapping.ColumnMappings.Add("xecs_id", "xecs_id")
+            tableMapping.ColumnMappings.Add("clients_nom", "clients_nom")
+            tableMapping.ColumnMappings.Add("xecs_data_entrega", "xecs_data_entrega")
+            tableMapping.ColumnMappings.Add("xecs_valor", "xecs_valor")
+            tableMapping.ColumnMappings.Add("xecs_data_liquidat", "xecs_data_liquidat")
+            tableMapping.ColumnMappings.Add("feines_id", "feines_id")
+            Me._adapter.TableMappings.Add(tableMapping)
+            Me._adapter.DeleteCommand = New Global.System.Data.OleDb.OleDbCommand()
+            Me._adapter.DeleteCommand.Connection = Me.Connection
+            Me._adapter.DeleteCommand.CommandText = "DELETE FROM `Xecs` WHERE ((`xecs_id` = ?) AND ((? = 1 AND `clients_nom` IS NULL) "& _ 
+                "OR (`clients_nom` = ?)) AND ((? = 1 AND `xecs_data_entrega` IS NULL) OR (`xecs_d"& _ 
+                "ata_entrega` = ?)) AND ((? = 1 AND `xecs_valor` IS NULL) OR (`xecs_valor` = ?)) "& _ 
+                "AND ((? = 1 AND `xecs_data_liquidat` IS NULL) OR (`xecs_data_liquidat` = ?)) AND"& _ 
+                " ((? = 1 AND `feines_id` IS NULL) OR (`feines_id` = ?)))"
+            Me._adapter.DeleteCommand.CommandType = Global.System.Data.CommandType.Text
+            Me._adapter.DeleteCommand.Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("Original_xecs_id", Global.System.Data.OleDb.OleDbType.[Integer], 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "xecs_id", Global.System.Data.DataRowVersion.Original, false, Nothing))
+            Me._adapter.DeleteCommand.Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("IsNull_clients_nom", Global.System.Data.OleDb.OleDbType.[Integer], 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "clients_nom", Global.System.Data.DataRowVersion.Original, true, Nothing))
+            Me._adapter.DeleteCommand.Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("Original_clients_nom", Global.System.Data.OleDb.OleDbType.VarWChar, 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "clients_nom", Global.System.Data.DataRowVersion.Original, false, Nothing))
+            Me._adapter.DeleteCommand.Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("IsNull_xecs_data_entrega", Global.System.Data.OleDb.OleDbType.[Integer], 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "xecs_data_entrega", Global.System.Data.DataRowVersion.Original, true, Nothing))
+            Me._adapter.DeleteCommand.Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("Original_xecs_data_entrega", Global.System.Data.OleDb.OleDbType.[Date], 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "xecs_data_entrega", Global.System.Data.DataRowVersion.Original, false, Nothing))
+            Me._adapter.DeleteCommand.Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("IsNull_xecs_valor", Global.System.Data.OleDb.OleDbType.[Integer], 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "xecs_valor", Global.System.Data.DataRowVersion.Original, true, Nothing))
+            Me._adapter.DeleteCommand.Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("Original_xecs_valor", Global.System.Data.OleDb.OleDbType.[Single], 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "xecs_valor", Global.System.Data.DataRowVersion.Original, false, Nothing))
+            Me._adapter.DeleteCommand.Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("IsNull_xecs_data_liquidat", Global.System.Data.OleDb.OleDbType.[Integer], 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "xecs_data_liquidat", Global.System.Data.DataRowVersion.Original, true, Nothing))
+            Me._adapter.DeleteCommand.Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("Original_xecs_data_liquidat", Global.System.Data.OleDb.OleDbType.[Date], 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "xecs_data_liquidat", Global.System.Data.DataRowVersion.Original, false, Nothing))
+            Me._adapter.DeleteCommand.Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("IsNull_feines_id", Global.System.Data.OleDb.OleDbType.[Integer], 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "feines_id", Global.System.Data.DataRowVersion.Original, true, Nothing))
+            Me._adapter.DeleteCommand.Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("Original_feines_id", Global.System.Data.OleDb.OleDbType.[Integer], 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "feines_id", Global.System.Data.DataRowVersion.Original, false, Nothing))
+            Me._adapter.InsertCommand = New Global.System.Data.OleDb.OleDbCommand()
+            Me._adapter.InsertCommand.Connection = Me.Connection
+            Me._adapter.InsertCommand.CommandText = "INSERT INTO `Xecs` (`xecs_id`, `clients_nom`, `xecs_data_entrega`, `xecs_valor`, "& _ 
+                "`xecs_data_liquidat`, `feines_id`) VALUES (?, ?, ?, ?, ?, ?)"
+            Me._adapter.InsertCommand.CommandType = Global.System.Data.CommandType.Text
+            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("xecs_id", Global.System.Data.OleDb.OleDbType.[Integer], 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "xecs_id", Global.System.Data.DataRowVersion.Current, false, Nothing))
+            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("clients_nom", Global.System.Data.OleDb.OleDbType.VarWChar, 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "clients_nom", Global.System.Data.DataRowVersion.Current, false, Nothing))
+            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("xecs_data_entrega", Global.System.Data.OleDb.OleDbType.[Date], 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "xecs_data_entrega", Global.System.Data.DataRowVersion.Current, false, Nothing))
+            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("xecs_valor", Global.System.Data.OleDb.OleDbType.[Single], 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "xecs_valor", Global.System.Data.DataRowVersion.Current, false, Nothing))
+            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("xecs_data_liquidat", Global.System.Data.OleDb.OleDbType.[Date], 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "xecs_data_liquidat", Global.System.Data.DataRowVersion.Current, false, Nothing))
+            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("feines_id", Global.System.Data.OleDb.OleDbType.[Integer], 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "feines_id", Global.System.Data.DataRowVersion.Current, false, Nothing))
+            Me._adapter.UpdateCommand = New Global.System.Data.OleDb.OleDbCommand()
+            Me._adapter.UpdateCommand.Connection = Me.Connection
+            Me._adapter.UpdateCommand.CommandText = "UPDATE `Xecs` SET `xecs_id` = ?, `clients_nom` = ?, `xecs_data_entrega` = ?, `xec"& _ 
+                "s_valor` = ?, `xecs_data_liquidat` = ?, `feines_id` = ? WHERE ((`xecs_id` = ?) A"& _ 
+                "ND ((? = 1 AND `clients_nom` IS NULL) OR (`clients_nom` = ?)) AND ((? = 1 AND `x"& _ 
+                "ecs_data_entrega` IS NULL) OR (`xecs_data_entrega` = ?)) AND ((? = 1 AND `xecs_v"& _ 
+                "alor` IS NULL) OR (`xecs_valor` = ?)) AND ((? = 1 AND `xecs_data_liquidat` IS NU"& _ 
+                "LL) OR (`xecs_data_liquidat` = ?)) AND ((? = 1 AND `feines_id` IS NULL) OR (`fei"& _ 
+                "nes_id` = ?)))"
+            Me._adapter.UpdateCommand.CommandType = Global.System.Data.CommandType.Text
+            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("xecs_id", Global.System.Data.OleDb.OleDbType.[Integer], 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "xecs_id", Global.System.Data.DataRowVersion.Current, false, Nothing))
+            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("clients_nom", Global.System.Data.OleDb.OleDbType.VarWChar, 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "clients_nom", Global.System.Data.DataRowVersion.Current, false, Nothing))
+            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("xecs_data_entrega", Global.System.Data.OleDb.OleDbType.[Date], 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "xecs_data_entrega", Global.System.Data.DataRowVersion.Current, false, Nothing))
+            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("xecs_valor", Global.System.Data.OleDb.OleDbType.[Single], 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "xecs_valor", Global.System.Data.DataRowVersion.Current, false, Nothing))
+            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("xecs_data_liquidat", Global.System.Data.OleDb.OleDbType.[Date], 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "xecs_data_liquidat", Global.System.Data.DataRowVersion.Current, false, Nothing))
+            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("feines_id", Global.System.Data.OleDb.OleDbType.[Integer], 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "feines_id", Global.System.Data.DataRowVersion.Current, false, Nothing))
+            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("Original_xecs_id", Global.System.Data.OleDb.OleDbType.[Integer], 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "xecs_id", Global.System.Data.DataRowVersion.Original, false, Nothing))
+            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("IsNull_clients_nom", Global.System.Data.OleDb.OleDbType.[Integer], 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "clients_nom", Global.System.Data.DataRowVersion.Original, true, Nothing))
+            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("Original_clients_nom", Global.System.Data.OleDb.OleDbType.VarWChar, 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "clients_nom", Global.System.Data.DataRowVersion.Original, false, Nothing))
+            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("IsNull_xecs_data_entrega", Global.System.Data.OleDb.OleDbType.[Integer], 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "xecs_data_entrega", Global.System.Data.DataRowVersion.Original, true, Nothing))
+            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("Original_xecs_data_entrega", Global.System.Data.OleDb.OleDbType.[Date], 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "xecs_data_entrega", Global.System.Data.DataRowVersion.Original, false, Nothing))
+            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("IsNull_xecs_valor", Global.System.Data.OleDb.OleDbType.[Integer], 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "xecs_valor", Global.System.Data.DataRowVersion.Original, true, Nothing))
+            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("Original_xecs_valor", Global.System.Data.OleDb.OleDbType.[Single], 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "xecs_valor", Global.System.Data.DataRowVersion.Original, false, Nothing))
+            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("IsNull_xecs_data_liquidat", Global.System.Data.OleDb.OleDbType.[Integer], 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "xecs_data_liquidat", Global.System.Data.DataRowVersion.Original, true, Nothing))
+            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("Original_xecs_data_liquidat", Global.System.Data.OleDb.OleDbType.[Date], 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "xecs_data_liquidat", Global.System.Data.DataRowVersion.Original, false, Nothing))
+            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("IsNull_feines_id", Global.System.Data.OleDb.OleDbType.[Integer], 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "feines_id", Global.System.Data.DataRowVersion.Original, true, Nothing))
+            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("Original_feines_id", Global.System.Data.OleDb.OleDbType.[Integer], 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "feines_id", Global.System.Data.DataRowVersion.Original, false, Nothing))
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Private Sub InitConnection()
+            Me._connection = New Global.System.Data.OleDb.OleDbConnection()
+            Me._connection.ConnectionString = Global.PlaniFeinesOTS.My.MySettings.Default.PlaniFeinesConnectionString
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Private Sub InitCommandCollection()
+            Me._commandCollection = New Global.System.Data.OleDb.OleDbCommand(0) {}
+            Me._commandCollection(0) = New Global.System.Data.OleDb.OleDbCommand()
+            Me._commandCollection(0).Connection = Me.Connection
+            Me._commandCollection(0).CommandText = "SELECT xecs_id, clients_nom, xecs_data_entrega, xecs_valor, xecs_data_liquidat, f"& _ 
+                "eines_id FROM Xecs"
+            Me._commandCollection(0).CommandType = Global.System.Data.CommandType.Text
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0"),  _
+         Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter"),  _
+         Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.Fill, true)>  _
+        Public Overloads Overridable Function Fill(ByVal dataTable As PlaniFeinesDataSet.XecsDataTable) As Integer
+            Me.Adapter.SelectCommand = Me.CommandCollection(0)
+            If (Me.ClearBeforeFill = true) Then
+                dataTable.Clear
+            End If
+            Dim returnValue As Integer = Me.Adapter.Fill(dataTable)
+            Return returnValue
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0"),  _
+         Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter"),  _
+         Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.[Select], true)>  _
+        Public Overloads Overridable Function GetData() As PlaniFeinesDataSet.XecsDataTable
+            Me.Adapter.SelectCommand = Me.CommandCollection(0)
+            Dim dataTable As PlaniFeinesDataSet.XecsDataTable = New PlaniFeinesDataSet.XecsDataTable()
+            Me.Adapter.Fill(dataTable)
+            Return dataTable
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0"),  _
+         Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")>  _
+        Public Overloads Overridable Function Update(ByVal dataTable As PlaniFeinesDataSet.XecsDataTable) As Integer
+            Return Me.Adapter.Update(dataTable)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0"),  _
+         Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")>  _
+        Public Overloads Overridable Function Update(ByVal dataSet As PlaniFeinesDataSet) As Integer
+            Return Me.Adapter.Update(dataSet, "Xecs")
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0"),  _
+         Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")>  _
+        Public Overloads Overridable Function Update(ByVal dataRow As Global.System.Data.DataRow) As Integer
+            Return Me.Adapter.Update(New Global.System.Data.DataRow() {dataRow})
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0"),  _
+         Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")>  _
+        Public Overloads Overridable Function Update(ByVal dataRows() As Global.System.Data.DataRow) As Integer
+            Return Me.Adapter.Update(dataRows)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0"),  _
+         Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter"),  _
+         Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.Delete, true)>  _
+        Public Overloads Overridable Function Delete(ByVal Original_xecs_id As Integer, ByVal Original_clients_nom As String, ByVal Original_xecs_data_entrega As Date, ByVal Original_xecs_valor As Single, ByVal Original_xecs_data_liquidat As Global.System.Nullable(Of Date), ByVal Original_feines_id As Global.System.Nullable(Of Integer)) As Integer
+            Me.Adapter.DeleteCommand.Parameters(0).Value = CType(Original_xecs_id,Integer)
+            If (Original_clients_nom Is Nothing) Then
+                Throw New Global.System.ArgumentNullException("Original_clients_nom")
+            Else
+                Me.Adapter.DeleteCommand.Parameters(1).Value = CType(0,Object)
+                Me.Adapter.DeleteCommand.Parameters(2).Value = CType(Original_clients_nom,String)
+            End If
+            Me.Adapter.DeleteCommand.Parameters(3).Value = CType(0,Object)
+            Me.Adapter.DeleteCommand.Parameters(4).Value = CType(Original_xecs_data_entrega,Date)
+            Me.Adapter.DeleteCommand.Parameters(5).Value = CType(0,Object)
+            Me.Adapter.DeleteCommand.Parameters(6).Value = CType(Original_xecs_valor,Single)
+            If (Original_xecs_data_liquidat.HasValue = true) Then
+                Me.Adapter.DeleteCommand.Parameters(7).Value = CType(0,Object)
+                Me.Adapter.DeleteCommand.Parameters(8).Value = CType(Original_xecs_data_liquidat.Value,Date)
+            Else
+                Me.Adapter.DeleteCommand.Parameters(7).Value = CType(1,Object)
+                Me.Adapter.DeleteCommand.Parameters(8).Value = Global.System.DBNull.Value
+            End If
+            If (Original_feines_id.HasValue = true) Then
+                Me.Adapter.DeleteCommand.Parameters(9).Value = CType(0,Object)
+                Me.Adapter.DeleteCommand.Parameters(10).Value = CType(Original_feines_id.Value,Integer)
+            Else
+                Me.Adapter.DeleteCommand.Parameters(9).Value = CType(1,Object)
+                Me.Adapter.DeleteCommand.Parameters(10).Value = Global.System.DBNull.Value
+            End If
+            Dim previousConnectionState As Global.System.Data.ConnectionState = Me.Adapter.DeleteCommand.Connection.State
+            If ((Me.Adapter.DeleteCommand.Connection.State And Global.System.Data.ConnectionState.Open)  _
+                        <> Global.System.Data.ConnectionState.Open) Then
+                Me.Adapter.DeleteCommand.Connection.Open
+            End If
+            Try 
+                Dim returnValue As Integer = Me.Adapter.DeleteCommand.ExecuteNonQuery
+                Return returnValue
+            Finally
+                If (previousConnectionState = Global.System.Data.ConnectionState.Closed) Then
+                    Me.Adapter.DeleteCommand.Connection.Close
+                End If
+            End Try
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0"),  _
+         Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter"),  _
+         Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.Insert, true)>  _
+        Public Overloads Overridable Function Insert(ByVal xecs_id As Integer, ByVal clients_nom As String, ByVal xecs_data_entrega As Date, ByVal xecs_valor As Single, ByVal xecs_data_liquidat As Global.System.Nullable(Of Date), ByVal feines_id As Global.System.Nullable(Of Integer)) As Integer
+            Me.Adapter.InsertCommand.Parameters(0).Value = CType(xecs_id,Integer)
+            If (clients_nom Is Nothing) Then
+                Throw New Global.System.ArgumentNullException("clients_nom")
+            Else
+                Me.Adapter.InsertCommand.Parameters(1).Value = CType(clients_nom,String)
+            End If
+            Me.Adapter.InsertCommand.Parameters(2).Value = CType(xecs_data_entrega,Date)
+            Me.Adapter.InsertCommand.Parameters(3).Value = CType(xecs_valor,Single)
+            If (xecs_data_liquidat.HasValue = true) Then
+                Me.Adapter.InsertCommand.Parameters(4).Value = CType(xecs_data_liquidat.Value,Date)
+            Else
+                Me.Adapter.InsertCommand.Parameters(4).Value = Global.System.DBNull.Value
+            End If
+            If (feines_id.HasValue = true) Then
+                Me.Adapter.InsertCommand.Parameters(5).Value = CType(feines_id.Value,Integer)
+            Else
+                Me.Adapter.InsertCommand.Parameters(5).Value = Global.System.DBNull.Value
+            End If
+            Dim previousConnectionState As Global.System.Data.ConnectionState = Me.Adapter.InsertCommand.Connection.State
+            If ((Me.Adapter.InsertCommand.Connection.State And Global.System.Data.ConnectionState.Open)  _
+                        <> Global.System.Data.ConnectionState.Open) Then
+                Me.Adapter.InsertCommand.Connection.Open
+            End If
+            Try 
+                Dim returnValue As Integer = Me.Adapter.InsertCommand.ExecuteNonQuery
+                Return returnValue
+            Finally
+                If (previousConnectionState = Global.System.Data.ConnectionState.Closed) Then
+                    Me.Adapter.InsertCommand.Connection.Close
+                End If
+            End Try
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0"),  _
+         Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter"),  _
+         Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.Update, true)>  _
+        Public Overloads Overridable Function Update(ByVal xecs_id As Integer, ByVal clients_nom As String, ByVal xecs_data_entrega As Date, ByVal xecs_valor As Single, ByVal xecs_data_liquidat As Global.System.Nullable(Of Date), ByVal feines_id As Global.System.Nullable(Of Integer), ByVal Original_xecs_id As Integer, ByVal Original_clients_nom As String, ByVal Original_xecs_data_entrega As Date, ByVal Original_xecs_valor As Single, ByVal Original_xecs_data_liquidat As Global.System.Nullable(Of Date), ByVal Original_feines_id As Global.System.Nullable(Of Integer)) As Integer
+            Me.Adapter.UpdateCommand.Parameters(0).Value = CType(xecs_id,Integer)
+            If (clients_nom Is Nothing) Then
+                Throw New Global.System.ArgumentNullException("clients_nom")
+            Else
+                Me.Adapter.UpdateCommand.Parameters(1).Value = CType(clients_nom,String)
+            End If
+            Me.Adapter.UpdateCommand.Parameters(2).Value = CType(xecs_data_entrega,Date)
+            Me.Adapter.UpdateCommand.Parameters(3).Value = CType(xecs_valor,Single)
+            If (xecs_data_liquidat.HasValue = true) Then
+                Me.Adapter.UpdateCommand.Parameters(4).Value = CType(xecs_data_liquidat.Value,Date)
+            Else
+                Me.Adapter.UpdateCommand.Parameters(4).Value = Global.System.DBNull.Value
+            End If
+            If (feines_id.HasValue = true) Then
+                Me.Adapter.UpdateCommand.Parameters(5).Value = CType(feines_id.Value,Integer)
+            Else
+                Me.Adapter.UpdateCommand.Parameters(5).Value = Global.System.DBNull.Value
+            End If
+            Me.Adapter.UpdateCommand.Parameters(6).Value = CType(Original_xecs_id,Integer)
+            If (Original_clients_nom Is Nothing) Then
+                Throw New Global.System.ArgumentNullException("Original_clients_nom")
+            Else
+                Me.Adapter.UpdateCommand.Parameters(7).Value = CType(0,Object)
+                Me.Adapter.UpdateCommand.Parameters(8).Value = CType(Original_clients_nom,String)
+            End If
+            Me.Adapter.UpdateCommand.Parameters(9).Value = CType(0,Object)
+            Me.Adapter.UpdateCommand.Parameters(10).Value = CType(Original_xecs_data_entrega,Date)
+            Me.Adapter.UpdateCommand.Parameters(11).Value = CType(0,Object)
+            Me.Adapter.UpdateCommand.Parameters(12).Value = CType(Original_xecs_valor,Single)
+            If (Original_xecs_data_liquidat.HasValue = true) Then
+                Me.Adapter.UpdateCommand.Parameters(13).Value = CType(0,Object)
+                Me.Adapter.UpdateCommand.Parameters(14).Value = CType(Original_xecs_data_liquidat.Value,Date)
+            Else
+                Me.Adapter.UpdateCommand.Parameters(13).Value = CType(1,Object)
+                Me.Adapter.UpdateCommand.Parameters(14).Value = Global.System.DBNull.Value
+            End If
+            If (Original_feines_id.HasValue = true) Then
+                Me.Adapter.UpdateCommand.Parameters(15).Value = CType(0,Object)
+                Me.Adapter.UpdateCommand.Parameters(16).Value = CType(Original_feines_id.Value,Integer)
+            Else
+                Me.Adapter.UpdateCommand.Parameters(15).Value = CType(1,Object)
+                Me.Adapter.UpdateCommand.Parameters(16).Value = Global.System.DBNull.Value
+            End If
+            Dim previousConnectionState As Global.System.Data.ConnectionState = Me.Adapter.UpdateCommand.Connection.State
+            If ((Me.Adapter.UpdateCommand.Connection.State And Global.System.Data.ConnectionState.Open)  _
+                        <> Global.System.Data.ConnectionState.Open) Then
+                Me.Adapter.UpdateCommand.Connection.Open
+            End If
+            Try 
+                Dim returnValue As Integer = Me.Adapter.UpdateCommand.ExecuteNonQuery
+                Return returnValue
+            Finally
+                If (previousConnectionState = Global.System.Data.ConnectionState.Closed) Then
+                    Me.Adapter.UpdateCommand.Connection.Close
+                End If
+            End Try
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0"),  _
+         Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter"),  _
+         Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.Update, true)>  _
+        Public Overloads Overridable Function Update(ByVal clients_nom As String, ByVal xecs_data_entrega As Date, ByVal xecs_valor As Single, ByVal xecs_data_liquidat As Global.System.Nullable(Of Date), ByVal feines_id As Global.System.Nullable(Of Integer), ByVal Original_xecs_id As Integer, ByVal Original_clients_nom As String, ByVal Original_xecs_data_entrega As Date, ByVal Original_xecs_valor As Single, ByVal Original_xecs_data_liquidat As Global.System.Nullable(Of Date), ByVal Original_feines_id As Global.System.Nullable(Of Integer)) As Integer
+            Return Me.Update(Original_xecs_id, clients_nom, xecs_data_entrega, xecs_valor, xecs_data_liquidat, feines_id, Original_xecs_id, Original_clients_nom, Original_xecs_data_entrega, Original_xecs_valor, Original_xecs_data_liquidat, Original_feines_id)
+        End Function
+    End Class
+    
+    '''<summary>
+    '''Represents the connection and commands used to retrieve and save data.
+    '''</summary>
+    <Global.System.ComponentModel.DesignerCategoryAttribute("code"),  _
+     Global.System.ComponentModel.ToolboxItem(true),  _
+     Global.System.ComponentModel.DataObjectAttribute(true),  _
+     Global.System.ComponentModel.DesignerAttribute("Microsoft.VSDesigner.DataSource.Design.TableAdapterDesigner, Microsoft.VSDesigner"& _ 
+        ", Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"),  _
+     Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")>  _
     Partial Public Class FeinesTableAdapter
         Inherits Global.System.ComponentModel.Component
         
@@ -7861,22 +8207,13 @@ Namespace PlaniFeinesDataSetTableAdapters
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
         Private Sub InitCommandCollection()
-            Me._commandCollection = New Global.System.Data.OleDb.OleDbCommand(1) {}
+            Me._commandCollection = New Global.System.Data.OleDb.OleDbCommand(0) {}
             Me._commandCollection(0) = New Global.System.Data.OleDb.OleDbCommand()
             Me._commandCollection(0).Connection = Me.Connection
-            Me._commandCollection(0).CommandText = "SELECT        feines_id, llocs_nom, feines_data, feines_hora_inici, feines_hora_f"& _ 
-                "i, recursos_nom, feines_feta, feines_data_factura, feines_observacions, feines_q"& _ 
-                "uota"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"FROM            Feines"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"ORDER BY feines_id"
+            Me._commandCollection(0).CommandText = "SELECT feines_id, llocs_nom, feines_data, feines_hora_inici, feines_hora_fi, recu"& _ 
+                "rsos_nom, feines_feta, feines_data_factura, feines_observacions, feines_quota FR"& _ 
+                "OM Feines"
             Me._commandCollection(0).CommandType = Global.System.Data.CommandType.Text
-            Me._commandCollection(1) = New Global.System.Data.OleDb.OleDbCommand()
-            Me._commandCollection(1).Connection = Me.Connection
-            Me._commandCollection(1).CommandText = "SELECT        feines_id, llocs_nom, feines_data, feines_hora_inici, feines_hora_f"& _ 
-                "i, recursos_nom, feines_feta, feines_data_factura, feines_observacions, feines_q"& _ 
-                "uota"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"FROM            Feines"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"WHERE        (feines_data >= ?) AND (feines_data <"& _ 
-                "= ?)"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"ORDER BY feines_id"
-            Me._commandCollection(1).CommandType = Global.System.Data.CommandType.Text
-            Me._commandCollection(1).Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("feines_data", Global.System.Data.OleDb.OleDbType.[Date], 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "feines_data", Global.System.Data.DataRowVersion.Current, false, Nothing))
-            Me._commandCollection(1).Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("feines_data1", Global.System.Data.OleDb.OleDbType.[Date], 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "feines_data", Global.System.Data.DataRowVersion.Current, false, Nothing))
         End Sub
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -7901,21 +8238,6 @@ Namespace PlaniFeinesDataSetTableAdapters
             Dim dataTable As PlaniFeinesDataSet.FeinesDataTable = New PlaniFeinesDataSet.FeinesDataTable()
             Me.Adapter.Fill(dataTable)
             Return dataTable
-        End Function
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0"),  _
-         Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter"),  _
-         Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.Fill, false)>  _
-        Public Overloads Overridable Function FillByDataRange(ByVal dataTable As PlaniFeinesDataSet.FeinesDataTable, ByVal feines_data As Date, ByVal feines_data1 As Date) As Integer
-            Me.Adapter.SelectCommand = Me.CommandCollection(1)
-            Me.Adapter.SelectCommand.Parameters(0).Value = CType(feines_data,Date)
-            Me.Adapter.SelectCommand.Parameters(1).Value = CType(feines_data1,Date)
-            If (Me.ClearBeforeFill = true) Then
-                dataTable.Clear
-            End If
-            Dim returnValue As Integer = Me.Adapter.Fill(dataTable)
-            Return returnValue
         End Function
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -8398,9 +8720,8 @@ Namespace PlaniFeinesDataSetTableAdapters
             Me._commandCollection = New Global.System.Data.OleDb.OleDbCommand(0) {}
             Me._commandCollection(0) = New Global.System.Data.OleDb.OleDbCommand()
             Me._commandCollection(0).Connection = Me.Connection
-            Me._commandCollection(0).CommandText = "SELECT     feines_id, serveis_nom, feines_detall_quantitat, feines_detall_preu_un"& _ 
-                ", feines_detall_unitat"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"FROM         Feines_Detall"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"ORDER BY feines_id, serveis_"& _ 
-                "nom"
+            Me._commandCollection(0).CommandText = "SELECT feines_id, serveis_nom, feines_detall_quantitat, feines_detall_preu_un, fe"& _ 
+                "ines_detall_unitat FROM Feines_Detall"
             Me._commandCollection(0).CommandType = Global.System.Data.CommandType.Text
         End Sub
         
@@ -8797,8 +9118,7 @@ Namespace PlaniFeinesDataSetTableAdapters
             Me._commandCollection = New Global.System.Data.OleDb.OleDbCommand(0) {}
             Me._commandCollection(0) = New Global.System.Data.OleDb.OleDbCommand()
             Me._commandCollection(0).Connection = Me.Connection
-            Me._commandCollection(0).CommandText = "SELECT        recursos_nom, hores_data, hores_quantitat"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"FROM            Hores_Fe"& _ 
-                "tes"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"ORDER BY recursos_nom, hores_data"
+            Me._commandCollection(0).CommandText = "SELECT recursos_nom, hores_data, hores_quantitat FROM Hores_Fetes"
             Me._commandCollection(0).CommandType = Global.System.Data.CommandType.Text
         End Sub
         
@@ -9247,11 +9567,10 @@ Namespace PlaniFeinesDataSetTableAdapters
             Me._commandCollection = New Global.System.Data.OleDb.OleDbCommand(0) {}
             Me._commandCollection(0) = New Global.System.Data.OleDb.OleDbCommand()
             Me._commandCollection(0).Connection = Me.Connection
-            Me._commandCollection(0).CommandText = "SELECT        llocs_nom, clients_nom, [llocs_adreça], llocs_poblacio, llocs_telef"& _ 
-                "on, llocs_minuts_previst, llocs_periodicitat_dies, llocs_dia_setmana, llocs_diss"& _ 
-                "abte, "&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"                         llocs_diumenge, llocs_hora, recursos_nom, llocs"& _ 
-                "_observacions, llocs_quota, llocs_primer_dia_mes, llocs_ultim_dia_mes"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"FROM     "& _ 
-                "       Llocs"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"ORDER BY llocs_nom"
+            Me._commandCollection(0).CommandText = "SELECT llocs_nom, clients_nom, llocs_adreça, llocs_poblacio, llocs_telefon, llocs"& _ 
+                "_minuts_previst, llocs_periodicitat_dies, llocs_dia_setmana, llocs_dissabte, llo"& _ 
+                "cs_diumenge, llocs_hora, recursos_nom, llocs_observacions, llocs_quota, llocs_pr"& _ 
+                "imer_dia_mes, llocs_ultim_dia_mes FROM Llocs"
             Me._commandCollection(0).CommandType = Global.System.Data.CommandType.Text
         End Sub
         
@@ -9932,8 +10251,8 @@ Namespace PlaniFeinesDataSetTableAdapters
             Me._commandCollection = New Global.System.Data.OleDb.OleDbCommand(0) {}
             Me._commandCollection(0) = New Global.System.Data.OleDb.OleDbCommand()
             Me._commandCollection(0).Connection = Me.Connection
-            Me._commandCollection(0).CommandText = "SELECT        llocs_nom, serveis_nom, llocs_serveis_quantitat, llocs_serveis_preu"& _ 
-                "_un"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"FROM            Llocs_Serveis"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"ORDER BY llocs_nom, serveis_nom"
+            Me._commandCollection(0).CommandText = "SELECT llocs_nom, serveis_nom, llocs_serveis_quantitat, llocs_serveis_preu_un FRO"& _ 
+                "M Llocs_Serveis"
             Me._commandCollection(0).CommandType = Global.System.Data.CommandType.Text
         End Sub
         
@@ -10331,8 +10650,8 @@ Namespace PlaniFeinesDataSetTableAdapters
             Me._commandCollection = New Global.System.Data.OleDb.OleDbCommand(0) {}
             Me._commandCollection(0) = New Global.System.Data.OleDb.OleDbCommand()
             Me._commandCollection(0).Connection = Me.Connection
-            Me._commandCollection(0).CommandText = "SELECT        pagaments_mes, clients_nom, pagaments_import, pagaments_data"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"FROM "& _ 
-                "           Pagaments"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"ORDER BY pagaments_mes"
+            Me._commandCollection(0).CommandText = "SELECT pagaments_mes, clients_nom, pagaments_import, pagaments_data FROM Pagament"& _ 
+                "s"
             Me._commandCollection(0).CommandType = Global.System.Data.CommandType.Text
         End Sub
         
@@ -10725,8 +11044,7 @@ Namespace PlaniFeinesDataSetTableAdapters
             Me._commandCollection = New Global.System.Data.OleDb.OleDbCommand(0) {}
             Me._commandCollection(0) = New Global.System.Data.OleDb.OleDbCommand()
             Me._commandCollection(0).Connection = Me.Connection
-            Me._commandCollection(0).CommandText = "SELECT        recursos_nom, recursos_grup, recursos_color"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"FROM            Recurs"& _ 
-                "os"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"ORDER BY recursos_nom"
+            Me._commandCollection(0).CommandText = "SELECT recursos_nom, recursos_grup, recursos_color FROM Recursos"
             Me._commandCollection(0).CommandType = Global.System.Data.CommandType.Text
         End Sub
         
@@ -11069,8 +11387,7 @@ Namespace PlaniFeinesDataSetTableAdapters
             Me._commandCollection = New Global.System.Data.OleDb.OleDbCommand(0) {}
             Me._commandCollection(0) = New Global.System.Data.OleDb.OleDbCommand()
             Me._commandCollection(0).Connection = Me.Connection
-            Me._commandCollection(0).CommandText = "SELECT        recursos_nom, recursos_component_nom"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"FROM            Recursos_Comp"& _ 
-                "onents"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"ORDER BY recursos_nom, recursos_component_nom"
+            Me._commandCollection(0).CommandText = "SELECT recursos_nom, recursos_component_nom FROM Recursos_Components"
             Me._commandCollection(0).CommandType = Global.System.Data.CommandType.Text
         End Sub
         
@@ -11434,8 +11751,8 @@ Namespace PlaniFeinesDataSetTableAdapters
             Me._commandCollection = New Global.System.Data.OleDb.OleDbCommand(0) {}
             Me._commandCollection(0) = New Global.System.Data.OleDb.OleDbCommand()
             Me._commandCollection(0).Connection = Me.Connection
-            Me._commandCollection(0).CommandText = "SELECT        serveis_nom, serveis_unitat, serveis_preu_un, serveis_minuts_per_un"& _ 
-                "itat, serveis_comu_per_recursos"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"FROM            Serveis"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"ORDER BY serveis_nom"
+            Me._commandCollection(0).CommandText = "SELECT serveis_nom, serveis_unitat, serveis_preu_un, serveis_minuts_per_unitat, s"& _ 
+                "erveis_comu_per_recursos FROM Serveis"
             Me._commandCollection(0).CommandType = Global.System.Data.CommandType.Text
         End Sub
         
@@ -11657,424 +11974,6 @@ Namespace PlaniFeinesDataSetTableAdapters
     End Class
     
     '''<summary>
-    '''Represents the connection and commands used to retrieve and save data.
-    '''</summary>
-    <Global.System.ComponentModel.DesignerCategoryAttribute("code"),  _
-     Global.System.ComponentModel.ToolboxItem(true),  _
-     Global.System.ComponentModel.DataObjectAttribute(true),  _
-     Global.System.ComponentModel.DesignerAttribute("Microsoft.VSDesigner.DataSource.Design.TableAdapterDesigner, Microsoft.VSDesigner"& _ 
-        ", Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"),  _
-     Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")>  _
-    Partial Public Class XecsTableAdapter
-        Inherits Global.System.ComponentModel.Component
-        
-        Private WithEvents _adapter As Global.System.Data.OleDb.OleDbDataAdapter
-        
-        Private _connection As Global.System.Data.OleDb.OleDbConnection
-        
-        Private _transaction As Global.System.Data.OleDb.OleDbTransaction
-        
-        Private _commandCollection() As Global.System.Data.OleDb.OleDbCommand
-        
-        Private _clearBeforeFill As Boolean
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Public Sub New()
-            MyBase.New
-            Me.ClearBeforeFill = true
-        End Sub
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Protected Friend ReadOnly Property Adapter() As Global.System.Data.OleDb.OleDbDataAdapter
-            Get
-                If (Me._adapter Is Nothing) Then
-                    Me.InitAdapter
-                End If
-                Return Me._adapter
-            End Get
-        End Property
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Friend Property Connection() As Global.System.Data.OleDb.OleDbConnection
-            Get
-                If (Me._connection Is Nothing) Then
-                    Me.InitConnection
-                End If
-                Return Me._connection
-            End Get
-            Set
-                Me._connection = value
-                If (Not (Me.Adapter.InsertCommand) Is Nothing) Then
-                    Me.Adapter.InsertCommand.Connection = value
-                End If
-                If (Not (Me.Adapter.DeleteCommand) Is Nothing) Then
-                    Me.Adapter.DeleteCommand.Connection = value
-                End If
-                If (Not (Me.Adapter.UpdateCommand) Is Nothing) Then
-                    Me.Adapter.UpdateCommand.Connection = value
-                End If
-                Dim i As Integer = 0
-                Do While (i < Me.CommandCollection.Length)
-                    If (Not (Me.CommandCollection(i)) Is Nothing) Then
-                        CType(Me.CommandCollection(i),Global.System.Data.OleDb.OleDbCommand).Connection = value
-                    End If
-                    i = (i + 1)
-                Loop
-            End Set
-        End Property
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Friend Property Transaction() As Global.System.Data.OleDb.OleDbTransaction
-            Get
-                Return Me._transaction
-            End Get
-            Set
-                Me._transaction = value
-                Dim i As Integer = 0
-                Do While (i < Me.CommandCollection.Length)
-                    Me.CommandCollection(i).Transaction = Me._transaction
-                    i = (i + 1)
-                Loop
-                If ((Not (Me.Adapter) Is Nothing)  _
-                            AndAlso (Not (Me.Adapter.DeleteCommand) Is Nothing)) Then
-                    Me.Adapter.DeleteCommand.Transaction = Me._transaction
-                End If
-                If ((Not (Me.Adapter) Is Nothing)  _
-                            AndAlso (Not (Me.Adapter.InsertCommand) Is Nothing)) Then
-                    Me.Adapter.InsertCommand.Transaction = Me._transaction
-                End If
-                If ((Not (Me.Adapter) Is Nothing)  _
-                            AndAlso (Not (Me.Adapter.UpdateCommand) Is Nothing)) Then
-                    Me.Adapter.UpdateCommand.Transaction = Me._transaction
-                End If
-            End Set
-        End Property
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Protected ReadOnly Property CommandCollection() As Global.System.Data.OleDb.OleDbCommand()
-            Get
-                If (Me._commandCollection Is Nothing) Then
-                    Me.InitCommandCollection
-                End If
-                Return Me._commandCollection
-            End Get
-        End Property
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Public Property ClearBeforeFill() As Boolean
-            Get
-                Return Me._clearBeforeFill
-            End Get
-            Set
-                Me._clearBeforeFill = value
-            End Set
-        End Property
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Private Sub InitAdapter()
-            Me._adapter = New Global.System.Data.OleDb.OleDbDataAdapter()
-            Dim tableMapping As Global.System.Data.Common.DataTableMapping = New Global.System.Data.Common.DataTableMapping()
-            tableMapping.SourceTable = "Table"
-            tableMapping.DataSetTable = "Xecs"
-            tableMapping.ColumnMappings.Add("xecs_id", "xecs_id")
-            tableMapping.ColumnMappings.Add("clients_nom", "clients_nom")
-            tableMapping.ColumnMappings.Add("xecs_data_entrega", "xecs_data_entrega")
-            tableMapping.ColumnMappings.Add("xecs_valor", "xecs_valor")
-            tableMapping.ColumnMappings.Add("xecs_data_liquidat", "xecs_data_liquidat")
-            tableMapping.ColumnMappings.Add("feines_id", "feines_id")
-            Me._adapter.TableMappings.Add(tableMapping)
-            Me._adapter.DeleteCommand = New Global.System.Data.OleDb.OleDbCommand()
-            Me._adapter.DeleteCommand.Connection = Me.Connection
-            Me._adapter.DeleteCommand.CommandText = "DELETE FROM `Xecs` WHERE ((`xecs_id` = ?) AND ((? = 1 AND `clients_nom` IS NULL) "& _ 
-                "OR (`clients_nom` = ?)) AND ((? = 1 AND `xecs_data_entrega` IS NULL) OR (`xecs_d"& _ 
-                "ata_entrega` = ?)) AND ((? = 1 AND `xecs_valor` IS NULL) OR (`xecs_valor` = ?)) "& _ 
-                "AND ((? = 1 AND `xecs_data_liquidat` IS NULL) OR (`xecs_data_liquidat` = ?)) AND"& _ 
-                " ((? = 1 AND `feines_id` IS NULL) OR (`feines_id` = ?)))"
-            Me._adapter.DeleteCommand.CommandType = Global.System.Data.CommandType.Text
-            Me._adapter.DeleteCommand.Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("Original_xecs_id", Global.System.Data.OleDb.OleDbType.[Integer], 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "xecs_id", Global.System.Data.DataRowVersion.Original, false, Nothing))
-            Me._adapter.DeleteCommand.Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("IsNull_clients_nom", Global.System.Data.OleDb.OleDbType.[Integer], 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "clients_nom", Global.System.Data.DataRowVersion.Original, true, Nothing))
-            Me._adapter.DeleteCommand.Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("Original_clients_nom", Global.System.Data.OleDb.OleDbType.VarWChar, 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "clients_nom", Global.System.Data.DataRowVersion.Original, false, Nothing))
-            Me._adapter.DeleteCommand.Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("IsNull_xecs_data_entrega", Global.System.Data.OleDb.OleDbType.[Integer], 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "xecs_data_entrega", Global.System.Data.DataRowVersion.Original, true, Nothing))
-            Me._adapter.DeleteCommand.Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("Original_xecs_data_entrega", Global.System.Data.OleDb.OleDbType.[Date], 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "xecs_data_entrega", Global.System.Data.DataRowVersion.Original, false, Nothing))
-            Me._adapter.DeleteCommand.Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("IsNull_xecs_valor", Global.System.Data.OleDb.OleDbType.[Integer], 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "xecs_valor", Global.System.Data.DataRowVersion.Original, true, Nothing))
-            Me._adapter.DeleteCommand.Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("Original_xecs_valor", Global.System.Data.OleDb.OleDbType.[Single], 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "xecs_valor", Global.System.Data.DataRowVersion.Original, false, Nothing))
-            Me._adapter.DeleteCommand.Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("IsNull_xecs_data_liquidat", Global.System.Data.OleDb.OleDbType.[Integer], 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "xecs_data_liquidat", Global.System.Data.DataRowVersion.Original, true, Nothing))
-            Me._adapter.DeleteCommand.Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("Original_xecs_data_liquidat", Global.System.Data.OleDb.OleDbType.[Date], 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "xecs_data_liquidat", Global.System.Data.DataRowVersion.Original, false, Nothing))
-            Me._adapter.DeleteCommand.Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("IsNull_feines_id", Global.System.Data.OleDb.OleDbType.[Integer], 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "feines_id", Global.System.Data.DataRowVersion.Original, true, Nothing))
-            Me._adapter.DeleteCommand.Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("Original_feines_id", Global.System.Data.OleDb.OleDbType.[Integer], 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "feines_id", Global.System.Data.DataRowVersion.Original, false, Nothing))
-            Me._adapter.InsertCommand = New Global.System.Data.OleDb.OleDbCommand()
-            Me._adapter.InsertCommand.Connection = Me.Connection
-            Me._adapter.InsertCommand.CommandText = "INSERT INTO `Xecs` (`xecs_id`, `clients_nom`, `xecs_data_entrega`, `xecs_valor`, "& _ 
-                "`xecs_data_liquidat`, `feines_id`) VALUES (?, ?, ?, ?, ?, ?)"
-            Me._adapter.InsertCommand.CommandType = Global.System.Data.CommandType.Text
-            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("xecs_id", Global.System.Data.OleDb.OleDbType.[Integer], 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "xecs_id", Global.System.Data.DataRowVersion.Current, false, Nothing))
-            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("clients_nom", Global.System.Data.OleDb.OleDbType.VarWChar, 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "clients_nom", Global.System.Data.DataRowVersion.Current, false, Nothing))
-            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("xecs_data_entrega", Global.System.Data.OleDb.OleDbType.[Date], 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "xecs_data_entrega", Global.System.Data.DataRowVersion.Current, false, Nothing))
-            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("xecs_valor", Global.System.Data.OleDb.OleDbType.[Single], 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "xecs_valor", Global.System.Data.DataRowVersion.Current, false, Nothing))
-            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("xecs_data_liquidat", Global.System.Data.OleDb.OleDbType.[Date], 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "xecs_data_liquidat", Global.System.Data.DataRowVersion.Current, false, Nothing))
-            Me._adapter.InsertCommand.Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("feines_id", Global.System.Data.OleDb.OleDbType.[Integer], 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "feines_id", Global.System.Data.DataRowVersion.Current, false, Nothing))
-            Me._adapter.UpdateCommand = New Global.System.Data.OleDb.OleDbCommand()
-            Me._adapter.UpdateCommand.Connection = Me.Connection
-            Me._adapter.UpdateCommand.CommandText = "UPDATE `Xecs` SET `xecs_id` = ?, `clients_nom` = ?, `xecs_data_entrega` = ?, `xec"& _ 
-                "s_valor` = ?, `xecs_data_liquidat` = ?, `feines_id` = ? WHERE ((`xecs_id` = ?) A"& _ 
-                "ND ((? = 1 AND `clients_nom` IS NULL) OR (`clients_nom` = ?)) AND ((? = 1 AND `x"& _ 
-                "ecs_data_entrega` IS NULL) OR (`xecs_data_entrega` = ?)) AND ((? = 1 AND `xecs_v"& _ 
-                "alor` IS NULL) OR (`xecs_valor` = ?)) AND ((? = 1 AND `xecs_data_liquidat` IS NU"& _ 
-                "LL) OR (`xecs_data_liquidat` = ?)) AND ((? = 1 AND `feines_id` IS NULL) OR (`fei"& _ 
-                "nes_id` = ?)))"
-            Me._adapter.UpdateCommand.CommandType = Global.System.Data.CommandType.Text
-            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("xecs_id", Global.System.Data.OleDb.OleDbType.[Integer], 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "xecs_id", Global.System.Data.DataRowVersion.Current, false, Nothing))
-            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("clients_nom", Global.System.Data.OleDb.OleDbType.VarWChar, 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "clients_nom", Global.System.Data.DataRowVersion.Current, false, Nothing))
-            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("xecs_data_entrega", Global.System.Data.OleDb.OleDbType.[Date], 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "xecs_data_entrega", Global.System.Data.DataRowVersion.Current, false, Nothing))
-            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("xecs_valor", Global.System.Data.OleDb.OleDbType.[Single], 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "xecs_valor", Global.System.Data.DataRowVersion.Current, false, Nothing))
-            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("xecs_data_liquidat", Global.System.Data.OleDb.OleDbType.[Date], 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "xecs_data_liquidat", Global.System.Data.DataRowVersion.Current, false, Nothing))
-            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("feines_id", Global.System.Data.OleDb.OleDbType.[Integer], 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "feines_id", Global.System.Data.DataRowVersion.Current, false, Nothing))
-            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("Original_xecs_id", Global.System.Data.OleDb.OleDbType.[Integer], 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "xecs_id", Global.System.Data.DataRowVersion.Original, false, Nothing))
-            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("IsNull_clients_nom", Global.System.Data.OleDb.OleDbType.[Integer], 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "clients_nom", Global.System.Data.DataRowVersion.Original, true, Nothing))
-            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("Original_clients_nom", Global.System.Data.OleDb.OleDbType.VarWChar, 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "clients_nom", Global.System.Data.DataRowVersion.Original, false, Nothing))
-            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("IsNull_xecs_data_entrega", Global.System.Data.OleDb.OleDbType.[Integer], 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "xecs_data_entrega", Global.System.Data.DataRowVersion.Original, true, Nothing))
-            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("Original_xecs_data_entrega", Global.System.Data.OleDb.OleDbType.[Date], 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "xecs_data_entrega", Global.System.Data.DataRowVersion.Original, false, Nothing))
-            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("IsNull_xecs_valor", Global.System.Data.OleDb.OleDbType.[Integer], 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "xecs_valor", Global.System.Data.DataRowVersion.Original, true, Nothing))
-            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("Original_xecs_valor", Global.System.Data.OleDb.OleDbType.[Single], 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "xecs_valor", Global.System.Data.DataRowVersion.Original, false, Nothing))
-            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("IsNull_xecs_data_liquidat", Global.System.Data.OleDb.OleDbType.[Integer], 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "xecs_data_liquidat", Global.System.Data.DataRowVersion.Original, true, Nothing))
-            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("Original_xecs_data_liquidat", Global.System.Data.OleDb.OleDbType.[Date], 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "xecs_data_liquidat", Global.System.Data.DataRowVersion.Original, false, Nothing))
-            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("IsNull_feines_id", Global.System.Data.OleDb.OleDbType.[Integer], 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "feines_id", Global.System.Data.DataRowVersion.Original, true, Nothing))
-            Me._adapter.UpdateCommand.Parameters.Add(New Global.System.Data.OleDb.OleDbParameter("Original_feines_id", Global.System.Data.OleDb.OleDbType.[Integer], 0, Global.System.Data.ParameterDirection.Input, CType(0,Byte), CType(0,Byte), "feines_id", Global.System.Data.DataRowVersion.Original, false, Nothing))
-        End Sub
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Private Sub InitConnection()
-            Me._connection = New Global.System.Data.OleDb.OleDbConnection()
-            Me._connection.ConnectionString = Global.PlaniFeinesOTS.My.MySettings.Default.PlaniFeinesConnectionString
-        End Sub
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Private Sub InitCommandCollection()
-            Me._commandCollection = New Global.System.Data.OleDb.OleDbCommand(0) {}
-            Me._commandCollection(0) = New Global.System.Data.OleDb.OleDbCommand()
-            Me._commandCollection(0).Connection = Me.Connection
-            Me._commandCollection(0).CommandText = "SELECT        xecs_id, clients_nom, xecs_data_entrega, xecs_valor, xecs_data_liqu"& _ 
-                "idat, feines_id"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"FROM            Xecs"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"ORDER BY xecs_id"
-            Me._commandCollection(0).CommandType = Global.System.Data.CommandType.Text
-        End Sub
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0"),  _
-         Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter"),  _
-         Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.Fill, true)>  _
-        Public Overloads Overridable Function Fill(ByVal dataTable As PlaniFeinesDataSet.XecsDataTable) As Integer
-            Me.Adapter.SelectCommand = Me.CommandCollection(0)
-            If (Me.ClearBeforeFill = true) Then
-                dataTable.Clear
-            End If
-            Dim returnValue As Integer = Me.Adapter.Fill(dataTable)
-            Return returnValue
-        End Function
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0"),  _
-         Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter"),  _
-         Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.[Select], true)>  _
-        Public Overloads Overridable Function GetData() As PlaniFeinesDataSet.XecsDataTable
-            Me.Adapter.SelectCommand = Me.CommandCollection(0)
-            Dim dataTable As PlaniFeinesDataSet.XecsDataTable = New PlaniFeinesDataSet.XecsDataTable()
-            Me.Adapter.Fill(dataTable)
-            Return dataTable
-        End Function
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0"),  _
-         Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")>  _
-        Public Overloads Overridable Function Update(ByVal dataTable As PlaniFeinesDataSet.XecsDataTable) As Integer
-            Return Me.Adapter.Update(dataTable)
-        End Function
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0"),  _
-         Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")>  _
-        Public Overloads Overridable Function Update(ByVal dataSet As PlaniFeinesDataSet) As Integer
-            Return Me.Adapter.Update(dataSet, "Xecs")
-        End Function
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0"),  _
-         Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")>  _
-        Public Overloads Overridable Function Update(ByVal dataRow As Global.System.Data.DataRow) As Integer
-            Return Me.Adapter.Update(New Global.System.Data.DataRow() {dataRow})
-        End Function
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0"),  _
-         Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")>  _
-        Public Overloads Overridable Function Update(ByVal dataRows() As Global.System.Data.DataRow) As Integer
-            Return Me.Adapter.Update(dataRows)
-        End Function
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0"),  _
-         Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter"),  _
-         Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.Delete, true)>  _
-        Public Overloads Overridable Function Delete(ByVal Original_xecs_id As Integer, ByVal Original_clients_nom As String, ByVal Original_xecs_data_entrega As Date, ByVal Original_xecs_valor As Single, ByVal Original_xecs_data_liquidat As Global.System.Nullable(Of Date), ByVal Original_feines_id As Global.System.Nullable(Of Integer)) As Integer
-            Me.Adapter.DeleteCommand.Parameters(0).Value = CType(Original_xecs_id,Integer)
-            If (Original_clients_nom Is Nothing) Then
-                Throw New Global.System.ArgumentNullException("Original_clients_nom")
-            Else
-                Me.Adapter.DeleteCommand.Parameters(1).Value = CType(0,Object)
-                Me.Adapter.DeleteCommand.Parameters(2).Value = CType(Original_clients_nom,String)
-            End If
-            Me.Adapter.DeleteCommand.Parameters(3).Value = CType(0,Object)
-            Me.Adapter.DeleteCommand.Parameters(4).Value = CType(Original_xecs_data_entrega,Date)
-            Me.Adapter.DeleteCommand.Parameters(5).Value = CType(0,Object)
-            Me.Adapter.DeleteCommand.Parameters(6).Value = CType(Original_xecs_valor,Single)
-            If (Original_xecs_data_liquidat.HasValue = true) Then
-                Me.Adapter.DeleteCommand.Parameters(7).Value = CType(0,Object)
-                Me.Adapter.DeleteCommand.Parameters(8).Value = CType(Original_xecs_data_liquidat.Value,Date)
-            Else
-                Me.Adapter.DeleteCommand.Parameters(7).Value = CType(1,Object)
-                Me.Adapter.DeleteCommand.Parameters(8).Value = Global.System.DBNull.Value
-            End If
-            If (Original_feines_id.HasValue = true) Then
-                Me.Adapter.DeleteCommand.Parameters(9).Value = CType(0,Object)
-                Me.Adapter.DeleteCommand.Parameters(10).Value = CType(Original_feines_id.Value,Integer)
-            Else
-                Me.Adapter.DeleteCommand.Parameters(9).Value = CType(1,Object)
-                Me.Adapter.DeleteCommand.Parameters(10).Value = Global.System.DBNull.Value
-            End If
-            Dim previousConnectionState As Global.System.Data.ConnectionState = Me.Adapter.DeleteCommand.Connection.State
-            If ((Me.Adapter.DeleteCommand.Connection.State And Global.System.Data.ConnectionState.Open)  _
-                        <> Global.System.Data.ConnectionState.Open) Then
-                Me.Adapter.DeleteCommand.Connection.Open
-            End If
-            Try 
-                Dim returnValue As Integer = Me.Adapter.DeleteCommand.ExecuteNonQuery
-                Return returnValue
-            Finally
-                If (previousConnectionState = Global.System.Data.ConnectionState.Closed) Then
-                    Me.Adapter.DeleteCommand.Connection.Close
-                End If
-            End Try
-        End Function
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0"),  _
-         Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter"),  _
-         Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.Insert, true)>  _
-        Public Overloads Overridable Function Insert(ByVal xecs_id As Integer, ByVal clients_nom As String, ByVal xecs_data_entrega As Date, ByVal xecs_valor As Single, ByVal xecs_data_liquidat As Global.System.Nullable(Of Date), ByVal feines_id As Global.System.Nullable(Of Integer)) As Integer
-            Me.Adapter.InsertCommand.Parameters(0).Value = CType(xecs_id,Integer)
-            If (clients_nom Is Nothing) Then
-                Throw New Global.System.ArgumentNullException("clients_nom")
-            Else
-                Me.Adapter.InsertCommand.Parameters(1).Value = CType(clients_nom,String)
-            End If
-            Me.Adapter.InsertCommand.Parameters(2).Value = CType(xecs_data_entrega,Date)
-            Me.Adapter.InsertCommand.Parameters(3).Value = CType(xecs_valor,Single)
-            If (xecs_data_liquidat.HasValue = true) Then
-                Me.Adapter.InsertCommand.Parameters(4).Value = CType(xecs_data_liquidat.Value,Date)
-            Else
-                Me.Adapter.InsertCommand.Parameters(4).Value = Global.System.DBNull.Value
-            End If
-            If (feines_id.HasValue = true) Then
-                Me.Adapter.InsertCommand.Parameters(5).Value = CType(feines_id.Value,Integer)
-            Else
-                Me.Adapter.InsertCommand.Parameters(5).Value = Global.System.DBNull.Value
-            End If
-            Dim previousConnectionState As Global.System.Data.ConnectionState = Me.Adapter.InsertCommand.Connection.State
-            If ((Me.Adapter.InsertCommand.Connection.State And Global.System.Data.ConnectionState.Open)  _
-                        <> Global.System.Data.ConnectionState.Open) Then
-                Me.Adapter.InsertCommand.Connection.Open
-            End If
-            Try 
-                Dim returnValue As Integer = Me.Adapter.InsertCommand.ExecuteNonQuery
-                Return returnValue
-            Finally
-                If (previousConnectionState = Global.System.Data.ConnectionState.Closed) Then
-                    Me.Adapter.InsertCommand.Connection.Close
-                End If
-            End Try
-        End Function
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0"),  _
-         Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter"),  _
-         Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.Update, true)>  _
-        Public Overloads Overridable Function Update(ByVal xecs_id As Integer, ByVal clients_nom As String, ByVal xecs_data_entrega As Date, ByVal xecs_valor As Single, ByVal xecs_data_liquidat As Global.System.Nullable(Of Date), ByVal feines_id As Global.System.Nullable(Of Integer), ByVal Original_xecs_id As Integer, ByVal Original_clients_nom As String, ByVal Original_xecs_data_entrega As Date, ByVal Original_xecs_valor As Single, ByVal Original_xecs_data_liquidat As Global.System.Nullable(Of Date), ByVal Original_feines_id As Global.System.Nullable(Of Integer)) As Integer
-            Me.Adapter.UpdateCommand.Parameters(0).Value = CType(xecs_id,Integer)
-            If (clients_nom Is Nothing) Then
-                Throw New Global.System.ArgumentNullException("clients_nom")
-            Else
-                Me.Adapter.UpdateCommand.Parameters(1).Value = CType(clients_nom,String)
-            End If
-            Me.Adapter.UpdateCommand.Parameters(2).Value = CType(xecs_data_entrega,Date)
-            Me.Adapter.UpdateCommand.Parameters(3).Value = CType(xecs_valor,Single)
-            If (xecs_data_liquidat.HasValue = true) Then
-                Me.Adapter.UpdateCommand.Parameters(4).Value = CType(xecs_data_liquidat.Value,Date)
-            Else
-                Me.Adapter.UpdateCommand.Parameters(4).Value = Global.System.DBNull.Value
-            End If
-            If (feines_id.HasValue = true) Then
-                Me.Adapter.UpdateCommand.Parameters(5).Value = CType(feines_id.Value,Integer)
-            Else
-                Me.Adapter.UpdateCommand.Parameters(5).Value = Global.System.DBNull.Value
-            End If
-            Me.Adapter.UpdateCommand.Parameters(6).Value = CType(Original_xecs_id,Integer)
-            If (Original_clients_nom Is Nothing) Then
-                Throw New Global.System.ArgumentNullException("Original_clients_nom")
-            Else
-                Me.Adapter.UpdateCommand.Parameters(7).Value = CType(0,Object)
-                Me.Adapter.UpdateCommand.Parameters(8).Value = CType(Original_clients_nom,String)
-            End If
-            Me.Adapter.UpdateCommand.Parameters(9).Value = CType(0,Object)
-            Me.Adapter.UpdateCommand.Parameters(10).Value = CType(Original_xecs_data_entrega,Date)
-            Me.Adapter.UpdateCommand.Parameters(11).Value = CType(0,Object)
-            Me.Adapter.UpdateCommand.Parameters(12).Value = CType(Original_xecs_valor,Single)
-            If (Original_xecs_data_liquidat.HasValue = true) Then
-                Me.Adapter.UpdateCommand.Parameters(13).Value = CType(0,Object)
-                Me.Adapter.UpdateCommand.Parameters(14).Value = CType(Original_xecs_data_liquidat.Value,Date)
-            Else
-                Me.Adapter.UpdateCommand.Parameters(13).Value = CType(1,Object)
-                Me.Adapter.UpdateCommand.Parameters(14).Value = Global.System.DBNull.Value
-            End If
-            If (Original_feines_id.HasValue = true) Then
-                Me.Adapter.UpdateCommand.Parameters(15).Value = CType(0,Object)
-                Me.Adapter.UpdateCommand.Parameters(16).Value = CType(Original_feines_id.Value,Integer)
-            Else
-                Me.Adapter.UpdateCommand.Parameters(15).Value = CType(1,Object)
-                Me.Adapter.UpdateCommand.Parameters(16).Value = Global.System.DBNull.Value
-            End If
-            Dim previousConnectionState As Global.System.Data.ConnectionState = Me.Adapter.UpdateCommand.Connection.State
-            If ((Me.Adapter.UpdateCommand.Connection.State And Global.System.Data.ConnectionState.Open)  _
-                        <> Global.System.Data.ConnectionState.Open) Then
-                Me.Adapter.UpdateCommand.Connection.Open
-            End If
-            Try 
-                Dim returnValue As Integer = Me.Adapter.UpdateCommand.ExecuteNonQuery
-                Return returnValue
-            Finally
-                If (previousConnectionState = Global.System.Data.ConnectionState.Closed) Then
-                    Me.Adapter.UpdateCommand.Connection.Close
-                End If
-            End Try
-        End Function
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0"),  _
-         Global.System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter"),  _
-         Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.Update, true)>  _
-        Public Overloads Overridable Function Update(ByVal clients_nom As String, ByVal xecs_data_entrega As Date, ByVal xecs_valor As Single, ByVal xecs_data_liquidat As Global.System.Nullable(Of Date), ByVal feines_id As Global.System.Nullable(Of Integer), ByVal Original_xecs_id As Integer, ByVal Original_clients_nom As String, ByVal Original_xecs_data_entrega As Date, ByVal Original_xecs_valor As Single, ByVal Original_xecs_data_liquidat As Global.System.Nullable(Of Date), ByVal Original_feines_id As Global.System.Nullable(Of Integer)) As Integer
-            Return Me.Update(Original_xecs_id, clients_nom, xecs_data_entrega, xecs_valor, xecs_data_liquidat, feines_id, Original_xecs_id, Original_clients_nom, Original_xecs_data_entrega, Original_xecs_valor, Original_xecs_data_liquidat, Original_feines_id)
-        End Function
-    End Class
-    
-    '''<summary>
     '''TableAdapterManager is used to coordinate TableAdapters in the dataset to enable Hierarchical Update scenarios
     '''</summary>
     <Global.System.ComponentModel.DesignerCategoryAttribute("code"),  _
@@ -12088,6 +11987,8 @@ Namespace PlaniFeinesDataSetTableAdapters
         Private _updateOrder As UpdateOrderOption
         
         Private _clientsTableAdapter As ClientsTableAdapter
+        
+        Private _xecsTableAdapter As XecsTableAdapter
         
         Private _feinesTableAdapter As FeinesTableAdapter
         
@@ -12106,8 +12007,6 @@ Namespace PlaniFeinesDataSetTableAdapters
         Private _recursos_ComponentsTableAdapter As Recursos_ComponentsTableAdapter
         
         Private _serveisTableAdapter As ServeisTableAdapter
-        
-        Private _xecsTableAdapter As XecsTableAdapter
         
         Private _backupDataSetBeforeUpdate As Boolean
         
@@ -12135,6 +12034,20 @@ Namespace PlaniFeinesDataSetTableAdapters
             End Get
             Set
                 Me._clientsTableAdapter = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0"),  _
+         Global.System.ComponentModel.EditorAttribute("Microsoft.VSDesigner.DataSource.Design.TableAdapterManagerPropertyEditor, Microso"& _ 
+            "ft.VSDesigner, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3"& _ 
+            "a", "System.Drawing.Design.UITypeEditor")>  _
+        Public Property XecsTableAdapter() As XecsTableAdapter
+            Get
+                Return Me._xecsTableAdapter
+            End Get
+            Set
+                Me._xecsTableAdapter = value
             End Set
         End Property
         
@@ -12265,20 +12178,6 @@ Namespace PlaniFeinesDataSetTableAdapters
         End Property
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0"),  _
-         Global.System.ComponentModel.EditorAttribute("Microsoft.VSDesigner.DataSource.Design.TableAdapterManagerPropertyEditor, Microso"& _ 
-            "ft.VSDesigner, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3"& _ 
-            "a", "System.Drawing.Design.UITypeEditor")>  _
-        Public Property XecsTableAdapter() As XecsTableAdapter
-            Get
-                Return Me._xecsTableAdapter
-            End Get
-            Set
-                Me._xecsTableAdapter = value
-            End Set
-        End Property
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
         Public Property BackupDataSetBeforeUpdate() As Boolean
             Get
@@ -12300,6 +12199,10 @@ Namespace PlaniFeinesDataSetTableAdapters
                 If ((Not (Me._clientsTableAdapter) Is Nothing)  _
                             AndAlso (Not (Me._clientsTableAdapter.Connection) Is Nothing)) Then
                     Return Me._clientsTableAdapter.Connection
+                End If
+                If ((Not (Me._xecsTableAdapter) Is Nothing)  _
+                            AndAlso (Not (Me._xecsTableAdapter.Connection) Is Nothing)) Then
+                    Return Me._xecsTableAdapter.Connection
                 End If
                 If ((Not (Me._feinesTableAdapter) Is Nothing)  _
                             AndAlso (Not (Me._feinesTableAdapter.Connection) Is Nothing)) Then
@@ -12337,10 +12240,6 @@ Namespace PlaniFeinesDataSetTableAdapters
                             AndAlso (Not (Me._serveisTableAdapter.Connection) Is Nothing)) Then
                     Return Me._serveisTableAdapter.Connection
                 End If
-                If ((Not (Me._xecsTableAdapter) Is Nothing)  _
-                            AndAlso (Not (Me._xecsTableAdapter.Connection) Is Nothing)) Then
-                    Return Me._xecsTableAdapter.Connection
-                End If
                 Return Nothing
             End Get
             Set
@@ -12355,6 +12254,9 @@ Namespace PlaniFeinesDataSetTableAdapters
             Get
                 Dim count As Integer = 0
                 If (Not (Me._clientsTableAdapter) Is Nothing) Then
+                    count = (count + 1)
+                End If
+                If (Not (Me._xecsTableAdapter) Is Nothing) Then
                     count = (count + 1)
                 End If
                 If (Not (Me._feinesTableAdapter) Is Nothing) Then
@@ -12382,9 +12284,6 @@ Namespace PlaniFeinesDataSetTableAdapters
                     count = (count + 1)
                 End If
                 If (Not (Me._serveisTableAdapter) Is Nothing) Then
-                    count = (count + 1)
-                End If
-                If (Not (Me._xecsTableAdapter) Is Nothing) Then
                     count = (count + 1)
                 End If
                 Return count
@@ -12443,6 +12342,15 @@ Namespace PlaniFeinesDataSetTableAdapters
                     allChangedRows.AddRange(updatedRows)
                 End If
             End If
+            If (Not (Me._xecsTableAdapter) Is Nothing) Then
+                Dim updatedRows() As Global.System.Data.DataRow = dataSet.Xecs.Select(Nothing, Nothing, Global.System.Data.DataViewRowState.ModifiedCurrent)
+                updatedRows = Me.GetRealUpdatedRows(updatedRows, allAddedRows)
+                If ((Not (updatedRows) Is Nothing)  _
+                            AndAlso (0 < updatedRows.Length)) Then
+                    result = (result + Me._xecsTableAdapter.Update(updatedRows))
+                    allChangedRows.AddRange(updatedRows)
+                End If
+            End If
             If (Not (Me._feines_DetallTableAdapter) Is Nothing) Then
                 Dim updatedRows() As Global.System.Data.DataRow = dataSet.Feines_Detall.Select(Nothing, Nothing, Global.System.Data.DataViewRowState.ModifiedCurrent)
                 updatedRows = Me.GetRealUpdatedRows(updatedRows, allAddedRows)
@@ -12485,15 +12393,6 @@ Namespace PlaniFeinesDataSetTableAdapters
                 If ((Not (updatedRows) Is Nothing)  _
                             AndAlso (0 < updatedRows.Length)) Then
                     result = (result + Me._recursos_ComponentsTableAdapter.Update(updatedRows))
-                    allChangedRows.AddRange(updatedRows)
-                End If
-            End If
-            If (Not (Me._xecsTableAdapter) Is Nothing) Then
-                Dim updatedRows() As Global.System.Data.DataRow = dataSet.Xecs.Select(Nothing, Nothing, Global.System.Data.DataViewRowState.ModifiedCurrent)
-                updatedRows = Me.GetRealUpdatedRows(updatedRows, allAddedRows)
-                If ((Not (updatedRows) Is Nothing)  _
-                            AndAlso (0 < updatedRows.Length)) Then
-                    result = (result + Me._xecsTableAdapter.Update(updatedRows))
                     allChangedRows.AddRange(updatedRows)
                 End If
             End If
@@ -12547,6 +12446,14 @@ Namespace PlaniFeinesDataSetTableAdapters
                     allAddedRows.AddRange(addedRows)
                 End If
             End If
+            If (Not (Me._xecsTableAdapter) Is Nothing) Then
+                Dim addedRows() As Global.System.Data.DataRow = dataSet.Xecs.Select(Nothing, Nothing, Global.System.Data.DataViewRowState.Added)
+                If ((Not (addedRows) Is Nothing)  _
+                            AndAlso (0 < addedRows.Length)) Then
+                    result = (result + Me._xecsTableAdapter.Update(addedRows))
+                    allAddedRows.AddRange(addedRows)
+                End If
+            End If
             If (Not (Me._feines_DetallTableAdapter) Is Nothing) Then
                 Dim addedRows() As Global.System.Data.DataRow = dataSet.Feines_Detall.Select(Nothing, Nothing, Global.System.Data.DataViewRowState.Added)
                 If ((Not (addedRows) Is Nothing)  _
@@ -12587,14 +12494,6 @@ Namespace PlaniFeinesDataSetTableAdapters
                     allAddedRows.AddRange(addedRows)
                 End If
             End If
-            If (Not (Me._xecsTableAdapter) Is Nothing) Then
-                Dim addedRows() As Global.System.Data.DataRow = dataSet.Xecs.Select(Nothing, Nothing, Global.System.Data.DataViewRowState.Added)
-                If ((Not (addedRows) Is Nothing)  _
-                            AndAlso (0 < addedRows.Length)) Then
-                    result = (result + Me._xecsTableAdapter.Update(addedRows))
-                    allAddedRows.AddRange(addedRows)
-                End If
-            End If
             Return result
         End Function
         
@@ -12605,14 +12504,6 @@ Namespace PlaniFeinesDataSetTableAdapters
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
         Private Function UpdateDeletedRows(ByVal dataSet As PlaniFeinesDataSet, ByVal allChangedRows As Global.System.Collections.Generic.List(Of Global.System.Data.DataRow)) As Integer
             Dim result As Integer = 0
-            If (Not (Me._xecsTableAdapter) Is Nothing) Then
-                Dim deletedRows() As Global.System.Data.DataRow = dataSet.Xecs.Select(Nothing, Nothing, Global.System.Data.DataViewRowState.Deleted)
-                If ((Not (deletedRows) Is Nothing)  _
-                            AndAlso (0 < deletedRows.Length)) Then
-                    result = (result + Me._xecsTableAdapter.Update(deletedRows))
-                    allChangedRows.AddRange(deletedRows)
-                End If
-            End If
             If (Not (Me._recursos_ComponentsTableAdapter) Is Nothing) Then
                 Dim deletedRows() As Global.System.Data.DataRow = dataSet.Recursos_Components.Select(Nothing, Nothing, Global.System.Data.DataViewRowState.Deleted)
                 If ((Not (deletedRows) Is Nothing)  _
@@ -12650,6 +12541,14 @@ Namespace PlaniFeinesDataSetTableAdapters
                 If ((Not (deletedRows) Is Nothing)  _
                             AndAlso (0 < deletedRows.Length)) Then
                     result = (result + Me._feines_DetallTableAdapter.Update(deletedRows))
+                    allChangedRows.AddRange(deletedRows)
+                End If
+            End If
+            If (Not (Me._xecsTableAdapter) Is Nothing) Then
+                Dim deletedRows() As Global.System.Data.DataRow = dataSet.Xecs.Select(Nothing, Nothing, Global.System.Data.DataViewRowState.Deleted)
+                If ((Not (deletedRows) Is Nothing)  _
+                            AndAlso (0 < deletedRows.Length)) Then
+                    result = (result + Me._xecsTableAdapter.Update(deletedRows))
                     allChangedRows.AddRange(deletedRows)
                 End If
             End If
@@ -12739,6 +12638,11 @@ Namespace PlaniFeinesDataSetTableAdapters
                 Throw New Global.System.ArgumentException("Todos los TableAdapters administrados por un TableAdapterManager deben usar la mi"& _ 
                         "sma cadena de conexión.")
             End If
+            If ((Not (Me._xecsTableAdapter) Is Nothing)  _
+                        AndAlso (Me.MatchTableAdapterConnection(Me._xecsTableAdapter.Connection) = false)) Then
+                Throw New Global.System.ArgumentException("Todos los TableAdapters administrados por un TableAdapterManager deben usar la mi"& _ 
+                        "sma cadena de conexión.")
+            End If
             If ((Not (Me._feinesTableAdapter) Is Nothing)  _
                         AndAlso (Me.MatchTableAdapterConnection(Me._feinesTableAdapter.Connection) = false)) Then
                 Throw New Global.System.ArgumentException("Todos los TableAdapters administrados por un TableAdapterManager deben usar la mi"& _ 
@@ -12784,11 +12688,6 @@ Namespace PlaniFeinesDataSetTableAdapters
                 Throw New Global.System.ArgumentException("Todos los TableAdapters administrados por un TableAdapterManager deben usar la mi"& _ 
                         "sma cadena de conexión.")
             End If
-            If ((Not (Me._xecsTableAdapter) Is Nothing)  _
-                        AndAlso (Me.MatchTableAdapterConnection(Me._xecsTableAdapter.Connection) = false)) Then
-                Throw New Global.System.ArgumentException("Todos los TableAdapters administrados por un TableAdapterManager deben usar la mi"& _ 
-                        "sma cadena de conexión.")
-            End If
             Dim workConnection As Global.System.Data.IDbConnection = Me.Connection
             If (workConnection Is Nothing) Then
                 Throw New Global.System.ApplicationException("TableAdapterManager no contiene información de conexión. Establezca cada propieda"& _ 
@@ -12828,6 +12727,15 @@ Namespace PlaniFeinesDataSetTableAdapters
                     If Me._clientsTableAdapter.Adapter.AcceptChangesDuringUpdate Then
                         Me._clientsTableAdapter.Adapter.AcceptChangesDuringUpdate = false
                         adaptersWithAcceptChangesDuringUpdate.Add(Me._clientsTableAdapter.Adapter)
+                    End If
+                End If
+                If (Not (Me._xecsTableAdapter) Is Nothing) Then
+                    revertConnections.Add(Me._xecsTableAdapter, Me._xecsTableAdapter.Connection)
+                    Me._xecsTableAdapter.Connection = CType(workConnection,Global.System.Data.OleDb.OleDbConnection)
+                    Me._xecsTableAdapter.Transaction = CType(workTransaction,Global.System.Data.OleDb.OleDbTransaction)
+                    If Me._xecsTableAdapter.Adapter.AcceptChangesDuringUpdate Then
+                        Me._xecsTableAdapter.Adapter.AcceptChangesDuringUpdate = false
+                        adaptersWithAcceptChangesDuringUpdate.Add(Me._xecsTableAdapter.Adapter)
                     End If
                 End If
                 If (Not (Me._feinesTableAdapter) Is Nothing) Then
@@ -12911,15 +12819,6 @@ Namespace PlaniFeinesDataSetTableAdapters
                         adaptersWithAcceptChangesDuringUpdate.Add(Me._serveisTableAdapter.Adapter)
                     End If
                 End If
-                If (Not (Me._xecsTableAdapter) Is Nothing) Then
-                    revertConnections.Add(Me._xecsTableAdapter, Me._xecsTableAdapter.Connection)
-                    Me._xecsTableAdapter.Connection = CType(workConnection,Global.System.Data.OleDb.OleDbConnection)
-                    Me._xecsTableAdapter.Transaction = CType(workTransaction,Global.System.Data.OleDb.OleDbTransaction)
-                    If Me._xecsTableAdapter.Adapter.AcceptChangesDuringUpdate Then
-                        Me._xecsTableAdapter.Adapter.AcceptChangesDuringUpdate = false
-                        adaptersWithAcceptChangesDuringUpdate.Add(Me._xecsTableAdapter.Adapter)
-                    End If
-                End If
                 '
                 '---- Perform updates -----------
                 '
@@ -12984,6 +12883,10 @@ Namespace PlaniFeinesDataSetTableAdapters
                     Me._clientsTableAdapter.Connection = CType(revertConnections(Me._clientsTableAdapter),Global.System.Data.OleDb.OleDbConnection)
                     Me._clientsTableAdapter.Transaction = Nothing
                 End If
+                If (Not (Me._xecsTableAdapter) Is Nothing) Then
+                    Me._xecsTableAdapter.Connection = CType(revertConnections(Me._xecsTableAdapter),Global.System.Data.OleDb.OleDbConnection)
+                    Me._xecsTableAdapter.Transaction = Nothing
+                End If
                 If (Not (Me._feinesTableAdapter) Is Nothing) Then
                     Me._feinesTableAdapter.Connection = CType(revertConnections(Me._feinesTableAdapter),Global.System.Data.OleDb.OleDbConnection)
                     Me._feinesTableAdapter.Transaction = Nothing
@@ -13019,10 +12922,6 @@ Namespace PlaniFeinesDataSetTableAdapters
                 If (Not (Me._serveisTableAdapter) Is Nothing) Then
                     Me._serveisTableAdapter.Connection = CType(revertConnections(Me._serveisTableAdapter),Global.System.Data.OleDb.OleDbConnection)
                     Me._serveisTableAdapter.Transaction = Nothing
-                End If
-                If (Not (Me._xecsTableAdapter) Is Nothing) Then
-                    Me._xecsTableAdapter.Connection = CType(revertConnections(Me._xecsTableAdapter),Global.System.Data.OleDb.OleDbConnection)
-                    Me._xecsTableAdapter.Transaction = Nothing
                 End If
                 If (0 < adaptersWithAcceptChangesDuringUpdate.Count) Then
                     Dim adapters((adaptersWithAcceptChangesDuringUpdate.Count) - 1) As Global.System.Data.Common.DataAdapter

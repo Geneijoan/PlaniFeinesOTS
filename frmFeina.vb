@@ -3,10 +3,127 @@
 Public Class frmFeina
 
     Public Shared pPGElement As PlaniGrid.PGElement 'parametre d'entrada al form
+    Public Shared pModeConsulta As Boolean  'per obrir el form en mode consulta
 
-    'objectes per accés manual a la BBDD
-    Dim CN As OleDbConnection
-    Dim CNS As String = My.Settings.PlaniFeinesConnectionString
+    Private Sub frmFeina_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        'TODO: esta línea de código carga datos en la tabla 'PlaniFeinesDataSet.Serveis' Puede moverla o quitarla según sea necesario.
+        Me.ServeisTableAdapter.Fill(Me.PlaniFeinesDataSet.Serveis)
+
+        Dim CMDseleccionaFeina As New OleDbCommand
+        Dim RDSelFeina As OleDbDataReader
+        Dim CMDseleccionaDetall As New OleDbCommand
+        Dim RDSelDetall As OleDbDataReader
+        Dim auxtotal As Single
+
+        txtId.Text = pPGElement.Id
+
+        'en mode consulta inhabilitem alguns controls
+        If pModeConsulta Then
+            Me.Text = "Detall de Feina (consulta)"
+            OK_Button.Visible = False
+            chkFeta.Enabled = False
+            txtObservacions.Enabled = False
+            dgvDetall.Enabled = False
+            cmbServeis.Enabled = False
+            txtQuantitat.Enabled = False
+            txtPreu.Enabled = False
+        Else
+            Me.Text = "Detall de Feina"
+            OK_Button.Visible = True
+            chkFeta.Enabled = True
+            txtObservacions.Enabled = True
+            dgvDetall.Enabled = True
+            cmbServeis.Enabled = True
+            txtQuantitat.Enabled = True
+            txtPreu.Enabled = True
+        End If
+
+        'provem la connexio
+        If Not ObrirConnexio() Then
+            MsgBox("Error al obrir connexió a BD: " + ObtenirCNS(), MsgBoxStyle.OkOnly, "ERROR")
+            pPGElement = Nothing
+            Me.Close()
+            Exit Sub
+        End If
+
+        CMDseleccionaFeina.Connection = ObtenirConnexio()
+        CMDseleccionaFeina.CommandText = "SELECT * FROM Feines INNER JOIN Llocs ON Feines.llocs_nom = Llocs.llocs_nom " &
+        "WHERE feines_id = @id"
+        CMDseleccionaFeina.Parameters.Add("@id", OleDbType.Integer).Value = CInt(pPGElement.Id)
+        RDSelFeina = CMDseleccionaFeina.ExecuteReader
+
+        If RDSelFeina.Read Then
+            'carreguem camps pantalla
+            txtClient.Text = RDSelFeina.Item("clients_nom")
+            txtLloc.Text = RDSelFeina.Item("Feines.llocs_nom")
+            txtData.Text = RDSelFeina.Item("feines_data")
+            txtHoraInici.Text = RDSelFeina.Item("feines_hora_inici")
+            txtHoraFinal.Text = RDSelFeina.Item("feines_hora_fi")
+            If Not IsDBNull(RDSelFeina.Item("Feines.recursos_nom")) Then
+                txtRecurs.Text = RDSelFeina.Item("Feines.recursos_nom")
+            Else
+                txtRecurs.Text = ""
+            End If
+            chkFeta.Checked = RDSelFeina.Item("feines_feta")
+
+            If Not IsDBNull(RDSelFeina.Item("feines_data_factura")) Then
+                txtDataFra.Text = RDSelFeina.Item("feines_data_factura")
+            Else
+                txtDataFra.Text = ""
+            End If
+            txtObservacions.Text = RDSelFeina.Item("feines_observacions")
+        Else
+            MsgBox("Error al accedir a feina #" & pPGElement.Id, MsgBoxStyle.OkOnly, "ERROR")
+            TancarConnexio()
+            pPGElement = Nothing
+            Me.Close()
+            Exit Sub
+        End If
+
+        'inicialitzem camps serveis
+        cmbServeis.SelectedIndex = -1
+        txtQuantitat.Text = ""
+
+        If chkFeta.Checked Then
+            cmbServeis.Enabled = False
+            txtQuantitat.Enabled = False
+            txtPreu.Enabled = False
+            dgvDetall.Enabled = False
+        Else
+            cmbServeis.Enabled = True
+            txtQuantitat.Enabled = True
+            txtPreu.Enabled = True
+            dgvDetall.Enabled = True
+        End If
+
+        'carreguem detall feina
+        CMDseleccionaDetall.Connection = ObtenirConnexio()
+        CMDseleccionaDetall.CommandText = "SELECT Feines_Detall.*, Serveis.serveis_minuts_per_unitat, Serveis.serveis_comu_per_recursos " &
+        "FROM Serveis INNER JOIN Feines_Detall ON Serveis.serveis_nom = Feines_Detall.serveis_nom " &
+        "WHERE feines_id = @id"
+        CMDseleccionaDetall.Parameters.Add("@id", OleDbType.Integer).Value = CInt(pPGElement.Id)
+        RDSelDetall = CMDseleccionaDetall.ExecuteReader
+
+        dgvDetall.Rows.Clear()
+        auxtotal = 0
+
+        While RDSelDetall.Read
+            'carreguem camps grid detall
+            Dim auxrow As String() = {RDSelDetall.GetString(RDSelDetall.GetOrdinal("serveis_nom")),
+                                      Format(RDSelDetall.GetFloat(RDSelDetall.GetOrdinal("feines_detall_quantitat")), "###,##0.##"),
+                                      RDSelDetall.GetString(RDSelDetall.GetOrdinal("feines_detall_unitat")),
+                                      Format(RDSelDetall.GetFloat(RDSelDetall.GetOrdinal("feines_detall_preu_un")), "###,##0.#### €"),
+                                      CStr(RDSelDetall.GetInt16(RDSelDetall.GetOrdinal("serveis_minuts_per_unitat"))),
+                                      CStr(RDSelDetall.GetBoolean(RDSelDetall.GetOrdinal("serveis_comu_per_recursos")))}
+            dgvDetall.Rows.Add(auxrow)
+            auxtotal += CSng(Format(RDSelDetall.GetFloat(RDSelDetall.GetOrdinal("feines_detall_quantitat")), "###,##0.##")) * CSng(Format(RDSelDetall.GetFloat(RDSelDetall.GetOrdinal("feines_detall_preu_un")), "###,##0.####"))
+        End While
+
+        txtTotal.Text = Format(auxtotal, "C")
+
+        TancarConnexio()
+
+    End Sub
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
         Dim CMDactualitzaFeina As New OleDbCommand
@@ -15,9 +132,6 @@ Public Class frmFeina
         Dim CMDactualitzaXecs As New OleDbCommand
         Dim auxint As Integer
         Dim TRANS As OleDbTransaction
-
-        'If Not pPGElement Is Nothing Then
-        'validacions
 
         'avís si no hi ha serveis
         If dgvDetall.RowCount = 0 Then
@@ -46,7 +160,6 @@ Public Class frmFeina
         'calculem duracions segons serveis
         pPGElement.SharedDuration = New TimeSpan(0)
         pPGElement.NonSharedDuration = New TimeSpan(0)
-
         For i = 0 To dgvDetall.Rows.Count - 1
             auxint = CSng(dgvDetall.Item("clQuantitat", i).Value) * CInt(dgvDetall.Item("clMinuts", i).Value)
             If CBool(dgvDetall.Item("clComu", i).Value) Then
@@ -75,21 +188,19 @@ Public Class frmFeina
         'actualitzem feina i detall a BBDD
 
         'provem la connexio
-        Try
-            CN.Open()
-        Catch ex As Exception
-            MsgBox("Error al obrir connexió: " & CNS, MsgBoxStyle.OkOnly, "ERROR")
+        If Not ObrirConnexio() Then
+            MsgBox("Error al obrir connexió a BD: " + ObtenirCNS(), MsgBoxStyle.OkOnly, "ERROR")
             Exit Sub
-        End Try
+        End If
 
         'iniciem transaccio
         ' Creamos el objeto Transaction
-        TRANS = CN.BeginTransaction
+        TRANS = ObtenirConnexio().BeginTransaction
 
         'actualitzem feina
-        CMDactualitzaFeina.Connection = CN
-        CMDactualitzaFeina.CommandText = "UPDATE Feines " & _
-        "SET feines_hora_fi = @horafi, feines_feta = @feta, feines_observacions = @obs, feines_data_factura = @datafra " & _
+        CMDactualitzaFeina.Connection = ObtenirConnexio()
+        CMDactualitzaFeina.CommandText = "UPDATE Feines " &
+        "SET feines_hora_fi = @horafi, feines_feta = @feta, feines_observacions = @obs, feines_data_factura = @datafra " &
         "WHERE feines_id = @id"
         CMDactualitzaFeina.Parameters.Add("@horafi", OleDbType.Char, 5).Value = Format(pPGElement.Ends, "HH:mm")
         CMDactualitzaFeina.Parameters.Add("@feta", OleDbType.Boolean).Value = chkFeta.Checked
@@ -108,19 +219,19 @@ Public Class frmFeina
             If CMDactualitzaFeina.ExecuteNonQuery < 1 Then
                 MsgBox("Error al actualitzar la feina #" & pPGElement.Id, MsgBoxStyle.OkOnly, "ERROR")
                 TRANS.Rollback()
-                If CN.State = ConnectionState.Open Then CN.Close()
+                TancarConnexio()
                 Exit Sub
             End If
         Catch ex As Exception
             MsgBox(ex.Message, MsgBoxStyle.OkOnly, "ERROR")
             TRANS.Rollback()
-            If CN.State = ConnectionState.Open Then CN.Close()
+            TancarConnexio()
             Exit Sub
         End Try
 
         'eliminem detall feina
-        CMDeliminaDetall.Connection = CN
-        CMDeliminaDetall.CommandText = "DELETE FROM Feines_Detall " & _
+        CMDeliminaDetall.Connection = ObtenirConnexio()
+        CMDeliminaDetall.CommandText = "DELETE FROM Feines_Detall " &
         "WHERE feines_id = @id"
         CMDeliminaDetall.Parameters.Add("@id", OleDbType.Integer).Value = CInt(pPGElement.Id)
 
@@ -131,14 +242,14 @@ Public Class frmFeina
         Catch ex As Exception
             MsgBox(ex.Message, MsgBoxStyle.OkOnly, "ERROR")
             TRANS.Rollback()
-            If CN.State = ConnectionState.Open Then CN.Close()
+            TancarConnexio()
             Exit Sub
         End Try
 
         'afegim detall feina
-        CMDactualitzaDetall.Connection = CN
-        CMDactualitzaDetall.CommandText = "INSERT INTO Feines_Detall " & _
-        "(feines_id, serveis_nom, feines_detall_quantitat, feines_detall_preu_un, feines_detall_unitat) " & _
+        CMDactualitzaDetall.Connection = ObtenirConnexio()
+        CMDactualitzaDetall.CommandText = "INSERT INTO Feines_Detall " &
+        "(feines_id, serveis_nom, feines_detall_quantitat, feines_detall_preu_un, feines_detall_unitat) " &
         "VALUES (@id, @servei, @quantitat, @preu, @unitat)"
         CMDactualitzaDetall.Parameters.Add("@id", OleDbType.Integer)
         CMDactualitzaDetall.Parameters.Add("@servei", OleDbType.Char, 50)
@@ -158,22 +269,22 @@ Public Class frmFeina
                 If CMDactualitzaDetall.ExecuteNonQuery < 1 Then
                     MsgBox("Error al actualitzar detall feina #" & pPGElement.Id & " " & CStr(dgvDetall.Item("clServei", i).Value), MsgBoxStyle.OkOnly, "ERROR")
                     TRANS.Rollback()
-                    If CN.State = ConnectionState.Open Then CN.Close()
+                    TancarConnexio()
                     Exit Sub
                 End If
             Catch ex As Exception
                 MsgBox(ex.Message, MsgBoxStyle.OkOnly, "ERROR")
                 TRANS.Rollback()
-                If CN.State = ConnectionState.Open Then CN.Close()
+                TancarConnexio()
                 Exit Sub
             End Try
         Next
 
         'si feina no feta, desmarquem els xecs associats que tingui
         If Not chkFeta.Checked Then
-            CMDactualitzaXecs.Connection = CN
-            CMDactualitzaXecs.CommandText = "UPDATE Xecs " & _
-            "SET feines_id = Null, xecs_data_liquidat = Null " & _
+            CMDactualitzaXecs.Connection = ObtenirConnexio()
+            CMDactualitzaXecs.CommandText = "UPDATE Xecs " &
+            "SET feines_id = Null, xecs_data_liquidat = Null " &
             "WHERE feines_id = @id"
             CMDactualitzaXecs.Parameters.Add("@id", OleDbType.Integer).Value = CInt(pPGElement.Id)
 
@@ -184,20 +295,19 @@ Public Class frmFeina
             Catch ex As Exception
                 MsgBox(ex.Message, MsgBoxStyle.OkOnly, "ERROR")
                 TRANS.Rollback()
-                If CN.State = ConnectionState.Open Then CN.Close()
+                TancarConnexio()
                 Exit Sub
-        End Try
+            End Try
         End If
 
         TRANS.Commit()
 
-        If CN.State = ConnectionState.Open Then CN.Close()
-
-        'End If
+        TancarConnexio()
 
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
 
         pPGElement = Nothing
+        pModeConsulta = False
         Me.Close()
 
     End Sub
@@ -205,6 +315,7 @@ Public Class frmFeina
     Private Sub Cancel_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Cancel_Button.Click
         Me.DialogResult = System.Windows.Forms.DialogResult.Cancel
         pPGElement = Nothing
+        pModeConsulta = False
         Me.Close()
     End Sub
 
@@ -214,7 +325,8 @@ Public Class frmFeina
 
         'Debug.WriteLine(e.KeyChar)
         'si fem intro baixem els camps a la grid
-        If e.KeyChar = Microsoft.VisualBasic.ChrW(Keys.Return) Then
+        If e.KeyChar = Microsoft.VisualBasic.ChrW(Keys.Return) And Not pModeConsulta Then
+
             If cmbServeis.SelectedIndex <> -1 And IsNumeric(txtQuantitat.Text) And IsNumeric(txtPreu.Text) Then
                 'si hi ha una linia amb el mateix servei, la eliminem
                 For i = 0 To dgvDetall.Rows.Count - 1
@@ -253,111 +365,6 @@ Public Class frmFeina
                 txtHoraFinal.Text = Format(pPGElement.Ends, "HH:mm")
             End If
         End If
-    End Sub
-
-    Private Sub frmFeina_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        'TODO: esta línea de código carga datos en la tabla 'PlaniFeinesDataSet.Serveis' Puede moverla o quitarla según sea necesario.
-        Me.ServeisTableAdapter.Fill(Me.PlaniFeinesDataSet.Serveis)
-
-        Dim CMDseleccionaFeina As New OleDbCommand
-        Dim RDSelFeina As OleDbDataReader
-        Dim CMDseleccionaDetall As New OleDbCommand
-        Dim RDSelDetall As OleDbDataReader
-        Dim auxtotal As Single
-
-        txtId.Text = pPGElement.Id
-
-        'obtenim feina de BBDD
-        'inicialitzem connexio BBDD
-        CN = New OleDbConnection(CNS)
-
-        'provem la connexio
-        Try
-            CN.Open()
-        Catch ex As Exception
-            MsgBox("Error al obrir connexió: " & CNS, MsgBoxStyle.OkOnly, "ERROR")
-            pPGElement = Nothing
-            Me.Close()
-            Exit Sub
-        End Try
-
-        CMDseleccionaFeina.Connection = CN
-        CMDseleccionaFeina.CommandText = "SELECT * FROM Feines INNER JOIN Llocs ON Feines.llocs_nom = Llocs.llocs_nom " & _
-        "WHERE feines_id = @id"
-        CMDseleccionaFeina.Parameters.Add("@id", OleDbType.Integer).Value = CInt(pPGElement.Id)
-        RDSelFeina = CMDseleccionaFeina.ExecuteReader
-
-        If RDSelFeina.Read Then
-            'carreguem camps pantalla
-            txtClient.Text = RDSelFeina.Item("clients_nom")
-            txtLloc.Text = RDSelFeina.Item("Feines.llocs_nom")
-            txtData.Text = RDSelFeina.Item("feines_data")
-            txtHoraInici.Text = RDSelFeina.Item("feines_hora_inici")
-            txtHoraFinal.Text = RDSelFeina.Item("feines_hora_fi")
-            If Not IsDBNull(RDSelFeina.Item("Feines.recursos_nom")) Then
-                txtRecurs.Text = RDSelFeina.Item("Feines.recursos_nom")
-            Else
-                txtRecurs.Text = ""
-            End If
-            chkFeta.Checked = RDSelFeina.Item("feines_feta")
-
-            If Not IsDBNull(RDSelFeina.Item("feines_data_factura")) Then
-                txtDataFra.Text = RDSelFeina.Item("feines_data_factura")
-            Else
-                txtDataFra.Text = ""
-            End If
-            txtObservacions.Text = RDSelFeina.Item("feines_observacions")
-        Else
-            MsgBox("Error al accedir a feina #" & pPGElement.Id, MsgBoxStyle.OkOnly, "ERROR")
-            CN.Close()
-            pPGElement = Nothing
-            Me.Close()
-            Exit Sub
-        End If
-
-        'inicialitzem camps serveis
-        cmbServeis.SelectedIndex = -1
-        txtQuantitat.Text = ""
-
-        If chkFeta.Checked Then
-            cmbServeis.Enabled = False
-            txtQuantitat.Enabled = False
-            txtPreu.Enabled = False
-            dgvDetall.Enabled = False
-        Else
-            cmbServeis.Enabled = True
-            txtQuantitat.Enabled = True
-            txtPreu.Enabled = True
-            dgvDetall.Enabled = True
-        End If
-
-        'carreguem detall feina
-        CMDseleccionaDetall.Connection = CN
-        CMDseleccionaDetall.CommandText = "SELECT Feines_Detall.*, Serveis.serveis_minuts_per_unitat, Serveis.serveis_comu_per_recursos " & _
-        "FROM Serveis INNER JOIN Feines_Detall ON Serveis.serveis_nom = Feines_Detall.serveis_nom " & _
-        "WHERE feines_id = @id"
-        CMDseleccionaDetall.Parameters.Add("@id", OleDbType.Integer).Value = CInt(pPGElement.Id)
-        RDSelDetall = CMDseleccionaDetall.ExecuteReader
-
-        dgvDetall.Rows.Clear()
-        auxtotal = 0
-
-        While RDSelDetall.Read
-            'carreguem camps grid detall
-            Dim auxrow As String() = {RDSelDetall.GetString(RDSelDetall.GetOrdinal("serveis_nom")), _
-                                      Format(RDSelDetall.GetFloat(RDSelDetall.GetOrdinal("feines_detall_quantitat")), "###,##0.##"), _
-                                      RDSelDetall.GetString(RDSelDetall.GetOrdinal("feines_detall_unitat")), _
-                                      Format(RDSelDetall.GetFloat(RDSelDetall.GetOrdinal("feines_detall_preu_un")), "###,##0.#### €"), _
-                                      CStr(RDSelDetall.GetInt16(RDSelDetall.GetOrdinal("serveis_minuts_per_unitat"))), _
-                                      CStr(RDSelDetall.GetBoolean(RDSelDetall.GetOrdinal("serveis_comu_per_recursos")))}
-            dgvDetall.Rows.Add(auxrow)
-            auxtotal += CSng(Format(RDSelDetall.GetFloat(RDSelDetall.GetOrdinal("feines_detall_quantitat")), "###,##0.##")) * CSng(Format(RDSelDetall.GetFloat(RDSelDetall.GetOrdinal("feines_detall_preu_un")), "###,##0.####"))
-        End While
-
-        txtTotal.Text = Format(auxtotal, "C")
-
-        If CN.State = ConnectionState.Open Then CN.Close()
-
     End Sub
 
     Private Sub txtQuantitat_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles txtQuantitat.KeyPress
@@ -450,18 +457,16 @@ Public Class frmFeina
         'eliminem feina (i detall) a BBDD
 
         'provem la connexio
-        Try
-            CN.Open()
-        Catch ex As Exception
-            MsgBox("Error al obrir connexió: " & CNS, MsgBoxStyle.OkOnly, "ERROR")
+        If Not ObrirConnexio() Then
+            MsgBox("Error al obrir connexió a BD: " + ObtenirCNS(), MsgBoxStyle.OkOnly, "ERROR")
             Exit Sub
-        End Try
+        End If
 
         'iniciem transaccio
-        TRANS = CN.BeginTransaction
+        TRANS = ObtenirConnexio().BeginTransaction
 
         'eliminem feina
-        CMDeliminaFeina.Connection = CN
+        CMDeliminaFeina.Connection = ObtenirConnexio()
         CMDeliminaFeina.CommandText = "DELETE FROM Feines " &
         "WHERE feines_id = @id"
         CMDeliminaFeina.Parameters.Add("@id", OleDbType.Integer).Value = CInt(pPGElement.Id)
@@ -473,18 +478,20 @@ Public Class frmFeina
         Catch ex As Exception
             MsgBox(ex.Message, MsgBoxStyle.OkOnly, "ERROR")
             TRANS.Rollback()
-            If CN.State = ConnectionState.Open Then CN.Close()
+            TancarConnexio()
             Exit Sub
         End Try
 
         TRANS.Commit()
 
-        If CN.State = ConnectionState.Open Then CN.Close()
+        TancarConnexio()
 
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
 
         pPGElement = Nothing
+        pModeConsulta = False
         Me.Close()
 
     End Sub
+
 End Class
