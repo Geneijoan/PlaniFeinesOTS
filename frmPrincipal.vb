@@ -2406,6 +2406,13 @@
         Dim CMDDetallFeines As New OleDbCommand
         Dim RDDetallFeines As OleDbDataReader
 
+        'no es pot borrar festius
+        If e.Row.Cells("cNomServei").Value = FESTIU Then
+            ServeisDataGridView.Rows(e.Row.Index).ErrorText = "El servei " & FESTIU & " no es pot eliminar."
+            e.Cancel = True
+            Exit Sub
+        End If
+
         'validem que no hi hagi registres associats en altres taules
 
         'servei en llocs
@@ -4848,6 +4855,13 @@
     Private Sub Calendari_DateChanged(pDate As Date) Handles Calendari.DateChanged
         AgendaGrid.DisplayDate = pDate
         dtpSelMes.Value = pDate
+    End Sub
+
+    Private Sub ServeisDataGridView_CellFormatting(sender As Object, e As DataGridViewCellFormattingEventArgs) Handles ServeisDataGridView.CellFormatting
+        'columna comú per recursos
+        If e.ColumnIndex = 4 Then
+            ServeisDataGridView.Rows(e.RowIndex).Cells(e.ColumnIndex).ToolTipText = "Fés click si la duració del servei no depén de la quantitat de recursos."
+        End If
     End Sub
 
     'Private Sub frmPrincipal_SizeChanged(sender As Object, e As EventArgs) Handles Me.SizeChanged
