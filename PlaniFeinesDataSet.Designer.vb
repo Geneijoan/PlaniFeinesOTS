@@ -65,8 +65,6 @@ Partial Public Class PlaniFeinesDataSet
     
     Private relationLlocsLlocs_Serveis As Global.System.Data.DataRelation
     
-    Private relationClientsPagaments As Global.System.Data.DataRelation
-    
     Private relationRecursosRecursos_Components1 As Global.System.Data.DataRelation
     
     Private relationClientsXecs As Global.System.Data.DataRelation
@@ -74,6 +72,8 @@ Partial Public Class PlaniFeinesDataSet
     Private relationRecursosRecursos_Components As Global.System.Data.DataRelation
     
     Private relationServeisLlocs_Serveis As Global.System.Data.DataRelation
+    
+    Private relationClientsPagaments As Global.System.Data.DataRelation
     
     Private _schemaSerializationMode As Global.System.Data.SchemaSerializationMode = Global.System.Data.SchemaSerializationMode.IncludeSchema
     
@@ -471,11 +471,11 @@ Partial Public Class PlaniFeinesDataSet
         Me.relationClientsLlocs = Me.Relations("ClientsLlocs")
         Me.relationRecursosLlocs = Me.Relations("RecursosLlocs")
         Me.relationLlocsLlocs_Serveis = Me.Relations("LlocsLlocs_Serveis")
-        Me.relationClientsPagaments = Me.Relations("ClientsPagaments")
         Me.relationRecursosRecursos_Components1 = Me.Relations("RecursosRecursos_Components1")
         Me.relationClientsXecs = Me.Relations("ClientsXecs")
         Me.relationRecursosRecursos_Components = Me.Relations("RecursosRecursos_Components")
         Me.relationServeisLlocs_Serveis = Me.Relations("ServeisLlocs_Serveis")
+        Me.relationClientsPagaments = Me.Relations("ClientsPagaments")
     End Sub
     
     <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -526,8 +526,6 @@ Partial Public Class PlaniFeinesDataSet
         Me.Relations.Add(Me.relationRecursosLlocs)
         Me.relationLlocsLlocs_Serveis = New Global.System.Data.DataRelation("LlocsLlocs_Serveis", New Global.System.Data.DataColumn() {Me.tableLlocs.llocs_nomColumn}, New Global.System.Data.DataColumn() {Me.tableLlocs_Serveis.llocs_nomColumn}, false)
         Me.Relations.Add(Me.relationLlocsLlocs_Serveis)
-        Me.relationClientsPagaments = New Global.System.Data.DataRelation("ClientsPagaments", New Global.System.Data.DataColumn() {Me.tableClients.clients_nomColumn}, New Global.System.Data.DataColumn() {Me.tablePagaments.clients_nomColumn}, false)
-        Me.Relations.Add(Me.relationClientsPagaments)
         Me.relationRecursosRecursos_Components1 = New Global.System.Data.DataRelation("RecursosRecursos_Components1", New Global.System.Data.DataColumn() {Me.tableRecursos.recursos_nomColumn}, New Global.System.Data.DataColumn() {Me.tableRecursos_Components.recursos_component_nomColumn}, false)
         Me.Relations.Add(Me.relationRecursosRecursos_Components1)
         Me.relationClientsXecs = New Global.System.Data.DataRelation("ClientsXecs", New Global.System.Data.DataColumn() {Me.tableClients.clients_nomColumn}, New Global.System.Data.DataColumn() {Me.tableXecs.clients_nomColumn}, false)
@@ -536,6 +534,8 @@ Partial Public Class PlaniFeinesDataSet
         Me.Relations.Add(Me.relationRecursosRecursos_Components)
         Me.relationServeisLlocs_Serveis = New Global.System.Data.DataRelation("ServeisLlocs_Serveis", New Global.System.Data.DataColumn() {Me.tableServeis.serveis_nomColumn}, New Global.System.Data.DataColumn() {Me.tableLlocs_Serveis.serveis_nomColumn}, false)
         Me.Relations.Add(Me.relationServeisLlocs_Serveis)
+        Me.relationClientsPagaments = New Global.System.Data.DataRelation("ClientsPagaments", New Global.System.Data.DataColumn() {Me.tableClients.clients_nomColumn}, New Global.System.Data.DataColumn() {Me.tablePagaments.clients_nomColumn}, false)
+        Me.Relations.Add(Me.relationClientsPagaments)
     End Sub
     
     <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -4454,11 +4454,11 @@ Partial Public Class PlaniFeinesDataSet
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
         Public Property clients_NIF() As String
             Get
-                Try 
+                If Me.Isclients_NIFNull Then
+                    Return Nothing
+                Else
                     Return CType(Me(Me.tableClients.clients_NIFColumn),String)
-                Catch e As Global.System.InvalidCastException
-                    Throw New Global.System.Data.StrongTypingException("El valor de la columna 'clients_NIF' de la tabla 'Clients' es DBNull.", e)
-                End Try
+                End If
             End Get
             Set
                 Me(Me.tableClients.clients_NIFColumn) = value
@@ -4469,11 +4469,11 @@ Partial Public Class PlaniFeinesDataSet
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
         Public Property clients_adreça() As String
             Get
-                Try 
+                If Me.Isclients_adreçaNull Then
+                    Return Nothing
+                Else
                     Return CType(Me(Me.tableClients.clients_adreçaColumn),String)
-                Catch e As Global.System.InvalidCastException
-                    Throw New Global.System.Data.StrongTypingException("El valor de la columna 'clients_adreça' de la tabla 'Clients' es DBNull.", e)
-                End Try
+                End If
             End Get
             Set
                 Me(Me.tableClients.clients_adreçaColumn) = value
@@ -4484,11 +4484,11 @@ Partial Public Class PlaniFeinesDataSet
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
         Public Property clients_poblacio() As String
             Get
-                Try 
+                If Me.Isclients_poblacioNull Then
+                    Return Nothing
+                Else
                     Return CType(Me(Me.tableClients.clients_poblacioColumn),String)
-                Catch e As Global.System.InvalidCastException
-                    Throw New Global.System.Data.StrongTypingException("El valor de la columna 'clients_poblacio' de la tabla 'Clients' es DBNull.", e)
-                End Try
+                End If
             End Get
             Set
                 Me(Me.tableClients.clients_poblacioColumn) = value
@@ -4499,11 +4499,11 @@ Partial Public Class PlaniFeinesDataSet
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
         Public Property clients_codi_postal() As String
             Get
-                Try 
+                If Me.Isclients_codi_postalNull Then
+                    Return Nothing
+                Else
                     Return CType(Me(Me.tableClients.clients_codi_postalColumn),String)
-                Catch e As Global.System.InvalidCastException
-                    Throw New Global.System.Data.StrongTypingException("El valor de la columna 'clients_codi_postal' de la tabla 'Clients' es DBNull.", e)
-                End Try
+                End If
             End Get
             Set
                 Me(Me.tableClients.clients_codi_postalColumn) = value
@@ -4514,11 +4514,11 @@ Partial Public Class PlaniFeinesDataSet
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
         Public Property clients_telefons() As String
             Get
-                Try 
+                If Me.Isclients_telefonsNull Then
+                    Return Nothing
+                Else
                     Return CType(Me(Me.tableClients.clients_telefonsColumn),String)
-                Catch e As Global.System.InvalidCastException
-                    Throw New Global.System.Data.StrongTypingException("El valor de la columna 'clients_telefons' de la tabla 'Clients' es DBNull.", e)
-                End Try
+                End If
             End Get
             Set
                 Me(Me.tableClients.clients_telefonsColumn) = value
@@ -4544,11 +4544,11 @@ Partial Public Class PlaniFeinesDataSet
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
         Public Property clients_observacions() As String
             Get
-                Try 
+                If Me.Isclients_observacionsNull Then
+                    Return Nothing
+                Else
                     Return CType(Me(Me.tableClients.clients_observacionsColumn),String)
-                Catch e As Global.System.InvalidCastException
-                    Throw New Global.System.Data.StrongTypingException("El valor de la columna 'clients_observacions' de la tabla 'Clients' es DBNull.", e)
-                End Try
+                End If
             End Get
             Set
                 Me(Me.tableClients.clients_observacionsColumn) = value
@@ -4574,11 +4574,11 @@ Partial Public Class PlaniFeinesDataSet
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
         Public Property clients_ccc() As String
             Get
-                Try 
+                If Me.Isclients_cccNull Then
+                    Return Nothing
+                Else
                     Return CType(Me(Me.tableClients.clients_cccColumn),String)
-                Catch e As Global.System.InvalidCastException
-                    Throw New Global.System.Data.StrongTypingException("El valor de la columna 'clients_ccc' de la tabla 'Clients' es DBNull.", e)
-                End Try
+                End If
             End Get
             Set
                 Me(Me.tableClients.clients_cccColumn) = value
@@ -4589,11 +4589,11 @@ Partial Public Class PlaniFeinesDataSet
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
         Public Property clients_email() As String
             Get
-                Try 
+                If Me.Isclients_emailNull Then
+                    Return Nothing
+                Else
                     Return CType(Me(Me.tableClients.clients_emailColumn),String)
-                Catch e As Global.System.InvalidCastException
-                    Throw New Global.System.Data.StrongTypingException("El valor de la columna 'clients_email' de la tabla 'Clients' es DBNull.", e)
-                End Try
+                End If
             End Get
             Set
                 Me(Me.tableClients.clients_emailColumn) = value
@@ -4732,21 +4732,21 @@ Partial Public Class PlaniFeinesDataSet
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
-        Public Function GetPagamentsRows() As PagamentsRow()
-            If (Me.Table.ChildRelations("ClientsPagaments") Is Nothing) Then
-                Return New PagamentsRow(-1) {}
-            Else
-                Return CType(MyBase.GetChildRows(Me.Table.ChildRelations("ClientsPagaments")),PagamentsRow())
-            End If
-        End Function
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
         Public Function GetXecsRows() As XecsRow()
             If (Me.Table.ChildRelations("ClientsXecs") Is Nothing) Then
                 Return New XecsRow(-1) {}
             Else
                 Return CType(MyBase.GetChildRows(Me.Table.ChildRelations("ClientsXecs")),XecsRow())
+            End If
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Function GetPagamentsRows() As PagamentsRow()
+            If (Me.Table.ChildRelations("ClientsPagaments") Is Nothing) Then
+                Return New PagamentsRow(-1) {}
+            Else
+                Return CType(MyBase.GetChildRows(Me.Table.ChildRelations("ClientsPagaments")),PagamentsRow())
             End If
         End Function
     End Class
@@ -4781,11 +4781,11 @@ Partial Public Class PlaniFeinesDataSet
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
         Public Property clients_nom() As String
             Get
-                Try 
+                If Me.Isclients_nomNull Then
+                    Return Nothing
+                Else
                     Return CType(Me(Me.tableXecs.clients_nomColumn),String)
-                Catch e As Global.System.InvalidCastException
-                    Throw New Global.System.Data.StrongTypingException("El valor de la columna 'clients_nom' de la tabla 'Xecs' es DBNull.", e)
-                End Try
+                End If
             End Get
             Set
                 Me(Me.tableXecs.clients_nomColumn) = value
@@ -4965,11 +4965,11 @@ Partial Public Class PlaniFeinesDataSet
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
         Public Property llocs_nom() As String
             Get
-                Try 
+                If Me.Isllocs_nomNull Then
+                    Return String.Empty
+                Else
                     Return CType(Me(Me.tableFeines.llocs_nomColumn),String)
-                Catch e As Global.System.InvalidCastException
-                    Throw New Global.System.Data.StrongTypingException("El valor de la columna 'llocs_nom' de la tabla 'Feines' es DBNull.", e)
-                End Try
+                End If
             End Get
             Set
                 Me(Me.tableFeines.llocs_nomColumn) = value
@@ -5025,11 +5025,11 @@ Partial Public Class PlaniFeinesDataSet
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
         Public Property recursos_nom() As String
             Get
-                Try 
+                If Me.Isrecursos_nomNull Then
+                    Return String.Empty
+                Else
                     Return CType(Me(Me.tableFeines.recursos_nomColumn),String)
-                Catch e As Global.System.InvalidCastException
-                    Throw New Global.System.Data.StrongTypingException("El valor de la columna 'recursos_nom' de la tabla 'Feines' es DBNull.", e)
-                End Try
+                End If
             End Get
             Set
                 Me(Me.tableFeines.recursos_nomColumn) = value
@@ -5497,11 +5497,11 @@ Partial Public Class PlaniFeinesDataSet
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
         Public Property clients_nom() As String
             Get
-                Try 
+                If Me.Isclients_nomNull Then
+                    Return String.Empty
+                Else
                     Return CType(Me(Me.tableLlocs.clients_nomColumn),String)
-                Catch e As Global.System.InvalidCastException
-                    Throw New Global.System.Data.StrongTypingException("El valor de la columna 'clients_nom' de la tabla 'Llocs' es DBNull.", e)
-                End Try
+                End If
             End Get
             Set
                 Me(Me.tableLlocs.clients_nomColumn) = value
@@ -5647,11 +5647,11 @@ Partial Public Class PlaniFeinesDataSet
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
         Public Property recursos_nom() As String
             Get
-                Try 
+                If Me.Isrecursos_nomNull Then
+                    Return Nothing
+                Else
                     Return CType(Me(Me.tableLlocs.recursos_nomColumn),String)
-                Catch e As Global.System.InvalidCastException
-                    Throw New Global.System.Data.StrongTypingException("El valor de la columna 'recursos_nom' de la tabla 'Llocs' es DBNull.", e)
-                End Try
+                End If
             End Get
             Set
                 Me(Me.tableLlocs.recursos_nomColumn) = value
@@ -6381,11 +6381,11 @@ Partial Public Class PlaniFeinesDataSet
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
         Public Property serveis_unitat() As String
             Get
-                Try 
+                If Me.Isserveis_unitatNull Then
+                    Return String.Empty
+                Else
                     Return CType(Me(Me.tableServeis.serveis_unitatColumn),String)
-                Catch e As Global.System.InvalidCastException
-                    Throw New Global.System.Data.StrongTypingException("El valor de la columna 'serveis_unitat' de la tabla 'Serveis' es DBNull.", e)
-                End Try
+                End If
             End Get
             Set
                 Me(Me.tableServeis.serveis_unitatColumn) = value
@@ -7219,7 +7219,7 @@ Namespace PlaniFeinesDataSetTableAdapters
          Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.Delete, true)>  _
         Public Overloads Overridable Function Delete(ByVal Original_clients_nom As String, ByVal Original_clients_NIF As String, ByVal Original_clients_adreça As String, ByVal Original_clients_poblacio As String, ByVal Original_clients_codi_postal As String, ByVal Original_clients_telefons As String, ByVal Original_clients_data_alta As Global.System.Nullable(Of Date), ByVal Original_clients_xecs As Boolean, ByVal Original_clients_ccc As String, ByVal Original_clients_email As String) As Integer
             If (Original_clients_nom Is Nothing) Then
-                Throw New Global.System.ArgumentNullException("Original_clients_nom")
+                Me.Adapter.DeleteCommand.Parameters(0).Value = Global.System.DBNull.Value
             Else
                 Me.Adapter.DeleteCommand.Parameters(0).Value = CType(Original_clients_nom,String)
             End If
@@ -7302,7 +7302,7 @@ Namespace PlaniFeinesDataSetTableAdapters
          Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.Insert, true)>  _
         Public Overloads Overridable Function Insert(ByVal clients_nom As String, ByVal clients_NIF As String, ByVal clients_adreça As String, ByVal clients_poblacio As String, ByVal clients_codi_postal As String, ByVal clients_telefons As String, ByVal clients_data_alta As Global.System.Nullable(Of Date), ByVal clients_observacions As String, ByVal clients_xecs As Boolean, ByVal clients_ccc As String, ByVal clients_email As String) As Integer
             If (clients_nom Is Nothing) Then
-                Throw New Global.System.ArgumentNullException("clients_nom")
+                Me.Adapter.InsertCommand.Parameters(0).Value = Global.System.DBNull.Value
             Else
                 Me.Adapter.InsertCommand.Parameters(0).Value = CType(clients_nom,String)
             End If
@@ -7394,7 +7394,7 @@ Namespace PlaniFeinesDataSetTableAdapters
                     ByVal Original_clients_ccc As String,  _
                     ByVal Original_clients_email As String) As Integer
             If (clients_nom Is Nothing) Then
-                Throw New Global.System.ArgumentNullException("clients_nom")
+                Me.Adapter.UpdateCommand.Parameters(0).Value = Global.System.DBNull.Value
             Else
                 Me.Adapter.UpdateCommand.Parameters(0).Value = CType(clients_nom,String)
             End If
@@ -7445,7 +7445,7 @@ Namespace PlaniFeinesDataSetTableAdapters
                 Me.Adapter.UpdateCommand.Parameters(10).Value = CType(clients_email,String)
             End If
             If (Original_clients_nom Is Nothing) Then
-                Throw New Global.System.ArgumentNullException("Original_clients_nom")
+                Me.Adapter.UpdateCommand.Parameters(11).Value = Global.System.DBNull.Value
             Else
                 Me.Adapter.UpdateCommand.Parameters(11).Value = CType(Original_clients_nom,String)
             End If
@@ -8784,7 +8784,7 @@ Namespace PlaniFeinesDataSetTableAdapters
         Public Overloads Overridable Function Delete(ByVal Original_feines_id As Integer, ByVal Original_serveis_nom As String, ByVal Original_feines_detall_quantitat As Global.System.Nullable(Of Single), ByVal Original_feines_detall_preu_un As Global.System.Nullable(Of Single), ByVal Original_feines_detall_unitat As String) As Integer
             Me.Adapter.DeleteCommand.Parameters(0).Value = CType(Original_feines_id,Integer)
             If (Original_serveis_nom Is Nothing) Then
-                Throw New Global.System.ArgumentNullException("Original_serveis_nom")
+                Me.Adapter.DeleteCommand.Parameters(1).Value = Global.System.DBNull.Value
             Else
                 Me.Adapter.DeleteCommand.Parameters(1).Value = CType(Original_serveis_nom,String)
             End If
@@ -8831,7 +8831,7 @@ Namespace PlaniFeinesDataSetTableAdapters
         Public Overloads Overridable Function Insert(ByVal feines_id As Integer, ByVal serveis_nom As String, ByVal feines_detall_quantitat As Global.System.Nullable(Of Single), ByVal feines_detall_preu_un As Global.System.Nullable(Of Single), ByVal feines_detall_unitat As String) As Integer
             Me.Adapter.InsertCommand.Parameters(0).Value = CType(feines_id,Integer)
             If (serveis_nom Is Nothing) Then
-                Throw New Global.System.ArgumentNullException("serveis_nom")
+                Me.Adapter.InsertCommand.Parameters(1).Value = Global.System.DBNull.Value
             Else
                 Me.Adapter.InsertCommand.Parameters(1).Value = CType(serveis_nom,String)
             End If
@@ -8872,7 +8872,7 @@ Namespace PlaniFeinesDataSetTableAdapters
         Public Overloads Overridable Function Update(ByVal feines_id As Integer, ByVal serveis_nom As String, ByVal feines_detall_quantitat As Global.System.Nullable(Of Single), ByVal feines_detall_preu_un As Global.System.Nullable(Of Single), ByVal feines_detall_unitat As String, ByVal Original_feines_id As Integer, ByVal Original_serveis_nom As String, ByVal Original_feines_detall_quantitat As Global.System.Nullable(Of Single), ByVal Original_feines_detall_preu_un As Global.System.Nullable(Of Single), ByVal Original_feines_detall_unitat As String) As Integer
             Me.Adapter.UpdateCommand.Parameters(0).Value = CType(feines_id,Integer)
             If (serveis_nom Is Nothing) Then
-                Throw New Global.System.ArgumentNullException("serveis_nom")
+                Me.Adapter.UpdateCommand.Parameters(1).Value = Global.System.DBNull.Value
             Else
                 Me.Adapter.UpdateCommand.Parameters(1).Value = CType(serveis_nom,String)
             End If
@@ -8893,7 +8893,7 @@ Namespace PlaniFeinesDataSetTableAdapters
             End If
             Me.Adapter.UpdateCommand.Parameters(5).Value = CType(Original_feines_id,Integer)
             If (Original_serveis_nom Is Nothing) Then
-                Throw New Global.System.ArgumentNullException("Original_serveis_nom")
+                Me.Adapter.UpdateCommand.Parameters(6).Value = Global.System.DBNull.Value
             Else
                 Me.Adapter.UpdateCommand.Parameters(6).Value = CType(Original_serveis_nom,String)
             End If
@@ -9180,7 +9180,7 @@ Namespace PlaniFeinesDataSetTableAdapters
          Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.Delete, true)>  _
         Public Overloads Overridable Function Delete(ByVal Original_recursos_nom As String, ByVal Original_hores_data As Date, ByVal Original_hores_quantitat As Single) As Integer
             If (Original_recursos_nom Is Nothing) Then
-                Throw New Global.System.ArgumentNullException("Original_recursos_nom")
+                Me.Adapter.DeleteCommand.Parameters(0).Value = Global.System.DBNull.Value
             Else
                 Me.Adapter.DeleteCommand.Parameters(0).Value = CType(Original_recursos_nom,String)
             End If
@@ -9208,7 +9208,7 @@ Namespace PlaniFeinesDataSetTableAdapters
          Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.Insert, true)>  _
         Public Overloads Overridable Function Insert(ByVal recursos_nom As String, ByVal hores_data As Date, ByVal hores_quantitat As Single) As Integer
             If (recursos_nom Is Nothing) Then
-                Throw New Global.System.ArgumentNullException("recursos_nom")
+                Me.Adapter.InsertCommand.Parameters(0).Value = Global.System.DBNull.Value
             Else
                 Me.Adapter.InsertCommand.Parameters(0).Value = CType(recursos_nom,String)
             End If
@@ -9235,14 +9235,14 @@ Namespace PlaniFeinesDataSetTableAdapters
          Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.Update, true)>  _
         Public Overloads Overridable Function Update(ByVal recursos_nom As String, ByVal hores_data As Date, ByVal hores_quantitat As Single, ByVal Original_recursos_nom As String, ByVal Original_hores_data As Date, ByVal Original_hores_quantitat As Single) As Integer
             If (recursos_nom Is Nothing) Then
-                Throw New Global.System.ArgumentNullException("recursos_nom")
+                Me.Adapter.UpdateCommand.Parameters(0).Value = Global.System.DBNull.Value
             Else
                 Me.Adapter.UpdateCommand.Parameters(0).Value = CType(recursos_nom,String)
             End If
             Me.Adapter.UpdateCommand.Parameters(1).Value = CType(hores_data,Date)
             Me.Adapter.UpdateCommand.Parameters(2).Value = CType(hores_quantitat,Single)
             If (Original_recursos_nom Is Nothing) Then
-                Throw New Global.System.ArgumentNullException("Original_recursos_nom")
+                Me.Adapter.UpdateCommand.Parameters(3).Value = Global.System.DBNull.Value
             Else
                 Me.Adapter.UpdateCommand.Parameters(3).Value = CType(Original_recursos_nom,String)
             End If
@@ -9632,7 +9632,7 @@ Namespace PlaniFeinesDataSetTableAdapters
          Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.Delete, true)>  _
         Public Overloads Overridable Function Delete(ByVal Original_llocs_nom As String, ByVal Original_clients_nom As String, ByVal Original_llocs_adreça As String, ByVal Original_llocs_poblacio As String, ByVal Original_llocs_telefon As String, ByVal Original_llocs_minuts_previst As Global.System.Nullable(Of Short), ByVal Original_llocs_periodicitat_dies As Global.System.Nullable(Of Short), ByVal Original_llocs_dia_setmana As Global.System.Nullable(Of Short), ByVal Original_llocs_dissabte As Boolean, ByVal Original_llocs_diumenge As Boolean, ByVal Original_llocs_hora As String, ByVal Original_recursos_nom As String, ByVal Original_llocs_quota As Global.System.Nullable(Of Single), ByVal Original_llocs_primer_dia_mes As Boolean, ByVal Original_llocs_ultim_dia_mes As Boolean) As Integer
             If (Original_llocs_nom Is Nothing) Then
-                Throw New Global.System.ArgumentNullException("Original_llocs_nom")
+                Me.Adapter.DeleteCommand.Parameters(0).Value = Global.System.DBNull.Value
             Else
                 Me.Adapter.DeleteCommand.Parameters(0).Value = CType(Original_llocs_nom,String)
             End If
@@ -9750,7 +9750,7 @@ Namespace PlaniFeinesDataSetTableAdapters
                     ByVal llocs_primer_dia_mes As Boolean,  _
                     ByVal llocs_ultim_dia_mes As Boolean) As Integer
             If (llocs_nom Is Nothing) Then
-                Throw New Global.System.ArgumentNullException("llocs_nom")
+                Me.Adapter.InsertCommand.Parameters(0).Value = Global.System.DBNull.Value
             Else
                 Me.Adapter.InsertCommand.Parameters(0).Value = CType(llocs_nom,String)
             End If
@@ -9865,7 +9865,7 @@ Namespace PlaniFeinesDataSetTableAdapters
                     ByVal Original_llocs_primer_dia_mes As Boolean,  _
                     ByVal Original_llocs_ultim_dia_mes As Boolean) As Integer
             If (llocs_nom Is Nothing) Then
-                Throw New Global.System.ArgumentNullException("llocs_nom")
+                Me.Adapter.UpdateCommand.Parameters(0).Value = Global.System.DBNull.Value
             Else
                 Me.Adapter.UpdateCommand.Parameters(0).Value = CType(llocs_nom,String)
             End If
@@ -9929,7 +9929,7 @@ Namespace PlaniFeinesDataSetTableAdapters
             Me.Adapter.UpdateCommand.Parameters(14).Value = CType(llocs_primer_dia_mes,Boolean)
             Me.Adapter.UpdateCommand.Parameters(15).Value = CType(llocs_ultim_dia_mes,Boolean)
             If (Original_llocs_nom Is Nothing) Then
-                Throw New Global.System.ArgumentNullException("Original_llocs_nom")
+                Me.Adapter.UpdateCommand.Parameters(16).Value = Global.System.DBNull.Value
             Else
                 Me.Adapter.UpdateCommand.Parameters(16).Value = CType(Original_llocs_nom,String)
             End If
@@ -10314,12 +10314,12 @@ Namespace PlaniFeinesDataSetTableAdapters
          Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.Delete, true)>  _
         Public Overloads Overridable Function Delete(ByVal Original_llocs_nom As String, ByVal Original_serveis_nom As String, ByVal Original_llocs_serveis_quantitat As Global.System.Nullable(Of Single), ByVal Original_llocs_serveis_preu_un As Global.System.Nullable(Of Single)) As Integer
             If (Original_llocs_nom Is Nothing) Then
-                Throw New Global.System.ArgumentNullException("Original_llocs_nom")
+                Me.Adapter.DeleteCommand.Parameters(0).Value = Global.System.DBNull.Value
             Else
                 Me.Adapter.DeleteCommand.Parameters(0).Value = CType(Original_llocs_nom,String)
             End If
             If (Original_serveis_nom Is Nothing) Then
-                Throw New Global.System.ArgumentNullException("Original_serveis_nom")
+                Me.Adapter.DeleteCommand.Parameters(1).Value = Global.System.DBNull.Value
             Else
                 Me.Adapter.DeleteCommand.Parameters(1).Value = CType(Original_serveis_nom,String)
             End If
@@ -10358,12 +10358,12 @@ Namespace PlaniFeinesDataSetTableAdapters
          Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.Insert, true)>  _
         Public Overloads Overridable Function Insert(ByVal llocs_nom As String, ByVal serveis_nom As String, ByVal llocs_serveis_quantitat As Global.System.Nullable(Of Single), ByVal llocs_serveis_preu_un As Global.System.Nullable(Of Single)) As Integer
             If (llocs_nom Is Nothing) Then
-                Throw New Global.System.ArgumentNullException("llocs_nom")
+                Me.Adapter.InsertCommand.Parameters(0).Value = Global.System.DBNull.Value
             Else
                 Me.Adapter.InsertCommand.Parameters(0).Value = CType(llocs_nom,String)
             End If
             If (serveis_nom Is Nothing) Then
-                Throw New Global.System.ArgumentNullException("serveis_nom")
+                Me.Adapter.InsertCommand.Parameters(1).Value = Global.System.DBNull.Value
             Else
                 Me.Adapter.InsertCommand.Parameters(1).Value = CType(serveis_nom,String)
             End If
@@ -10398,12 +10398,12 @@ Namespace PlaniFeinesDataSetTableAdapters
          Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.Update, true)>  _
         Public Overloads Overridable Function Update(ByVal llocs_nom As String, ByVal serveis_nom As String, ByVal llocs_serveis_quantitat As Global.System.Nullable(Of Single), ByVal llocs_serveis_preu_un As Global.System.Nullable(Of Single), ByVal Original_llocs_nom As String, ByVal Original_serveis_nom As String, ByVal Original_llocs_serveis_quantitat As Global.System.Nullable(Of Single), ByVal Original_llocs_serveis_preu_un As Global.System.Nullable(Of Single)) As Integer
             If (llocs_nom Is Nothing) Then
-                Throw New Global.System.ArgumentNullException("llocs_nom")
+                Me.Adapter.UpdateCommand.Parameters(0).Value = Global.System.DBNull.Value
             Else
                 Me.Adapter.UpdateCommand.Parameters(0).Value = CType(llocs_nom,String)
             End If
             If (serveis_nom Is Nothing) Then
-                Throw New Global.System.ArgumentNullException("serveis_nom")
+                Me.Adapter.UpdateCommand.Parameters(1).Value = Global.System.DBNull.Value
             Else
                 Me.Adapter.UpdateCommand.Parameters(1).Value = CType(serveis_nom,String)
             End If
@@ -10418,12 +10418,12 @@ Namespace PlaniFeinesDataSetTableAdapters
                 Me.Adapter.UpdateCommand.Parameters(3).Value = Global.System.DBNull.Value
             End If
             If (Original_llocs_nom Is Nothing) Then
-                Throw New Global.System.ArgumentNullException("Original_llocs_nom")
+                Me.Adapter.UpdateCommand.Parameters(4).Value = Global.System.DBNull.Value
             Else
                 Me.Adapter.UpdateCommand.Parameters(4).Value = CType(Original_llocs_nom,String)
             End If
             If (Original_serveis_nom Is Nothing) Then
-                Throw New Global.System.ArgumentNullException("Original_serveis_nom")
+                Me.Adapter.UpdateCommand.Parameters(5).Value = Global.System.DBNull.Value
             Else
                 Me.Adapter.UpdateCommand.Parameters(5).Value = CType(Original_serveis_nom,String)
             End If
@@ -10718,7 +10718,7 @@ Namespace PlaniFeinesDataSetTableAdapters
                 Me.Adapter.DeleteCommand.Parameters(0).Value = CType(Original_pagaments_mes,String)
             End If
             If (Original_clients_nom Is Nothing) Then
-                Throw New Global.System.ArgumentNullException("Original_clients_nom")
+                Me.Adapter.DeleteCommand.Parameters(1).Value = Global.System.DBNull.Value
             Else
                 Me.Adapter.DeleteCommand.Parameters(1).Value = CType(Original_clients_nom,String)
             End If
@@ -10762,7 +10762,7 @@ Namespace PlaniFeinesDataSetTableAdapters
                 Me.Adapter.InsertCommand.Parameters(0).Value = CType(pagaments_mes,String)
             End If
             If (clients_nom Is Nothing) Then
-                Throw New Global.System.ArgumentNullException("clients_nom")
+                Me.Adapter.InsertCommand.Parameters(1).Value = Global.System.DBNull.Value
             Else
                 Me.Adapter.InsertCommand.Parameters(1).Value = CType(clients_nom,String)
             End If
@@ -10802,7 +10802,7 @@ Namespace PlaniFeinesDataSetTableAdapters
                 Me.Adapter.UpdateCommand.Parameters(0).Value = CType(pagaments_mes,String)
             End If
             If (clients_nom Is Nothing) Then
-                Throw New Global.System.ArgumentNullException("clients_nom")
+                Me.Adapter.UpdateCommand.Parameters(1).Value = Global.System.DBNull.Value
             Else
                 Me.Adapter.UpdateCommand.Parameters(1).Value = CType(clients_nom,String)
             End If
@@ -10822,7 +10822,7 @@ Namespace PlaniFeinesDataSetTableAdapters
                 Me.Adapter.UpdateCommand.Parameters(4).Value = CType(Original_pagaments_mes,String)
             End If
             If (Original_clients_nom Is Nothing) Then
-                Throw New Global.System.ArgumentNullException("Original_clients_nom")
+                Me.Adapter.UpdateCommand.Parameters(5).Value = Global.System.DBNull.Value
             Else
                 Me.Adapter.UpdateCommand.Parameters(5).Value = CType(Original_clients_nom,String)
             End If
@@ -11106,7 +11106,7 @@ Namespace PlaniFeinesDataSetTableAdapters
          Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.Delete, true)>  _
         Public Overloads Overridable Function Delete(ByVal Original_recursos_nom As String, ByVal Original_recursos_grup As Boolean, ByVal Original_recursos_color As Global.System.Nullable(Of Integer)) As Integer
             If (Original_recursos_nom Is Nothing) Then
-                Throw New Global.System.ArgumentNullException("Original_recursos_nom")
+                Me.Adapter.DeleteCommand.Parameters(0).Value = Global.System.DBNull.Value
             Else
                 Me.Adapter.DeleteCommand.Parameters(0).Value = CType(Original_recursos_nom,String)
             End If
@@ -11140,7 +11140,7 @@ Namespace PlaniFeinesDataSetTableAdapters
          Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.Insert, true)>  _
         Public Overloads Overridable Function Insert(ByVal recursos_nom As String, ByVal recursos_grup As Boolean, ByVal recursos_color As Global.System.Nullable(Of Integer)) As Integer
             If (recursos_nom Is Nothing) Then
-                Throw New Global.System.ArgumentNullException("recursos_nom")
+                Me.Adapter.InsertCommand.Parameters(0).Value = Global.System.DBNull.Value
             Else
                 Me.Adapter.InsertCommand.Parameters(0).Value = CType(recursos_nom,String)
             End If
@@ -11171,7 +11171,7 @@ Namespace PlaniFeinesDataSetTableAdapters
          Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.Update, true)>  _
         Public Overloads Overridable Function Update(ByVal recursos_nom As String, ByVal recursos_grup As Boolean, ByVal recursos_color As Global.System.Nullable(Of Integer), ByVal Original_recursos_nom As String, ByVal Original_recursos_grup As Boolean, ByVal Original_recursos_color As Global.System.Nullable(Of Integer)) As Integer
             If (recursos_nom Is Nothing) Then
-                Throw New Global.System.ArgumentNullException("recursos_nom")
+                Me.Adapter.UpdateCommand.Parameters(0).Value = Global.System.DBNull.Value
             Else
                 Me.Adapter.UpdateCommand.Parameters(0).Value = CType(recursos_nom,String)
             End If
@@ -11182,7 +11182,7 @@ Namespace PlaniFeinesDataSetTableAdapters
                 Me.Adapter.UpdateCommand.Parameters(2).Value = Global.System.DBNull.Value
             End If
             If (Original_recursos_nom Is Nothing) Then
-                Throw New Global.System.ArgumentNullException("Original_recursos_nom")
+                Me.Adapter.UpdateCommand.Parameters(3).Value = Global.System.DBNull.Value
             Else
                 Me.Adapter.UpdateCommand.Parameters(3).Value = CType(Original_recursos_nom,String)
             End If
@@ -11449,12 +11449,12 @@ Namespace PlaniFeinesDataSetTableAdapters
          Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.Delete, true)>  _
         Public Overloads Overridable Function Delete(ByVal Original_recursos_nom As String, ByVal Original_recursos_component_nom As String) As Integer
             If (Original_recursos_nom Is Nothing) Then
-                Throw New Global.System.ArgumentNullException("Original_recursos_nom")
+                Me.Adapter.DeleteCommand.Parameters(0).Value = Global.System.DBNull.Value
             Else
                 Me.Adapter.DeleteCommand.Parameters(0).Value = CType(Original_recursos_nom,String)
             End If
             If (Original_recursos_component_nom Is Nothing) Then
-                Throw New Global.System.ArgumentNullException("Original_recursos_component_nom")
+                Me.Adapter.DeleteCommand.Parameters(1).Value = Global.System.DBNull.Value
             Else
                 Me.Adapter.DeleteCommand.Parameters(1).Value = CType(Original_recursos_component_nom,String)
             End If
@@ -11479,12 +11479,12 @@ Namespace PlaniFeinesDataSetTableAdapters
          Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.Insert, true)>  _
         Public Overloads Overridable Function Insert(ByVal recursos_nom As String, ByVal recursos_component_nom As String) As Integer
             If (recursos_nom Is Nothing) Then
-                Throw New Global.System.ArgumentNullException("recursos_nom")
+                Me.Adapter.InsertCommand.Parameters(0).Value = Global.System.DBNull.Value
             Else
                 Me.Adapter.InsertCommand.Parameters(0).Value = CType(recursos_nom,String)
             End If
             If (recursos_component_nom Is Nothing) Then
-                Throw New Global.System.ArgumentNullException("recursos_component_nom")
+                Me.Adapter.InsertCommand.Parameters(1).Value = Global.System.DBNull.Value
             Else
                 Me.Adapter.InsertCommand.Parameters(1).Value = CType(recursos_component_nom,String)
             End If
@@ -11509,22 +11509,22 @@ Namespace PlaniFeinesDataSetTableAdapters
          Global.System.ComponentModel.DataObjectMethodAttribute(Global.System.ComponentModel.DataObjectMethodType.Update, true)>  _
         Public Overloads Overridable Function Update(ByVal recursos_nom As String, ByVal recursos_component_nom As String, ByVal Original_recursos_nom As String, ByVal Original_recursos_component_nom As String) As Integer
             If (recursos_nom Is Nothing) Then
-                Throw New Global.System.ArgumentNullException("recursos_nom")
+                Me.Adapter.UpdateCommand.Parameters(0).Value = Global.System.DBNull.Value
             Else
                 Me.Adapter.UpdateCommand.Parameters(0).Value = CType(recursos_nom,String)
             End If
             If (recursos_component_nom Is Nothing) Then
-                Throw New Global.System.ArgumentNullException("recursos_component_nom")
+                Me.Adapter.UpdateCommand.Parameters(1).Value = Global.System.DBNull.Value
             Else
                 Me.Adapter.UpdateCommand.Parameters(1).Value = CType(recursos_component_nom,String)
             End If
             If (Original_recursos_nom Is Nothing) Then
-                Throw New Global.System.ArgumentNullException("Original_recursos_nom")
+                Me.Adapter.UpdateCommand.Parameters(2).Value = Global.System.DBNull.Value
             Else
                 Me.Adapter.UpdateCommand.Parameters(2).Value = CType(Original_recursos_nom,String)
             End If
             If (Original_recursos_component_nom Is Nothing) Then
-                Throw New Global.System.ArgumentNullException("Original_recursos_component_nom")
+                Me.Adapter.UpdateCommand.Parameters(3).Value = Global.System.DBNull.Value
             Else
                 Me.Adapter.UpdateCommand.Parameters(3).Value = CType(Original_recursos_component_nom,String)
             End If

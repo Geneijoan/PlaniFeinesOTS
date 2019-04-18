@@ -3,13 +3,15 @@
     'parametres d'aplicació 
     Public HORAINICI As System.TimeSpan      'hora inici planificació
     Public HORAFINAL As System.TimeSpan      'hora fi planificació
+    Public HORESDIA As System.TimeSpan       'hores estandar x dia (pel calcul d'hores extres)
+    Public HORAINICIDINAR As System.TimeSpan 'horari dinar
+    Public HORAFINALDINAR As System.TimeSpan 'horari dinar
     Public MINGAP As System.TimeSpan         'minuts espai
     Public VALORDFTXEC As Decimal            'valor per defecte dels xecs per defecte
     Public COSTHORAXEC As Decimal            'cost de l'hora amb xec assignat
     Public NMAXXECSMES As Integer            'nro. maxim de xec/mes per client
-    Public HORESDIA As System.TimeSpan       'hores estandar x dia (pel calcul d'hores extres)
-    Public HORAINICIDINAR As System.TimeSpan 'horari dinar
-    Public HORAFINALDINAR As System.TimeSpan 'horari dinar
+    Public SERVEIXECS As String              'nom del servei al que apliquen els xecs
+    Public FESTIU As String                  'nom del servei pels dies festius
 
     'auxiliar per components de recurs
     Private Structure RecursComponent
@@ -30,6 +32,12 @@
     Dim mINI As New cIniArray
     Dim ficINI As String = ".\PlaniFeines.ini"
 
+    'altres constants
+    Public NOUCLIENT As String = "# Nou client"
+    Public LLOCS As String = "# Llocs"
+    Public SERVEIS As String = "# Serveis"
+    Public XECS As String = "# Xecs"
+
     'parametre d'estat 
     Public ULTDIAGENERAT As Date    'ultim dia planificat
 
@@ -42,6 +50,8 @@
     Dim altPerHoresExtres As Integer = 2 * Me.FontHeight + 10
 
     Dim textFormMissatges As String = ""    'buffer per formulari missatges
+
+    Dim eCancel As Boolean  'x substituir e.Cancel en Validating. Deixa el combobox lili
 
     Public Sub New()
 
@@ -106,13 +116,19 @@
         'obtenim els parametres d'aplicació
         HORAINICI = New TimeSpan(CInt(mINI.IniGet(ficINI, "Parametres", "HoraInici")), 0, 0)
         HORAFINAL = New TimeSpan(CInt(mINI.IniGet(ficINI, "Parametres", "HoraFinal")), 0, 0)
-        MINGAP = New TimeSpan(0, CInt(mINI.IniGet(ficINI, "Parametres", "MinutsCella")), 0)
-        VALORDFTXEC = CDec(mINI.IniGet(ficINI, "Parametres", "ValorXec"))
-        COSTHORAXEC = CDec(mINI.IniGet(ficINI, "Parametres", "CostHoraXec"))
-        NMAXXECSMES = CInt(mINI.IniGet(ficINI, "Parametres", "MaxXecsMes"))
         HORESDIA = New TimeSpan(CInt(mINI.IniGet(ficINI, "Parametres", "HoresDia")), 0, 0)
         HORAINICIDINAR = New TimeSpan(CInt(Mid(mINI.IniGet(ficINI, "Parametres", "HoraIniciDinar"), 1, 2)), CInt(Mid(mINI.IniGet(ficINI, "Parametres", "HoraIniciDinar"), 4, 2)), 0)
         HORAFINALDINAR = New TimeSpan(CInt(Mid(mINI.IniGet(ficINI, "Parametres", "HoraFinalDinar"), 1, 2)), CInt(Mid(mINI.IniGet(ficINI, "Parametres", "HoraFinalDinar"), 4, 2)), 0)
+
+        MINGAP = New TimeSpan(0, CInt(mINI.IniGet(ficINI, "Parametres", "MinutsCella")), 0)
+
+        VALORDFTXEC = CDec(mINI.IniGet(ficINI, "Parametres", "ValorXec"))
+        COSTHORAXEC = CDec(mINI.IniGet(ficINI, "Parametres", "CostHoraXec"))
+        NMAXXECSMES = CInt(mINI.IniGet(ficINI, "Parametres", "MaxXecsMes"))
+
+        SERVEIXECS = mINI.IniGet(ficINI, "Parametres", "ServeiXecs")
+        FESTIU = mINI.IniGet(ficINI, "Parametres", "Festius")
+
         ULTDIAGENERAT = CDate(mINI.IniGet(ficINI, "Estat", "UltimDiaGen"))
 
         AgendaGrid.StartTimeOfDay = Microsoft.VisualBasic.Left(HORAINICI.ToString, 5)
@@ -593,7 +609,7 @@
         CMDSel.Connection = ObtenirConnexio()
 
         If cmbSelClients.Text <> "" Then
-            Label17.Text = "Serveis:"
+            Label17.Text = "Serveis"
             'carrega grid factura
             If chkPdtFacturar.Checked Then
                 CMDSel.CommandText = "SELECT Llocs.llocs_quota, Feines.feines_id, Feines.feines_data, Feines.llocs_nom, Feines.recursos_nom, Feines.feines_feta, Feines.feines_data_factura, Feines.feines_quota, Feines.feines_observacions, Feines_Detall.serveis_nom, Feines_Detall.feines_detall_quantitat, Feines_Detall.feines_detall_unitat, Feines_Detall.feines_detall_preu_un, Serveis.serveis_minuts_per_unitat " &
@@ -666,7 +682,7 @@
                         LlocImport += auxsng
                         'carreguem taula d'assignació de xecs amb 1 reg. x hora de Neteja
                         'de feines amb import >= VALORDFTXEC i sense quota
-                        If RDSel.Item("serveis_nom") = "Neteja" And RDSel.Item("feines_feta") And auxsng >= VALORDFTXEC Then
+                        If RDSel.Item("serveis_nom") = SERVEIXECS And RDSel.Item("feines_feta") And auxsng >= VALORDFTXEC Then
                             For k = 1 To CLng(RDSel.Item("feines_detall_quantitat") - 0.1)
                                 ReDim Preserve tasig(dimasig)
                                 tasig(dimasig).feina = RDSel.Item("feines_id")
@@ -748,7 +764,7 @@
             RDSel = CMDSel.ExecuteReader
             primer = True
             If RDSel.HasRows Then
-                'i els anem assignant a les feines de la grid, servei "Neteja"
+                'i els anem assignant a les feines de la grid, servei SERVEIXECS
                 'fins que en tenim NMAXXECSMES (compten tots, liquidats i no)
                 'cal tenir en compte que si n'hi ha d'assignats no liquidats, es matxaca l'assignació
 
@@ -767,7 +783,7 @@
                             dgvXecs.Rows(i).Cells("Client").Value = RDSel.Item("clients_nom")
                             dgvXecs.Rows(i).Cells("FeinaXec").Value = RDSel.Item("feines_id")
                             dgvXecs.Rows(i).Cells("DataLiquidat").Value = RDSel.Item("xecs_data_liquidat")
-                            dgvXecs.Rows(i).Cells("ServeiFeina").Value = "Neteja"
+                            dgvXecs.Rows(i).Cells("ServeiFeina").Value = SERVEIXECS
                             dgvXecs.Rows(i).Cells("QuantitatFeina").Value = 1
                             dgvXecs.Rows(i).Cells("UnitatFeina").Value = "Hores"
                             dgvXecs.Rows(i).Cells("ImportXec").Value = RDSel.Item("xecs_valor")
@@ -835,7 +851,7 @@
                             dgvXecs.Rows(i).Cells("Client").Value = RDSel.Item("clients_nom")
                             dgvXecs.Rows(i).Cells("FeinaXec").Value = IIf(idfeinasig = 0, "", CStr(idfeinasig))
                             dgvXecs.Rows(i).Cells("DataLiquidat").Value = "" 'no està liquidat
-                            dgvXecs.Rows(i).Cells("ServeiFeina").Value = IIf(idfeinasig <> 0, "Neteja", "")
+                            dgvXecs.Rows(i).Cells("ServeiFeina").Value = IIf(idfeinasig <> 0, SERVEIXECS, "")
                             dgvXecs.Rows(i).Cells("QuantitatFeina").Value = IIf(idfeinasig <> 0, 1, "")
                             dgvXecs.Rows(i).Cells("UnitatFeina").Value = IIf(idfeinasig <> 0, "Hores", "")
                             dgvXecs.Rows(i).Cells("ImportXec").Value = IIf(idfeinasig <> 0, Format(RDSel.Item("xecs_valor"), "#,##0.00"), Format(0, "#,##0.00"))
@@ -860,7 +876,7 @@
             txtTotalFacturar.Text = Format(TotalImport - impxecs - CSng(IIf(IsNumeric(txtPagaments.Text), txtPagaments.Text, "0")), "C")
 
         Else    'si client no seleccionat -> grid feines no fetes + xecs liquidats mes
-            Label17.Text = "Serveis no fets:"
+            Label17.Text = "Serveis no fets"
 
             'carrega grid factura amb feines no fetes del mes
             CMDSel.CommandText = "SELECT Llocs.llocs_quota, Feines.feines_id, Feines.feines_data, Feines.llocs_nom, Feines.recursos_nom, Feines.feines_feta, Feines.feines_data_factura, Feines.feines_quota, Feines.feines_observacions, Feines_Detall.serveis_nom, Feines_Detall.feines_detall_quantitat, Feines_Detall.feines_detall_unitat, Feines_Detall.feines_detall_preu_un, Serveis.serveis_minuts_per_unitat " &
@@ -980,7 +996,7 @@
                     dgvXecs.Rows(i).Cells("Client").Value = RDSel.Item("clients_nom")
                     dgvXecs.Rows(i).Cells("FeinaXec").Value = RDSel.Item("feines_id")
                     dgvXecs.Rows(i).Cells("DataLiquidat").Value = RDSel.Item("xecs_data_liquidat")
-                    dgvXecs.Rows(i).Cells("ServeiFeina").Value = "Neteja"
+                    dgvXecs.Rows(i).Cells("ServeiFeina").Value = SERVEIXECS
                     dgvXecs.Rows(i).Cells("QuantitatFeina").Value = 1
                     dgvXecs.Rows(i).Cells("UnitatFeina").Value = "Hores"
                     dgvXecs.Rows(i).Cells("ImportXec").Value = RDSel.Item("xecs_valor")
@@ -1062,7 +1078,7 @@
             If e.KeyCode = Keys.Escape Then
 
                 If pnlClients.Visible Then
-                    If tvClients.SelectedNode.Text = "# Nou client" Then
+                    If tvClients.SelectedNode.Text = NOUCLIENT Then
                         ClientsBindingSource.CancelEdit()
                         ClientsBindingSource.AddNew()
                     Else
@@ -1074,7 +1090,7 @@
                 End If
 
                 If pnlLlocs.Visible Then
-                    If tvClients.SelectedNode.Text = "# Llocs" Then
+                    If tvClients.SelectedNode.Text = LLOCS Then
                         LlocsBindingSource.CancelEdit()
                         LlocsBindingSource.AddNew()
                         Clients_nomTextBox1.Text = tvClients.SelectedNode.Parent.Text
@@ -1088,7 +1104,7 @@
                 End If
 
                 If pnlServeis.Visible Then
-                    If tvClients.SelectedNode.Text = "# Serveis" Then
+                    If tvClients.SelectedNode.Text = SERVEIS Then
                         Llocs_ServeisBindingSource.CancelEdit()
                         Llocs_ServeisBindingSource.AddNew()
                         Llocs_nomTextBox1.Text = tvClients.SelectedNode.Parent.Text
@@ -1103,7 +1119,7 @@
                 End If
 
                 If pnlXecs.Visible Then
-                    If tvClients.SelectedNode.Text = "# Xecs" Then
+                    If tvClients.SelectedNode.Text = XECS Then
                         XecsBindingSource.CancelEdit()
                         XecsBindingSource.AddNew()
                         Clients_nomTextBox2.Text = tvClients.SelectedNode.Parent.Text
@@ -2443,20 +2459,20 @@
         filtreServeis = PlaniFeinesDataSet.Llocs_Serveis.DefaultView
         filtreXecs = PlaniFeinesDataSet.Xecs.DefaultView
 
-        auxNodeClient = tvClients.Nodes.Add("# Nou client")
+        auxNodeClient = tvClients.Nodes.Add(NOUCLIENT)
         auxNodeClient.ToolTipText = "Fés click per afegir un client."
         auxNodeClient.NodeFont = auxFontBold
 
         For Each regClient In PlaniFeinesDataSet.Clients
             auxNodeClient = tvClients.Nodes.Add(Trim(regClient("clients_nom")))
-            auxNodeLlocs = auxNodeClient.Nodes.Add("# Llocs")
+            auxNodeLlocs = auxNodeClient.Nodes.Add(LLOCS)
             auxNodeLlocs.ToolTipText = "Fés click per afegir un lloc al client."
             auxNodeLlocs.NodeFont = auxFontBold
 
             filtreLlocs.RowFilter = "clients_nom = '" & Replace(Trim(regClient("clients_nom")), "'", "''") & "'"
             For i = 0 To filtreLlocs.Count - 1
                 auxNodeLloc = auxNodeLlocs.Nodes.Add(filtreLlocs.Item(i).Row("llocs_nom"))
-                auxNodeServeis = auxNodeLloc.Nodes.Add("# Serveis")
+                auxNodeServeis = auxNodeLloc.Nodes.Add(SERVEIS)
                 auxNodeServeis.ToolTipText = "Fés click per afegir un servei al lloc."
                 auxNodeServeis.NodeFont = auxFontBold
 
@@ -2466,7 +2482,7 @@
                 Next
             Next
             If regClient("clients_xecs") Then
-                auxNodeXecs = auxNodeClient.Nodes.Add("# Xecs")
+                auxNodeXecs = auxNodeClient.Nodes.Add(XECS)
                 auxNodeXecs.ToolTipText = "Fés click per afegir un xec al client."
                 auxNodeXecs.NodeFont = auxFontBold
                 filtreXecs.RowFilter = "clients_nom = '" & Replace(Trim(regClient("clients_nom")), "'", "''") & "'"
@@ -2509,7 +2525,7 @@
         Select Case e.Node.Level
 
             Case 0  'nou client o seleccio de client
-                If e.Node.Text = "# Nou client" Then
+                If e.Node.Text = NOUCLIENT Then
                     lblClient.Text = "Afegir client"
                     ClientsBindingSource.AddNew()
                     pnlClients.Visible = True
@@ -2524,7 +2540,7 @@
 
             Case 1  'nou lloc o nou xec
                 auxClient = e.Node.Parent.Text
-                If e.Node.Text = "# Llocs" Then
+                If e.Node.Text = LLOCS Then
                     lblLloc.Text = "Afegir lloc"
                     LlocsBindingSource.AddNew()
                     pnlLlocs.Visible = True
@@ -2546,7 +2562,7 @@
 
             Case 2  'seleccio de lloc o de xec
                 auxClient = e.Node.Parent.Parent.Text
-                If e.Node.Parent.Text = "# Llocs" Then
+                If e.Node.Parent.Text = LLOCS Then
                     auxLloc = e.Node.Text
                     lblLloc.Text = "Modificar lloc"
                     'ens posicionem al lloc
@@ -2660,7 +2676,7 @@
             Me.XecsTableAdapter.Fill(Me.PlaniFeinesDataSet.Xecs)
 
             'ens posicionem al node creat o actualitzem el nom del node modificat
-            If tvClients.SelectedNode.Text = "# Nou client" Then
+            If tvClients.SelectedNode.Text = NOUCLIENT Then
                 Carrega_TreeView_Clients()
                 'ens posicionem al node creat 
                 tvClients.SelectedNode = GetNode(auxnom, tvClients.Nodes, 0)
@@ -2673,16 +2689,16 @@
             If auxxecs Then
                 For Each n In tvClients.SelectedNode.Nodes
                     auxNodeXecs = CType(n, TreeNode)
-                    If auxNodeXecs.Text = "# Xecs" Then Exit Sub
+                    If auxNodeXecs.Text = XECS Then Exit Sub
                 Next
 
-                auxNodeXecs = tvClients.SelectedNode.Nodes.Add("# Xecs")
+                auxNodeXecs = tvClients.SelectedNode.Nodes.Add(XECS)
                 auxNodeXecs.ToolTipText = "Fés click per afegir un xec al client '" & auxnom & "'"
                 auxNodeXecs.NodeFont = auxFontBold
             Else
                 For Each n In tvClients.SelectedNode.Nodes
                     auxNodeXecs = CType(n, TreeNode)
-                    If auxNodeXecs.Text = "# Xecs" Then auxNodeXecs.Remove()
+                    If auxNodeXecs.Text = XECS Then auxNodeXecs.Remove()
                 Next
             End If
 
@@ -2719,7 +2735,7 @@
 
         If e.KeyCode = Keys.Delete Then
 
-            If pnlClients.Visible And tvClients.SelectedNode.Text <> "# Nou client" Then
+            If pnlClients.Visible And tvClients.SelectedNode.Text <> NOUCLIENT Then
                 If MsgBox("Eliminar client '" & tvClients.SelectedNode.Text & "' ?", MsgBoxStyle.YesNo, "CONFIRMACIÓ") = MsgBoxResult.Yes Then
                     'borrem el registre 
                     ClientsBindingSource.RemoveCurrent()
@@ -2748,7 +2764,7 @@
                 End If
             End If
 
-            If pnlLlocs.Visible And tvClients.SelectedNode.Text <> "# Llocs" Then
+            If pnlLlocs.Visible And tvClients.SelectedNode.Text <> LLOCS Then
                 If MsgBox("Eliminar lloc '" & tvClients.SelectedNode.Text & "' ?", MsgBoxStyle.YesNo, "CONFIRMACIÓ") = MsgBoxResult.Yes Then
                     'borrem el registre
                     LlocsBindingSource.RemoveCurrent()
@@ -2772,7 +2788,7 @@
                 End If
             End If
 
-            If pnlServeis.Visible And tvClients.SelectedNode.Text <> "# Serveis" Then
+            If pnlServeis.Visible And tvClients.SelectedNode.Text <> SERVEIS Then
                 If MsgBox("Eliminar servei '" & tvClients.SelectedNode.Text & "' del lloc '" & Llocs_nomTextBox1.Text & "'?", MsgBoxStyle.YesNo, "CONFIRMACIÓ") = MsgBoxResult.Yes Then
                     'borrem el registre
                     Llocs_ServeisBindingSource.RemoveCurrent()
@@ -2787,13 +2803,13 @@
                         Carrega_TreeView_Clients()
                         Exit Sub
                     End Try
+                    Actualitzar_minuts_previst_lloc_actual()
                     'borrem el node
                     tvClients.SelectedNode.Remove()
-                    Actualitzar_minuts_previst_lloc_actual()
                 End If
             End If
 
-            If pnlXecs.Visible And tvClients.SelectedNode.Text <> "# Xecs" Then
+            If pnlXecs.Visible And tvClients.SelectedNode.Text <> XECS Then
                 If MsgBox("Eliminar xec '" & tvClients.SelectedNode.Text & "' del client '" & Clients_nomTextBox2.Text & "'?", MsgBoxStyle.YesNo, "CONFIRMACIÓ") = MsgBoxResult.Yes Then
 
                     If Xecs_data_liquidatTextBox.Text <> "" Then
@@ -2829,7 +2845,7 @@
     End Sub
 
     Private Sub Llocs_dia_setmanaTextBox_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Llocs_dia_setmanaTextBox.TextChanged
-        cmbDiesSetmana.SelectedIndex = CInt(Llocs_dia_setmanaTextBox.Text)
+        cmbDiesSetmana.SelectedIndex = CInt(IIf(Llocs_dia_setmanaTextBox.Text = "", "0", Llocs_dia_setmanaTextBox.Text))
     End Sub
 
     Private Sub pnlLlocs_Validated(ByVal sender As Object, ByVal e As System.EventArgs) Handles pnlLlocs.Validated
@@ -2975,8 +2991,8 @@
         Dim auxnomlloc As String = Llocs_nomTextBox1.Text
         Dim auxnode As TreeNode
 
-        'si estem afegint o modificant un servei de lloc
-        If Serveis_nomComboBox.SelectedIndex <> -1 Then
+        'si estem afegint o modificant un servei de lloc (i validating ok)
+        If Serveis_nomComboBox.SelectedIndex <> -1 And Not eCancel Then
 
             'actualitzem la datatable
             Try
@@ -3013,7 +3029,9 @@
 
             'ens posicionem al node creat o modificat
             auxnode = GetNode(auxnomlloc, tvClients.Nodes, 2)
-            tvClients.SelectedNode = GetNode(auxnomservei, auxnode.Nodes, 4)
+            If Not auxnode Is Nothing Then
+                tvClients.SelectedNode = GetNode(auxnomservei, auxnode.Nodes, 4)
+            End If
             tvClients.Select()
 
         End If
@@ -3023,40 +3041,45 @@
     Private Sub pnlServeis_Validating(ByVal sender As Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles pnlServeis.Validating
 
         ToolStripStatusLabel2.Text = ""
+        eCancel = False
 
         'excepte si estem afegint servei al lloc i no seleccionem el seu nom -> validem
         If Not (lblServei.Text = "Afegir servei" And Serveis_nomComboBox.SelectedIndex = -1) Then
 
             If Not IsNumeric(Llocs_serveis_quantitatTextBox.Text) Then
                 ToolStripStatusLabel2.Text = "ERROR: La quantitat no és un número vàlid."
-                e.Cancel = True
+                'e.Cancel = True
+                eCancel = True
                 Exit Sub
             End If
 
             If CSng(Llocs_serveis_quantitatTextBox.Text) < 0 Then
                 ToolStripStatusLabel2.Text = "ERROR: No es pot informar una quantitat negativa."
-                e.Cancel = True
+                'e.Cancel = True
+                eCancel = True
                 Exit Sub
             End If
 
             If Not IsNumeric(Llocs_serveis_preu_unTextBox.Text) Then
                 ToolStripStatusLabel2.Text = "ERROR: El preu unitari no és un número vàlid."
-                e.Cancel = True
+                'e.Cancel = True
+                eCancel = True
                 Exit Sub
             End If
 
-            If CSng(Llocs_serveis_preu_unTextBox.Text) = 0 Then
-                ToolStripStatusLabel2.Text = "ERROR: Cal informar un preu unitari."
-                e.Cancel = True
-                Exit Sub
-            End If
+            'If CSng(Llocs_serveis_preu_unTextBox.Text) = 0 Then
+            '    ToolStripStatusLabel2.Text = "ERROR: Cal informar un preu unitari."
+            '    e.Cancel = True
+            '    Exit Sub
+            'End If
 
             'el servei ha de ser unic pel lloc. 
             If lblServei.Text = "Afegir servei" Then
                 For Each n In tvClients.SelectedNode.Nodes
                     If CType(n, TreeNode).Text = Serveis_nomComboBox.Text Then
                         ToolStripStatusLabel2.Text = "ERROR: El servei ja existeix pel lloc."
-                        e.Cancel = True
+                        'e.Cancel = True
+                        eCancel = True
                         Exit Sub
                     End If
                 Next
@@ -3085,7 +3108,7 @@
         End If
     End Sub
 
-    Private Sub Serveis_nomComboBox_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Serveis_nomComboBox.SelectedIndexChanged
+    Private Sub Serveis_nomComboBox_SelectedIndexChanged(ByVal sender As Object, ByVal e As EventArgs) Handles Serveis_nomComboBox.SelectedIndexChanged
 
         If pnlServeis.Visible And Serveis_nomComboBox.SelectedIndex <> -1 Then
             If Not IsNumeric(Llocs_serveis_preu_unTextBox.Text) Then
@@ -3413,7 +3436,7 @@
             chkPdtFacturar.Checked = False
             Label15.Visible = True
             txtPagaments.Visible = True
-            Label18.Text = "Xecs client:"
+            Label18.Text = "Xecs client"
             btnImprimirHores.Visible = False
             btnImprimirHoresTotals.Visible = False
             btnImprimirXecs.Visible = False
@@ -3427,7 +3450,7 @@
             chkPdtFacturar.Checked = False
             Label15.Visible = False
             txtPagaments.Visible = False
-            Label18.Text = "Xecs liquidats mes:"
+            Label18.Text = "Xecs liquidats mes"
             btnImprimirHores.Visible = True
             btnImprimirHoresTotals.Visible = True
             btnImprimirXecs.Visible = True
@@ -3488,11 +3511,12 @@
 
     Private Sub btnImprimirXecs_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnImprimirXecs.Click
         Dim auxDS As New DataSet
-        Dim auxXecsDA As New OleDb.OleDbDataAdapter("SELECT * FROM Xecs WHERE Xecs_data_liquidat Is Not Null", ObtenirConnexio())
-        Dim auxFeinesDA As New OleDb.OleDbDataAdapter("SELECT * FROM Feines WHERE (((Feines.feines_data)>=@dataini And (Feines.feines_data)<@datafi))", ObtenirConnexio())
-        Dim auxFeinesDetallDA As New OleDb.OleDbDataAdapter("SELECT * FROM Feines_Detall WHERE (((Feines_Detall.serveis_nom)='Neteja'))", ObtenirConnexio())
+        Dim auxXecsDA As New OleDbDataAdapter("SELECT * FROM Xecs WHERE Xecs_data_liquidat Is Not Null", ObtenirConnexio())
+        Dim auxFeinesDA As New OleDbDataAdapter("SELECT * FROM Feines WHERE (((Feines.feines_data)>=@dataini And (Feines.feines_data)<@datafi))", ObtenirConnexio())
+        Dim auxFeinesDetallDA As New OleDbDataAdapter("SELECT * FROM Feines_Detall WHERE (((Feines_Detall.serveis_nom)=@serveixecs))", ObtenirConnexio())
         Dim param1 As New OleDbParameter("@dataini", OleDbType.DBDate)
         Dim param2 As New OleDbParameter("@datafi", OleDbType.DBDate)
+        Dim param3 As New OleDbParameter("@serveixecs", OleDbType.VarChar)
         Dim auxdate As Date = DateSerial(dtpSelMes.Value.Year, dtpSelMes.Value.Month, 1)
         Dim miRpt As New crpXecsLiquidatsMes
 
@@ -3511,6 +3535,10 @@
         auxdate = DateAdd(DateInterval.Month, 1, auxdate)
         param2.Value = auxdate
         auxFeinesDA.SelectCommand.Parameters.Add(param2)
+
+        param3.Direction = ParameterDirection.Input
+        param3.Value = SERVEIXECS
+        auxFeinesDetallDA.SelectCommand.Parameters.Add(param3)
 
         Try
             If Not ObrirConnexio() Then
@@ -3602,7 +3630,7 @@
                 tvClients.SelectedNode = auxNode
                 For Each n2 In tvClients.SelectedNode.Nodes
                     auxNode = n2
-                    If auxNode.Text = "# Llocs" Then
+                    If auxNode.Text = LLOCS Then
                         tvClients.SelectedNode = auxNode
                         For Each n3 In tvClients.SelectedNode.Nodes
                             auxNode = n3

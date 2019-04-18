@@ -12,7 +12,7 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyDescription("Planificador de feines en .NET 2015 per OTS")>
 <Assembly: AssemblyCompany("PlaniSoftware")> 
 <Assembly: AssemblyProduct("PlaniFeinesOTS")>
-<Assembly: AssemblyCopyright("Copyright © PlaniSoftware 2018")>
+<Assembly: AssemblyCopyright("Copyright © PlaniSoftware 2019")>
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>
