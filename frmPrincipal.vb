@@ -1601,48 +1601,51 @@
         RDSelFeines = CMDSelFeines.ExecuteReader
 
         While RDSelFeines.Read
+            'no comptem els festius
+            If RDSelFeines.Item("llocs_nom") <> FESTIU Then
+                Try
+                    HoraIniFeina = TimeSpan.Parse(Convert.ToString(RDSelFeines.Item("feines_hora_inici")))
+                Catch ex As Exception
+                    HoraIniFeina = HORAINICI
+                End Try
 
-            Try
-                HoraIniFeina = TimeSpan.Parse(Convert.ToString(RDSelFeines.Item("feines_hora_inici")))
-            Catch ex As Exception
-                HoraIniFeina = HORAINICI
-            End Try
+                'calculem forat entre feines (final feina N fins inici N+1)
+                'descomptant l'horari de dinar
+                If HoraFiFeina <> TimeSpan.Zero Then
+                    foratEntreFeines = HoraIniFeina - HoraFiFeina
+                    If HoraFiFeina < HORAINICIDINAR And HoraIniFeina > HORAINICIDINAR And HoraIniFeina <= HORAFINALDINAR Then
+                        foratEntreFeines -= (HoraIniFeina - HORAINICIDINAR)
+                    End If
+                    If HoraFiFeina >= HORAINICIDINAR And HoraIniFeina <= HORAFINALDINAR Then
+                        foratEntreFeines = New TimeSpan(0)
+                    End If
+                    If HoraFiFeina >= HORAINICIDINAR And HoraFiFeina < HORAFINALDINAR And HoraIniFeina > HORAFINALDINAR Then
+                        foratEntreFeines -= (HORAFINALDINAR - HoraFiFeina)
+                    End If
+                    If HoraFiFeina < HORAINICIDINAR And HoraIniFeina > HORAFINALDINAR Then
+                        foratEntreFeines -= (HORAFINALDINAR - HORAINICIDINAR)
+                    End If
+                Else
+                    HoraIniJornada = HoraIniFeina
+                End If
 
-            'calculem forat entre feines (final feina N fins inici N+1)
-            'descomptant l'horari de dinar
-            If HoraFiFeina <> TimeSpan.Zero Then
-                foratEntreFeines = HoraIniFeina - HoraFiFeina
-                If HoraFiFeina < HORAINICIDINAR And HoraIniFeina > HORAINICIDINAR And HoraIniFeina <= HORAFINALDINAR Then
-                    foratEntreFeines -= (HoraIniFeina - HORAINICIDINAR)
-                End If
-                If HoraFiFeina >= HORAINICIDINAR And HoraIniFeina <= HORAFINALDINAR Then
-                    foratEntreFeines = New TimeSpan(0)
-                End If
-                If HoraFiFeina >= HORAINICIDINAR And HoraFiFeina < HORAFINALDINAR And HoraIniFeina > HORAFINALDINAR Then
-                    foratEntreFeines -= (HORAFINALDINAR - HoraFiFeina)
-                End If
-                If HoraFiFeina < HORAINICIDINAR And HoraIniFeina > HORAFINALDINAR Then
-                    foratEntreFeines -= (HORAFINALDINAR - HORAINICIDINAR)
-                End If
-            Else
-                HoraIniJornada = HoraIniFeina
+                Try
+                    HoraFiFeina = TimeSpan.Parse(Convert.ToString(RDSelFeines.Item("feines_hora_fi")))
+                Catch ex As Exception
+                    HoraFiFeina = New TimeSpan(HoraIniFeina.Ticks)
+                    HoraFiFeina += New TimeSpan(0, AgendaGrid.MinutesGap, 0)
+                End Try
+
+                Select Case pMode
+                    Case "EXTRA"
+                        TempsAcum += HoraFiFeina - HoraIniFeina '+ foratEntreFeines CANVI CRITERI 2013
+                    Case "TREBALLADES"
+                        TempsAcum += HoraFiFeina - HoraIniFeina
+                    Case Else   'JORNADA
+                        TempsAcum = HoraFiFeina - HoraIniJornada
+                End Select
+
             End If
-
-            Try
-                HoraFiFeina = TimeSpan.Parse(Convert.ToString(RDSelFeines.Item("feines_hora_fi")))
-            Catch ex As Exception
-                HoraFiFeina = New TimeSpan(HoraIniFeina.Ticks)
-                HoraFiFeina += New TimeSpan(0, AgendaGrid.MinutesGap, 0)
-            End Try
-
-            Select Case pMode
-                Case "EXTRA"
-                    TempsAcum += HoraFiFeina - HoraIniFeina '+ foratEntreFeines CANVI CRITERI 2013
-                Case "TREBALLADES"
-                    TempsAcum += HoraFiFeina - HoraIniFeina
-                Case Else   'JORNADA
-                    TempsAcum = HoraFiFeina - HoraIniJornada
-            End Select
 
         End While
         RDSelFeines.Close()
@@ -1701,41 +1704,45 @@
             'processem les feines del recurs en el periode (tant sol com dins d'un grup)
             While RDSelFeines.Read
 
-                If auxdate = Date.MinValue Then
-                    auxdate = RDSelFeines.Item("feines_data")
-                    HoraIniFeina = TimeSpan.Zero
-                    HoraFiFeina = TimeSpan.Zero
-                    TempsAcum = TimeSpan.Zero
-                Else
-                    If auxdate <> RDSelFeines.Item("feines_data") Then
-                        If TempsAcum.TotalHours > 0 Then
-                            dr = auxDT.NewRow
-                            dr("recursos_nom") = RDSelRecursos.Item("recursos_nom")
-                            dr("hores_data") = auxdate.Date
-                            dr("hores_quantitat") = TempsAcum.TotalHours
-                            auxDT.Rows.Add(dr)
-                        End If
+                'no comptem els festius
+                If RDSelFeines.Item("llocs_nom") <> FESTIU Then
+
+                    If auxdate = Date.MinValue Then
                         auxdate = RDSelFeines.Item("feines_data")
                         HoraIniFeina = TimeSpan.Zero
                         HoraFiFeina = TimeSpan.Zero
                         TempsAcum = TimeSpan.Zero
+                    Else
+                        If auxdate <> RDSelFeines.Item("feines_data") Then
+                            If TempsAcum.TotalHours > 0 Then
+                                dr = auxDT.NewRow
+                                dr("recursos_nom") = RDSelRecursos.Item("recursos_nom")
+                                dr("hores_data") = auxdate.Date
+                                dr("hores_quantitat") = TempsAcum.TotalHours
+                                auxDT.Rows.Add(dr)
+                            End If
+                            auxdate = RDSelFeines.Item("feines_data")
+                            HoraIniFeina = TimeSpan.Zero
+                            HoraFiFeina = TimeSpan.Zero
+                            TempsAcum = TimeSpan.Zero
+                        End If
                     End If
+
+                    Try
+                        HoraIniFeina = TimeSpan.Parse(Convert.ToString(RDSelFeines.Item("feines_hora_inici")))
+                    Catch ex As Exception
+                        HoraIniFeina = HORAINICI
+                    End Try
+
+                    Try
+                        HoraFiFeina = TimeSpan.Parse(Convert.ToString(RDSelFeines.Item("feines_hora_fi")))
+                    Catch ex As Exception
+                        HoraFiFeina = New TimeSpan(HoraIniFeina.Ticks)
+                        HoraFiFeina += New TimeSpan(0, AgendaGrid.MinutesGap, 0)
+                    End Try
+
+                    TempsAcum += HoraFiFeina - HoraIniFeina
                 End If
-
-                Try
-                    HoraIniFeina = TimeSpan.Parse(Convert.ToString(RDSelFeines.Item("feines_hora_inici")))
-                Catch ex As Exception
-                    HoraIniFeina = HORAINICI
-                End Try
-
-                Try
-                    HoraFiFeina = TimeSpan.Parse(Convert.ToString(RDSelFeines.Item("feines_hora_fi")))
-                Catch ex As Exception
-                    HoraFiFeina = New TimeSpan(HoraIniFeina.Ticks)
-                    HoraFiFeina += New TimeSpan(0, AgendaGrid.MinutesGap, 0)
-                End Try
-
-                TempsAcum += HoraFiFeina - HoraIniFeina
 
             End While
             RDSelFeines.Close()
@@ -2534,6 +2541,12 @@
                     auxClient = e.Node.Text
                     lblClient.Text = "Modificar client"
                     ClientsBindingSource.Position = ClientsBindingSource.Find("clients_nom", auxClient)
+                    'no es pot modificar el client festius
+                    If Clients_nomTextBox.Text = FESTIU Then
+                        Clients_nomTextBox.Enabled = False
+                    Else
+                        Clients_nomTextBox.Enabled = True
+                    End If
                     pnlClients.Visible = True
                     e.Node.ExpandAll()
                 End If
@@ -2618,6 +2631,7 @@
         End Select
 
         'Debug.WriteLine(e.Node.Level & " / Client: " & auxClient & " / Lloc: " & auxLloc & " / Servei: " & auxServei & " / Xec: " & auxXec)
+        ToolStripStatusLabel2.Text = ""
 
     End Sub
 
@@ -2647,7 +2661,7 @@
         Dim auxFontBold As Font = New Font(tvClients.Font, FontStyle.Bold)
 
         'si estem afegint o modificant un client
-        If auxnom <> "" Then
+        If auxnom <> "" And Not eCancel Then
 
             'actualitzem datatable
             Try
@@ -2711,15 +2725,25 @@
     Private Sub pnlClients_Validating(ByVal sender As Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles pnlClients.Validating
 
         ToolStripStatusLabel2.Text = ""
+        eCancel = False
 
-        Llocs_nomTextBox.Text = Trim(Llocs_nomTextBox.Text)
+        Clients_nomTextBox.Text = Trim(Clients_nomTextBox.Text)
+
+        'no es pot modificar el client festius
+        If Clients_nomTextBox.Text = FESTIU Then
+            ToolStripStatusLabel2.Text = "ERROR: No es poden modificar els " & FESTIU
+            'e.Cancel = True
+            eCancel = True
+            Exit Sub
+        End If
 
         'excepte si estem afegint client i no informem el seu nom -> validem
         If Not (lblClient.Text = "Afegir client" And Clients_nomTextBox.Text = "") Then
 
             If Clients_nomTextBox.Text = "" Then
                 ToolStripStatusLabel2.Text = "ERROR: Cal informar el nom del client."
-                e.Cancel = True
+                'e.Cancel = True
+                eCancel = True
                 Exit Sub
             End If
 
@@ -2735,7 +2759,7 @@
 
         If e.KeyCode = Keys.Delete Then
 
-            If pnlClients.Visible And tvClients.SelectedNode.Text <> NOUCLIENT Then
+            If pnlClients.Visible And tvClients.SelectedNode.Text <> NOUCLIENT And tvClients.SelectedNode.Text <> FESTIU Then
                 If MsgBox("Eliminar client '" & tvClients.SelectedNode.Text & "' ?", MsgBoxStyle.YesNo, "CONFIRMACIÓ") = MsgBoxResult.Yes Then
                     'borrem el registre 
                     ClientsBindingSource.RemoveCurrent()
@@ -2764,7 +2788,7 @@
                 End If
             End If
 
-            If pnlLlocs.Visible And tvClients.SelectedNode.Text <> LLOCS Then
+            If pnlLlocs.Visible And tvClients.SelectedNode.Text <> LLOCS And tvClients.SelectedNode.Text <> FESTIU Then
                 If MsgBox("Eliminar lloc '" & tvClients.SelectedNode.Text & "' ?", MsgBoxStyle.YesNo, "CONFIRMACIÓ") = MsgBoxResult.Yes Then
                     'borrem el registre
                     LlocsBindingSource.RemoveCurrent()
@@ -2788,7 +2812,7 @@
                 End If
             End If
 
-            If pnlServeis.Visible And tvClients.SelectedNode.Text <> SERVEIS Then
+            If pnlServeis.Visible And tvClients.SelectedNode.Text <> SERVEIS And tvClients.SelectedNode.Text <> FESTIU Then
                 If MsgBox("Eliminar servei '" & tvClients.SelectedNode.Text & "' del lloc '" & Llocs_nomTextBox1.Text & "'?", MsgBoxStyle.YesNo, "CONFIRMACIÓ") = MsgBoxResult.Yes Then
                     'borrem el registre
                     Llocs_ServeisBindingSource.RemoveCurrent()
@@ -2851,8 +2875,8 @@
     Private Sub pnlLlocs_Validated(ByVal sender As Object, ByVal e As System.EventArgs) Handles pnlLlocs.Validated
         Dim auxnomlloc As String = Llocs_nomTextBox.Text
 
-        'si estem afegint o modificant un lloc
-        If auxnomlloc <> "" Then
+        'si estem afegint o modificant un lloc (i validating ok. El e.cancel=true bloqueja pantalla)
+        If auxnomlloc <> "" And Not eCancel Then
 
             'actualitzem datatable
             Try
@@ -2902,40 +2926,55 @@
         Dim auxnomllocant As String
 
         ToolStripStatusLabel2.Text = ""
+        eCancel = False
+
 
         Llocs_nomTextBox.Text = Trim(Llocs_nomTextBox.Text)
+
+        'no es pot modificar el lloc festius
+        If Clients_nomTextBox1.Text = FESTIU Then
+            ToolStripStatusLabel2.Text = "ERROR: No es poden modificar els " & FESTIU
+            'e.Cancel = True
+            eCancel = True
+            Exit Sub
+        End If
 
         'excepte si estem afegint lloc i no informem el seu nom -> validem
         If Not (lblLloc.Text = "Afegir lloc" And Llocs_nomTextBox.Text = "") Then
 
             If Llocs_nomTextBox.Text = "" Then
                 ToolStripStatusLabel2.Text = "ERROR: Cal informar el nom del lloc."
-                e.Cancel = True
+                'e.Cancel = True
+                eCancel = True
                 Exit Sub
             End If
 
             If CInt(Llocs_periodicitat_diesTextBox.Text) < 0 Then
                 ToolStripStatusLabel2.Text = "ERROR: Cal informar la periodicitat en dies (0 si no planificable)."
-                e.Cancel = True
+                'e.Cancel = True
+                eCancel = True
                 Exit Sub
             End If
 
             If Not IsNumeric(Llocs_quotaTextBox.Text) Then
                 ToolStripStatusLabel2.Text = "ERROR: La quota no és un número vàlid."
-                e.Cancel = True
+                'e.Cancel = True
+                eCancel = True
                 Exit Sub
             End If
 
             If CSng(Llocs_quotaTextBox.Text) < 0 Then
                 ToolStripStatusLabel2.Text = "ERROR: La quota no pot ser menor que 0."
-                e.Cancel = True
+                'e.Cancel = True
+                eCancel = True
                 Exit Sub
             End If
 
             'si el client té xecs no pot tenir quotes
             If Clients_xecsCheckBox.Checked And CSng(Llocs_quotaTextBox.Text) > 0 Then
                 ToolStripStatusLabel2.Text = "ERROR: Si el client té xecs, no pot tenir quota."
-                e.Cancel = True
+                'e.Cancel = True
+                eCancel = True
                 Exit Sub
             End If
 
@@ -3043,6 +3082,14 @@
         ToolStripStatusLabel2.Text = ""
         eCancel = False
 
+        'no es pot modificar el servei festius
+        If Llocs_nomTextBox1.Text = FESTIU Then
+            ToolStripStatusLabel2.Text = "ERROR: No es poden modificar els " & FESTIU
+            'e.Cancel = True
+            eCancel = True
+            Exit Sub
+        End If
+
         'excepte si estem afegint servei al lloc i no seleccionem el seu nom -> validem
         If Not (lblServei.Text = "Afegir servei" And Serveis_nomComboBox.SelectedIndex = -1) Then
 
@@ -3073,19 +3120,27 @@
             '    Exit Sub
             'End If
 
-            'el servei ha de ser unic pel lloc. 
-            If lblServei.Text = "Afegir servei" Then
-                For Each n In tvClients.SelectedNode.Nodes
-                    If CType(n, TreeNode).Text = Serveis_nomComboBox.Text Then
-                        ToolStripStatusLabel2.Text = "ERROR: El servei ja existeix pel lloc."
-                        'e.Cancel = True
-                        eCancel = True
-                        Exit Sub
-                    End If
-                Next
+            'el servei festiu només es pot seleccionar en el lloc festiu
+            If Serveis_nomComboBox.Text = FESTIU Then
+                ToolStripStatusLabel2.Text = "ERROR: El servei " & FESTIU & " només és pel lloc " & FESTIU
+                'e.Cancel = True
+                eCancel = True
+                Exit Sub
             End If
 
-        End If
+            'el servei ha de ser unic pel lloc. 
+            If lblServei.Text = "Afegir servei" Then
+                    For Each n In tvClients.SelectedNode.Nodes
+                        If CType(n, TreeNode).Text = Serveis_nomComboBox.Text Then
+                            ToolStripStatusLabel2.Text = "ERROR: El servei ja existeix pel lloc."
+                            'e.Cancel = True
+                            eCancel = True
+                            Exit Sub
+                        End If
+                    Next
+                End If
+
+            End If
 
     End Sub
 
@@ -4432,56 +4487,62 @@
         For i = 0 To cmbSelClients.Items.Count - 1
             cmbSelClients.SelectedIndex = i
 
-            frmMissatges.txtMissatges.Text = frmMissatges.txtMissatges.Text & "Client: " & cmbSelClients.SelectedValue & vbCrLf
-            frmMissatges.txtMissatges.SelectionStart = frmMissatges.txtMissatges.Text.Length
-            frmMissatges.txtMissatges.ScrollToCaret()
+            'no tractem festius
+            If cmbSelClients.SelectedValue.ToString <> FESTIU Then
 
-            'carreguem les dades resum del client al DataSet
-            drclient = CType(ClientsBindingSource.Current, DataRowView).Row
+                frmMissatges.txtMissatges.Text = frmMissatges.txtMissatges.Text & "Client: " & cmbSelClients.SelectedValue & vbCrLf
+                frmMissatges.txtMissatges.SelectionStart = frmMissatges.txtMissatges.Text.Length
+                frmMissatges.txtMissatges.ScrollToCaret()
 
-            'carreguem la datatable a partir de la grid de factures
-            For Each r In dgvFactura.Rows
-                auxrow = r
-                'registre de feina feta (en llocs sense quota)
-                If Not IsNothing(auxrow.Cells("Feina").Value) And auxrow.Cells("Feta").Value = "Si" And auxrow.Cells("ImportServei").FormattedValue <> "" Then
-                    dr = dt.NewRow
-                    dr("Client") = drclient("clients_nom")
-                    dr("Lloc") = " " & auxrow.Cells("Lloc").Value
-                    dr("Servei") = auxrow.Cells("Servei").Value
-                    dr("Quantitat") = auxrow.Cells("Quantitat").Value
-                    dr("Unitat") = auxrow.Cells("Unitat").Value
-                    dr("Import") = IIf(auxrow.Cells("ImportServei").FormattedValue = "", 0, auxrow.Cells("ImportServei").Value)
-                    dr("ccc") = drclient("clients_ccc")
+                'carreguem les dades resum del client al DataSet
+                drclient = CType(ClientsBindingSource.Current, DataRowView).Row
 
-                    'dr("Quota") = auxrow.Cells("Quota").Value
-                    dt.Rows.Add(dr)
-                Else
-                    'registre de lloc amb quota
-                    If IsNothing(auxrow.Cells("Feina").Value) And auxrow.Cells("Quantitat").FormattedValue = "QUOTA" Then
+                'carreguem la datatable a partir de la grid de factures
+                For Each r In dgvFactura.Rows
+                    auxrow = r
+                    'registre de feina feta (en llocs sense quota)
+                    If Not IsNothing(auxrow.Cells("Feina").Value) And auxrow.Cells("Feta").Value = "Si" And auxrow.Cells("ImportServei").FormattedValue <> "" Then
                         dr = dt.NewRow
                         dr("Client") = drclient("clients_nom")
                         dr("Lloc") = " " & auxrow.Cells("Lloc").Value
-                        dr("Servei") = ""
-                        dr("Quantitat") = 1
-                        dr("Unitat") = "Quota mensual"
+                        dr("Servei") = auxrow.Cells("Servei").Value
+                        dr("Quantitat") = auxrow.Cells("Quantitat").Value
+                        dr("Unitat") = auxrow.Cells("Unitat").Value
                         dr("Import") = IIf(auxrow.Cells("ImportServei").FormattedValue = "", 0, auxrow.Cells("ImportServei").Value)
                         dr("ccc") = drclient("clients_ccc")
+
+                        'dr("Quota") = auxrow.Cells("Quota").Value
                         dt.Rows.Add(dr)
+                    Else
+                        'registre de lloc amb quota
+                        If IsNothing(auxrow.Cells("Feina").Value) And auxrow.Cells("Quantitat").FormattedValue = "QUOTA" Then
+                            dr = dt.NewRow
+                            dr("Client") = drclient("clients_nom")
+                            dr("Lloc") = " " & auxrow.Cells("Lloc").Value
+                            dr("Servei") = ""
+                            dr("Quantitat") = 1
+                            dr("Unitat") = "Quota mensual"
+                            dr("Import") = IIf(auxrow.Cells("ImportServei").FormattedValue = "", 0, auxrow.Cells("ImportServei").Value)
+                            dr("ccc") = drclient("clients_ccc")
+                            dt.Rows.Add(dr)
+                        End If
                     End If
+                Next
+                'carreguem registre xecs si n'hi ha
+                If dgvXecs.RowCount > 0 Then
+                    dr = dt.NewRow
+                    dr("Client") = drclient("clients_nom")
+                    dr("Lloc") = "."
+                    dr("Servei") = "XECS"
+                    dr("Quantitat") = CInt(txtTotalNXecs.Text)
+                    dr("Unitat") = "x " & VALORDFTXEC.ToString
+                    dr("Import") = -CSng(txtTotalXecs.Text)
+                    dr("ccc") = drclient("clients_ccc")
+                    dt.Rows.Add(dr)
                 End If
-            Next
-            'carreguem registre xecs si n'hi ha
-            If dgvXecs.RowCount > 0 Then
-                dr = dt.NewRow
-                dr("Client") = drclient("clients_nom")
-                dr("Lloc") = "."
-                dr("Servei") = "XECS"
-                dr("Quantitat") = CInt(txtTotalNXecs.Text)
-                dr("Unitat") = "x " & VALORDFTXEC.ToString
-                dr("Import") = -CSng(txtTotalXecs.Text)
-                dr("ccc") = drclient("clients_ccc")
-                dt.Rows.Add(dr)
+
             End If
+
         Next
 
         cmbSelClients.SelectedIndex = -1

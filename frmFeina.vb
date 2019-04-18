@@ -324,8 +324,17 @@ Public Class frmFeina
         Dim auxint As Integer
 
         'Debug.WriteLine(e.KeyChar)
+
         'si fem intro baixem els camps a la grid
         If e.KeyChar = Microsoft.VisualBasic.ChrW(Keys.Return) And Not pModeConsulta Then
+
+            'no permet servei festiu si el lloc no és festiu
+            If txtLloc.Text <> frmPrincipal.FESTIU And cmbServeis.Text = frmPrincipal.FESTIU Then
+                cmbServeis.SelectedIndex = -1
+                txtQuantitat.Text = ""
+                txtPreu.Text = ""
+                Exit Sub
+            End If
 
             If cmbServeis.SelectedIndex <> -1 And IsNumeric(txtQuantitat.Text) And IsNumeric(txtPreu.Text) Then
                 'si hi ha una linia amb el mateix servei, la eliminem
