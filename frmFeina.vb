@@ -163,9 +163,9 @@ Public Class frmFeina
         For i = 0 To dgvDetall.Rows.Count - 1
             auxint = CSng(dgvDetall.Item("clQuantitat", i).Value) * CInt(dgvDetall.Item("clMinuts", i).Value)
             If CBool(dgvDetall.Item("clComu", i).Value) Then
-                pPGElement.NonSharedDuration = pPGElement.NonSharedDuration + New TimeSpan(0, auxint, 0)
-            Else
                 pPGElement.SharedDuration = pPGElement.SharedDuration + New TimeSpan(0, auxint, 0)
+            Else
+                pPGElement.NonSharedDuration = pPGElement.NonSharedDuration + New TimeSpan(0, auxint, 0)
             End If
         Next
 
@@ -330,6 +330,16 @@ Public Class frmFeina
 
             'no permet servei festiu si el lloc no és festiu
             If txtLloc.Text <> frmPrincipal.FESTIU And cmbServeis.Text = frmPrincipal.FESTIU Then
+                MsgBox("El servei " & frmPrincipal.FESTIU & " només és pel lloc " & frmPrincipal.FESTIU, MsgBoxStyle.OkOnly, "ERROR")
+                cmbServeis.SelectedIndex = -1
+                txtQuantitat.Text = ""
+                txtPreu.Text = ""
+                Exit Sub
+            End If
+
+            'només permet servei festiu si el lloc és festiu
+            If txtLloc.Text = frmPrincipal.FESTIU And cmbServeis.Text <> frmPrincipal.FESTIU Then
+                MsgBox("El lloc " & frmPrincipal.FESTIU & " només permet el servei " & frmPrincipal.FESTIU, MsgBoxStyle.OkOnly, "ERROR")
                 cmbServeis.SelectedIndex = -1
                 txtQuantitat.Text = ""
                 txtPreu.Text = ""
@@ -364,9 +374,9 @@ Public Class frmFeina
                 For i = 0 To dgvDetall.Rows.Count - 1
                     auxint = CSng(dgvDetall.Item("clQuantitat", i).Value) * CInt(dgvDetall.Item("clMinuts", i).Value)
                     If CBool(dgvDetall.Item("clComu", i).Value) Then
-                        pPGElement.NonSharedDuration = pPGElement.NonSharedDuration + New TimeSpan(0, auxint, 0)
-                    Else
                         pPGElement.SharedDuration = pPGElement.SharedDuration + New TimeSpan(0, auxint, 0)
+                    Else
+                        pPGElement.NonSharedDuration = pPGElement.NonSharedDuration + New TimeSpan(0, auxint, 0)
                     End If
                 Next
 
@@ -418,9 +428,9 @@ Public Class frmFeina
         For i = 0 To dgvDetall.Rows.Count - 1
             auxint = CSng(dgvDetall.Item("clQuantitat", i).Value) * CInt(dgvDetall.Item("clMinuts", i).Value)
             If CBool(dgvDetall.Item("clComu", i).Value) Then
-                pPGElement.NonSharedDuration = pPGElement.NonSharedDuration + New TimeSpan(0, auxint, 0)
-            Else
                 pPGElement.SharedDuration = pPGElement.SharedDuration + New TimeSpan(0, auxint, 0)
+            Else
+                pPGElement.NonSharedDuration = pPGElement.NonSharedDuration + New TimeSpan(0, auxint, 0)
             End If
         Next
 
@@ -461,7 +471,6 @@ Public Class frmFeina
                 Exit Sub
             End If
         End If
-
 
         'eliminem feina (i detall) a BBDD
 

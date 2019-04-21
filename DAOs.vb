@@ -296,9 +296,9 @@
 
         While RDServeisLloc.Read
             If RDServeisLloc.Item("serveis_comu_per_recursos") Then
-                auxDuradaNoComp += New TimeSpan(0, RDServeisLloc.Item("llocs_serveis_quantitat") * RDServeisLloc.Item("serveis_minuts_per_unitat"), 0)
-            Else
                 auxDuradaComp += New TimeSpan(0, RDServeisLloc.Item("llocs_serveis_quantitat") * RDServeisLloc.Item("serveis_minuts_per_unitat"), 0)
+            Else
+                auxDuradaNoComp += New TimeSpan(0, RDServeisLloc.Item("llocs_serveis_quantitat") * RDServeisLloc.Item("serveis_minuts_per_unitat"), 0)
             End If
         End While
         RDServeisLloc.Close()

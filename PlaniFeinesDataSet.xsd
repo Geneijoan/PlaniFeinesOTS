@@ -855,7 +855,7 @@
         <xs:element name="Clients" msprop:Generator_TableClassName="ClientsDataTable" msprop:Generator_TableVarName="tableClients" msprop:Generator_TablePropName="Clients" msprop:Generator_RowDeletingName="ClientsRowDeleting" msprop:Generator_RowChangingName="ClientsRowChanging" msprop:Generator_RowEvHandlerName="ClientsRowChangeEventHandler" msprop:Generator_RowDeletedName="ClientsRowDeleted" msprop:Generator_UserTableName="Clients" msprop:Generator_RowChangedName="ClientsRowChanged" msprop:Generator_RowEvArgName="ClientsRowChangeEvent" msprop:Generator_RowClassName="ClientsRow">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="clients_nom" msprop:nullValue="_empty" msprop:Generator_ColumnPropNameInRow="clients_nom" msprop:Generator_ColumnVarNameInTable="columnclients_nom" msprop:Generator_ColumnPropNameInTable="clients_nomColumn" msprop:Generator_UserColumnName="clients_nom" minOccurs="0">
+              <xs:element name="clients_nom" msprop:nullValue="_empty" msprop:Generator_ColumnPropNameInRow="clients_nom" msprop:Generator_ColumnVarNameInTable="columnclients_nom" msprop:Generator_ColumnPropNameInTable="clients_nomColumn" msprop:Generator_UserColumnName="clients_nom">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="50" />
@@ -991,7 +991,7 @@
           <xs:complexType>
             <xs:sequence>
               <xs:element name="feines_id" msprop:Generator_ColumnVarNameInTable="columnfeines_id" msprop:Generator_ColumnPropNameInRow="feines_id" msprop:Generator_ColumnPropNameInTable="feines_idColumn" msprop:Generator_UserColumnName="feines_id" type="xs:int" />
-              <xs:element name="serveis_nom" msprop:nullValue="_empty" msprop:Generator_ColumnPropNameInRow="serveis_nom" msprop:Generator_ColumnVarNameInTable="columnserveis_nom" msprop:Generator_ColumnPropNameInTable="serveis_nomColumn" msprop:Generator_UserColumnName="serveis_nom" minOccurs="0">
+              <xs:element name="serveis_nom" msprop:nullValue="_empty" msprop:Generator_ColumnPropNameInRow="serveis_nom" msprop:Generator_ColumnVarNameInTable="columnserveis_nom" msprop:Generator_ColumnPropNameInTable="serveis_nomColumn" msprop:Generator_UserColumnName="serveis_nom">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="50" />
@@ -1013,7 +1013,7 @@
         <xs:element name="Hores_Fetes" msprop:Generator_TableClassName="Hores_FetesDataTable" msprop:Generator_TableVarName="tableHores_Fetes" msprop:Generator_TablePropName="Hores_Fetes" msprop:Generator_RowDeletingName="Hores_FetesRowDeleting" msprop:Generator_RowChangingName="Hores_FetesRowChanging" msprop:Generator_RowEvHandlerName="Hores_FetesRowChangeEventHandler" msprop:Generator_RowDeletedName="Hores_FetesRowDeleted" msprop:Generator_UserTableName="Hores_Fetes" msprop:Generator_RowChangedName="Hores_FetesRowChanged" msprop:Generator_RowEvArgName="Hores_FetesRowChangeEvent" msprop:Generator_RowClassName="Hores_FetesRow">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="recursos_nom" msprop:nullValue="_empty" msprop:Generator_ColumnPropNameInRow="recursos_nom" msprop:Generator_ColumnVarNameInTable="columnrecursos_nom" msprop:Generator_ColumnPropNameInTable="recursos_nomColumn" msprop:Generator_UserColumnName="recursos_nom" minOccurs="0">
+              <xs:element name="recursos_nom" msprop:nullValue="_empty" msprop:Generator_ColumnPropNameInRow="recursos_nom" msprop:Generator_ColumnVarNameInTable="columnrecursos_nom" msprop:Generator_ColumnPropNameInTable="recursos_nomColumn" msprop:Generator_UserColumnName="recursos_nom">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="50" />
@@ -1028,7 +1028,7 @@
         <xs:element name="Llocs" msprop:Generator_TableClassName="LlocsDataTable" msprop:Generator_TableVarName="tableLlocs" msprop:Generator_TablePropName="Llocs" msprop:Generator_RowDeletingName="LlocsRowDeleting" msprop:Generator_RowChangingName="LlocsRowChanging" msprop:Generator_RowEvHandlerName="LlocsRowChangeEventHandler" msprop:Generator_RowDeletedName="LlocsRowDeleted" msprop:Generator_UserTableName="Llocs" msprop:Generator_RowChangedName="LlocsRowChanged" msprop:Generator_RowEvArgName="LlocsRowChangeEvent" msprop:Generator_RowClassName="LlocsRow">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="llocs_nom" msprop:nullValue="_empty" msprop:Generator_ColumnPropNameInRow="llocs_nom" msprop:Generator_ColumnVarNameInTable="columnllocs_nom" msprop:Generator_ColumnPropNameInTable="llocs_nomColumn" msprop:Generator_UserColumnName="llocs_nom" minOccurs="0">
+              <xs:element name="llocs_nom" msprop:nullValue="_empty" msprop:Generator_ColumnPropNameInRow="llocs_nom" msprop:Generator_ColumnVarNameInTable="columnllocs_nom" msprop:Generator_ColumnPropNameInTable="llocs_nomColumn" msprop:Generator_UserColumnName="llocs_nom">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="50" />
@@ -1065,7 +1065,7 @@
               </xs:element>
               <xs:element name="llocs_minuts_previst" msprop:Generator_ColumnVarNameInTable="columnllocs_minuts_previst" msprop:Generator_ColumnPropNameInRow="llocs_minuts_previst" msprop:Generator_ColumnPropNameInTable="llocs_minuts_previstColumn" msprop:Generator_UserColumnName="llocs_minuts_previst" type="xs:short" default="0" minOccurs="0" />
               <xs:element name="llocs_periodicitat_dies" msprop:Generator_ColumnVarNameInTable="columnllocs_periodicitat_dies" msprop:Generator_ColumnPropNameInRow="llocs_periodicitat_dies" msprop:Generator_ColumnPropNameInTable="llocs_periodicitat_diesColumn" msprop:Generator_UserColumnName="llocs_periodicitat_dies" type="xs:short" default="0" minOccurs="0" />
-              <xs:element name="llocs_dia_setmana" msprop:Generator_ColumnVarNameInTable="columnllocs_dia_setmana" msprop:Generator_ColumnPropNameInRow="llocs_dia_setmana" msprop:Generator_ColumnPropNameInTable="llocs_dia_setmanaColumn" msprop:Generator_UserColumnName="llocs_dia_setmana" type="xs:short" minOccurs="0" />
+              <xs:element name="llocs_dia_setmana" msprop:nullValue="0" msprop:Generator_ColumnPropNameInRow="llocs_dia_setmana" msprop:Generator_ColumnVarNameInTable="columnllocs_dia_setmana" msprop:Generator_ColumnPropNameInTable="llocs_dia_setmanaColumn" msprop:Generator_UserColumnName="llocs_dia_setmana" type="xs:short" minOccurs="0" />
               <xs:element name="llocs_dissabte" msprop:Generator_ColumnVarNameInTable="columnllocs_dissabte" msprop:Generator_ColumnPropNameInRow="llocs_dissabte" msprop:Generator_ColumnPropNameInTable="llocs_dissabteColumn" msprop:Generator_UserColumnName="llocs_dissabte" type="xs:boolean" default="false" minOccurs="0" />
               <xs:element name="llocs_diumenge" msprop:Generator_ColumnVarNameInTable="columnllocs_diumenge" msprop:Generator_ColumnPropNameInRow="llocs_diumenge" msprop:Generator_ColumnPropNameInTable="llocs_diumengeColumn" msprop:Generator_UserColumnName="llocs_diumenge" type="xs:boolean" default="false" minOccurs="0" />
               <xs:element name="llocs_hora" msprop:Generator_ColumnVarNameInTable="columnllocs_hora" msprop:Generator_ColumnPropNameInRow="llocs_hora" msprop:Generator_ColumnPropNameInTable="llocs_horaColumn" msprop:Generator_UserColumnName="llocs_hora" minOccurs="0">
@@ -1098,14 +1098,14 @@
         <xs:element name="Llocs_Serveis" msprop:Generator_TableClassName="Llocs_ServeisDataTable" msprop:Generator_TableVarName="tableLlocs_Serveis" msprop:Generator_TablePropName="Llocs_Serveis" msprop:Generator_RowDeletingName="Llocs_ServeisRowDeleting" msprop:Generator_RowChangingName="Llocs_ServeisRowChanging" msprop:Generator_RowEvHandlerName="Llocs_ServeisRowChangeEventHandler" msprop:Generator_RowDeletedName="Llocs_ServeisRowDeleted" msprop:Generator_UserTableName="Llocs_Serveis" msprop:Generator_RowChangedName="Llocs_ServeisRowChanged" msprop:Generator_RowEvArgName="Llocs_ServeisRowChangeEvent" msprop:Generator_RowClassName="Llocs_ServeisRow">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="llocs_nom" msprop:nullValue="_empty" msprop:Generator_ColumnPropNameInRow="llocs_nom" msprop:Generator_ColumnVarNameInTable="columnllocs_nom" msprop:Generator_ColumnPropNameInTable="llocs_nomColumn" msprop:Generator_UserColumnName="llocs_nom" minOccurs="0">
+              <xs:element name="llocs_nom" msprop:nullValue="_empty" msprop:Generator_ColumnPropNameInRow="llocs_nom" msprop:Generator_ColumnVarNameInTable="columnllocs_nom" msprop:Generator_ColumnPropNameInTable="llocs_nomColumn" msprop:Generator_UserColumnName="llocs_nom">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="50" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="serveis_nom" msprop:nullValue="_empty" msprop:Generator_ColumnPropNameInRow="serveis_nom" msprop:Generator_ColumnVarNameInTable="columnserveis_nom" msprop:Generator_ColumnPropNameInTable="serveis_nomColumn" msprop:Generator_UserColumnName="serveis_nom" minOccurs="0">
+              <xs:element name="serveis_nom" msprop:nullValue="_empty" msprop:Generator_ColumnPropNameInRow="serveis_nom" msprop:Generator_ColumnVarNameInTable="columnserveis_nom" msprop:Generator_ColumnPropNameInTable="serveis_nomColumn" msprop:Generator_UserColumnName="serveis_nom">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="50" />
@@ -1127,7 +1127,7 @@
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="clients_nom" msprop:nullValue="_empty" msprop:Generator_ColumnPropNameInRow="clients_nom" msprop:Generator_ColumnVarNameInTable="columnclients_nom" msprop:Generator_ColumnPropNameInTable="clients_nomColumn" msprop:Generator_UserColumnName="clients_nom" minOccurs="0">
+              <xs:element name="clients_nom" msprop:nullValue="_empty" msprop:Generator_ColumnPropNameInRow="clients_nom" msprop:Generator_ColumnVarNameInTable="columnclients_nom" msprop:Generator_ColumnPropNameInTable="clients_nomColumn" msprop:Generator_UserColumnName="clients_nom">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="50" />
@@ -1142,7 +1142,7 @@
         <xs:element name="Recursos" msprop:Generator_TableClassName="RecursosDataTable" msprop:Generator_TableVarName="tableRecursos" msprop:Generator_TablePropName="Recursos" msprop:Generator_RowDeletingName="RecursosRowDeleting" msprop:Generator_RowChangingName="RecursosRowChanging" msprop:Generator_RowEvHandlerName="RecursosRowChangeEventHandler" msprop:Generator_RowDeletedName="RecursosRowDeleted" msprop:Generator_UserTableName="Recursos" msprop:Generator_RowChangedName="RecursosRowChanged" msprop:Generator_RowEvArgName="RecursosRowChangeEvent" msprop:Generator_RowClassName="RecursosRow">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="recursos_nom" msprop:nullValue="_empty" msprop:Generator_ColumnPropNameInRow="recursos_nom" msprop:Generator_ColumnVarNameInTable="columnrecursos_nom" msprop:Generator_ColumnPropNameInTable="recursos_nomColumn" msprop:Generator_UserColumnName="recursos_nom" minOccurs="0">
+              <xs:element name="recursos_nom" msprop:nullValue="_empty" msprop:Generator_ColumnPropNameInRow="recursos_nom" msprop:Generator_ColumnVarNameInTable="columnrecursos_nom" msprop:Generator_ColumnPropNameInTable="recursos_nomColumn" msprop:Generator_UserColumnName="recursos_nom">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="50" />
@@ -1157,14 +1157,14 @@
         <xs:element name="Recursos_Components" msprop:Generator_TableClassName="Recursos_ComponentsDataTable" msprop:Generator_TableVarName="tableRecursos_Components" msprop:Generator_TablePropName="Recursos_Components" msprop:Generator_RowDeletingName="Recursos_ComponentsRowDeleting" msprop:Generator_RowChangingName="Recursos_ComponentsRowChanging" msprop:Generator_RowEvHandlerName="Recursos_ComponentsRowChangeEventHandler" msprop:Generator_RowDeletedName="Recursos_ComponentsRowDeleted" msprop:Generator_UserTableName="Recursos_Components" msprop:Generator_RowChangedName="Recursos_ComponentsRowChanged" msprop:Generator_RowEvArgName="Recursos_ComponentsRowChangeEvent" msprop:Generator_RowClassName="Recursos_ComponentsRow">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="recursos_nom" msprop:nullValue="_empty" msprop:Generator_ColumnPropNameInRow="recursos_nom" msprop:Generator_ColumnVarNameInTable="columnrecursos_nom" msprop:Generator_ColumnPropNameInTable="recursos_nomColumn" msprop:Generator_UserColumnName="recursos_nom" minOccurs="0">
+              <xs:element name="recursos_nom" msprop:nullValue="_empty" msprop:Generator_ColumnPropNameInRow="recursos_nom" msprop:Generator_ColumnVarNameInTable="columnrecursos_nom" msprop:Generator_ColumnPropNameInTable="recursos_nomColumn" msprop:Generator_UserColumnName="recursos_nom">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="50" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="recursos_component_nom" msprop:nullValue="_empty" msprop:Generator_ColumnPropNameInRow="recursos_component_nom" msprop:Generator_ColumnVarNameInTable="columnrecursos_component_nom" msprop:Generator_ColumnPropNameInTable="recursos_component_nomColumn" msprop:Generator_UserColumnName="recursos_component_nom" minOccurs="0">
+              <xs:element name="recursos_component_nom" msprop:nullValue="_empty" msprop:Generator_ColumnPropNameInRow="recursos_component_nom" msprop:Generator_ColumnVarNameInTable="columnrecursos_component_nom" msprop:Generator_ColumnPropNameInTable="recursos_component_nomColumn" msprop:Generator_UserColumnName="recursos_component_nom">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="50" />
@@ -1177,7 +1177,7 @@
         <xs:element name="Serveis" msprop:Generator_TableClassName="ServeisDataTable" msprop:Generator_TableVarName="tableServeis" msprop:Generator_TablePropName="Serveis" msprop:Generator_RowDeletingName="ServeisRowDeleting" msprop:Generator_RowChangingName="ServeisRowChanging" msprop:Generator_RowEvHandlerName="ServeisRowChangeEventHandler" msprop:Generator_RowDeletedName="ServeisRowDeleted" msprop:Generator_UserTableName="Serveis" msprop:Generator_RowChangedName="ServeisRowChanged" msprop:Generator_RowEvArgName="ServeisRowChangeEvent" msprop:Generator_RowClassName="ServeisRow">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="serveis_nom" msprop:nullValue="_empty" msprop:Generator_ColumnPropNameInRow="serveis_nom" msprop:Generator_ColumnVarNameInTable="columnserveis_nom" msprop:Generator_ColumnPropNameInTable="serveis_nomColumn" msprop:Generator_UserColumnName="serveis_nom" minOccurs="0">
+              <xs:element name="serveis_nom" msprop:nullValue="_empty" msprop:Generator_ColumnPropNameInRow="serveis_nom" msprop:Generator_ColumnVarNameInTable="columnserveis_nom" msprop:Generator_ColumnPropNameInTable="serveis_nomColumn" msprop:Generator_UserColumnName="serveis_nom">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="50" />

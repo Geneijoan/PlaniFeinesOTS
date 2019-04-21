@@ -5587,11 +5587,11 @@ Partial Public Class PlaniFeinesDataSet
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
         Public Property llocs_dia_setmana() As Short
             Get
-                Try 
+                If Me.Isllocs_dia_setmanaNull Then
+                    Return 0
+                Else
                     Return CType(Me(Me.tableLlocs.llocs_dia_setmanaColumn),Short)
-                Catch e As Global.System.InvalidCastException
-                    Throw New Global.System.Data.StrongTypingException("El valor de la columna 'llocs_dia_setmana' de la tabla 'Llocs' es DBNull.", e)
-                End Try
+                End If
             End Get
             Set
                 Me(Me.tableLlocs.llocs_dia_setmanaColumn) = value

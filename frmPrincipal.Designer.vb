@@ -177,6 +177,27 @@ Partial Class frmPrincipal
         Me.TabPageClients = New System.Windows.Forms.TabPage()
         Me.SplitContainer3 = New System.Windows.Forms.SplitContainer()
         Me.tvClients = New System.Windows.Forms.TreeView()
+        Me.pnlLlocs = New System.Windows.Forms.Panel()
+        Me.Llocs_horaComboBox = New System.Windows.Forms.ComboBox()
+        Me.Llocs_periodicitat_diesTextBox = New System.Windows.Forms.TextBox()
+        Me.lblLloc = New System.Windows.Forms.Label()
+        Me.Llocs_quotaTextBox = New System.Windows.Forms.TextBox()
+        Me.Recursos_nomComboBox = New System.Windows.Forms.ComboBox()
+        Me.Clients_nomTextBox1 = New System.Windows.Forms.TextBox()
+        Me.cmbDiesSetmana = New System.Windows.Forms.ComboBox()
+        Me.Llocs_observacionsTextBox = New System.Windows.Forms.TextBox()
+        Me.Llocs_minuts_previstMaskedTextBox = New System.Windows.Forms.MaskedTextBox()
+        Me.Label6 = New System.Windows.Forms.Label()
+        Me.Llocs_ultim_dia_mesCheckBox = New System.Windows.Forms.CheckBox()
+        Me.Llocs_primer_dia_mesCheckBox = New System.Windows.Forms.CheckBox()
+        Me.Llocs_diumengeCheckBox = New System.Windows.Forms.CheckBox()
+        Me.Llocs_dissabteCheckBox = New System.Windows.Forms.CheckBox()
+        Me.Label5 = New System.Windows.Forms.Label()
+        Me.Llocs_telefonTextBox = New System.Windows.Forms.TextBox()
+        Me.Llocs_poblacioTextBox = New System.Windows.Forms.TextBox()
+        Me.Llocs_adreçaTextBox = New System.Windows.Forms.TextBox()
+        Me.Llocs_nomTextBox = New System.Windows.Forms.TextBox()
+        Me.Llocs_dia_setmanaTextBox = New System.Windows.Forms.TextBox()
         Me.pnlClients = New System.Windows.Forms.Panel()
         Me.Clients_observacionsTextBox = New System.Windows.Forms.TextBox()
         Me.Clients_emailTextBox = New System.Windows.Forms.TextBox()
@@ -212,27 +233,6 @@ Partial Class frmPrincipal
         Me.Xecs_data_entregaDateTimePicker = New System.Windows.Forms.DateTimePicker()
         Me.Clients_nomTextBox2 = New System.Windows.Forms.TextBox()
         Me.lblXec = New System.Windows.Forms.Label()
-        Me.pnlLlocs = New System.Windows.Forms.Panel()
-        Me.Llocs_horaComboBox = New System.Windows.Forms.ComboBox()
-        Me.Llocs_periodicitat_diesTextBox = New System.Windows.Forms.TextBox()
-        Me.lblLloc = New System.Windows.Forms.Label()
-        Me.Llocs_quotaTextBox = New System.Windows.Forms.TextBox()
-        Me.Recursos_nomComboBox = New System.Windows.Forms.ComboBox()
-        Me.Clients_nomTextBox1 = New System.Windows.Forms.TextBox()
-        Me.cmbDiesSetmana = New System.Windows.Forms.ComboBox()
-        Me.Llocs_observacionsTextBox = New System.Windows.Forms.TextBox()
-        Me.Llocs_minuts_previstMaskedTextBox = New System.Windows.Forms.MaskedTextBox()
-        Me.Label6 = New System.Windows.Forms.Label()
-        Me.Llocs_ultim_dia_mesCheckBox = New System.Windows.Forms.CheckBox()
-        Me.Llocs_primer_dia_mesCheckBox = New System.Windows.Forms.CheckBox()
-        Me.Llocs_diumengeCheckBox = New System.Windows.Forms.CheckBox()
-        Me.Llocs_dissabteCheckBox = New System.Windows.Forms.CheckBox()
-        Me.Label5 = New System.Windows.Forms.Label()
-        Me.Llocs_telefonTextBox = New System.Windows.Forms.TextBox()
-        Me.Llocs_poblacioTextBox = New System.Windows.Forms.TextBox()
-        Me.Llocs_adreçaTextBox = New System.Windows.Forms.TextBox()
-        Me.Llocs_nomTextBox = New System.Windows.Forms.TextBox()
-        Me.Llocs_dia_setmanaTextBox = New System.Windows.Forms.TextBox()
         Me.TabPageRecursosIServeis = New System.Windows.Forms.TabPage()
         Me.SplitContainer6 = New System.Windows.Forms.SplitContainer()
         Me.RecursosDataGridView = New System.Windows.Forms.DataGridView()
@@ -332,13 +332,13 @@ Partial Class frmPrincipal
         Me.SplitContainer3.Panel1.SuspendLayout()
         Me.SplitContainer3.Panel2.SuspendLayout()
         Me.SplitContainer3.SuspendLayout()
+        Me.pnlLlocs.SuspendLayout()
         Me.pnlClients.SuspendLayout()
         Me.pnlServeis.SuspendLayout()
         CType(Me.Llocs_ServeisBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.ServeisBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pnlXecs.SuspendLayout()
         CType(Me.XecsBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.pnlLlocs.SuspendLayout()
         Me.TabPageRecursosIServeis.SuspendLayout()
         CType(Me.SplitContainer6, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer6.Panel1.SuspendLayout()
@@ -902,6 +902,7 @@ Partial Class frmPrincipal
         '
         Me.LlocsBindingSource.DataMember = "Llocs"
         Me.LlocsBindingSource.DataSource = Me.PlaniFeinesDataSet
+        Me.LlocsBindingSource.Sort = "llocs_nom"
         '
         'PlaniFeinesDataSet
         '
@@ -920,7 +921,7 @@ Partial Class frmPrincipal
         Me.Calendari.MinimumSize = New System.Drawing.Size(234, 150)
         Me.Calendari.Name = "Calendari"
         Me.Calendari.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.Calendari.SelectedDate = New Date(2019, 4, 18, 0, 0, 0, 0)
+        Me.Calendari.SelectedDate = New Date(2019, 4, 22, 0, 0, 0, 0)
         Me.Calendari.Size = New System.Drawing.Size(234, 150)
         Me.Calendari.TabIndex = 7
         '
@@ -959,7 +960,7 @@ Partial Class frmPrincipal
         Me.RecursosSelDataGridView.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.RecursosSelDataGridView.RowHeadersVisible = False
         Me.RecursosSelDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.RecursosSelDataGridView.Size = New System.Drawing.Size(232, 121)
+        Me.RecursosSelDataGridView.Size = New System.Drawing.Size(232, 119)
         Me.RecursosSelDataGridView.TabIndex = 7
         '
         'recursos_nom
@@ -996,7 +997,7 @@ Partial Class frmPrincipal
         'txtNumFeina
         '
         Me.txtNumFeina.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.txtNumFeina.Location = New System.Drawing.Point(74, 146)
+        Me.txtNumFeina.Location = New System.Drawing.Point(74, 143)
         Me.txtNumFeina.MaxLength = 10
         Me.txtNumFeina.Name = "txtNumFeina"
         Me.txtNumFeina.Size = New System.Drawing.Size(60, 20)
@@ -1008,7 +1009,7 @@ Partial Class frmPrincipal
         Me.Label19.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Label19.AutoSize = True
         Me.Label19.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label19.Location = New System.Drawing.Point(4, 150)
+        Me.Label19.Location = New System.Drawing.Point(4, 147)
         Me.Label19.Name = "Label19"
         Me.Label19.Size = New System.Drawing.Size(71, 13)
         Me.Label19.TabIndex = 3
@@ -1017,7 +1018,7 @@ Partial Class frmPrincipal
         'btnImprimirAgenda
         '
         Me.btnImprimirAgenda.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnImprimirAgenda.Location = New System.Drawing.Point(139, 145)
+        Me.btnImprimirAgenda.Location = New System.Drawing.Point(139, 142)
         Me.btnImprimirAgenda.Name = "btnImprimirAgenda"
         Me.btnImprimirAgenda.Size = New System.Drawing.Size(96, 23)
         Me.btnImprimirAgenda.TabIndex = 9
@@ -1039,7 +1040,7 @@ Partial Class frmPrincipal
         Me.AgendaGrid.AllowMultiDayElements = False
         Me.AgendaGrid.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
         Me.AgendaGrid.BackColor = System.Drawing.SystemColors.ControlDark
-        Me.AgendaGrid.DisplayDate = New Date(2019, 4, 18, 0, 0, 0, 0)
+        Me.AgendaGrid.DisplayDate = New Date(2019, 4, 22, 0, 0, 0, 0)
         Me.AgendaGrid.Dock = System.Windows.Forms.DockStyle.Top
         Me.AgendaGrid.EndTimeOfDay = "24:00"
         Me.AgendaGrid.ExtResourceOverlap = True
@@ -1127,7 +1128,7 @@ Partial Class frmPrincipal
         Me.dgvHoresExtra.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect
         Me.dgvHoresExtra.ShowEditingIcon = False
         Me.dgvHoresExtra.ShowRowErrors = False
-        Me.dgvHoresExtra.Size = New System.Drawing.Size(495, 22)
+        Me.dgvHoresExtra.Size = New System.Drawing.Size(505, 22)
         Me.dgvHoresExtra.StandardTab = True
         Me.dgvHoresExtra.TabIndex = 3
         '
@@ -1751,6 +1752,7 @@ Partial Class frmPrincipal
         '
         Me.ClientsBindingSource.DataMember = "Clients"
         Me.ClientsBindingSource.DataSource = Me.PlaniFeinesDataSet
+        Me.ClientsBindingSource.Sort = "clients_nom"
         '
         'Label14
         '
@@ -1804,10 +1806,10 @@ Partial Class frmPrincipal
         '
         'SplitContainer3.Panel2
         '
+        Me.SplitContainer3.Panel2.Controls.Add(Me.pnlLlocs)
         Me.SplitContainer3.Panel2.Controls.Add(Me.pnlClients)
         Me.SplitContainer3.Panel2.Controls.Add(Me.pnlServeis)
         Me.SplitContainer3.Panel2.Controls.Add(Me.pnlXecs)
-        Me.SplitContainer3.Panel2.Controls.Add(Me.pnlLlocs)
         Me.SplitContainer3.Size = New System.Drawing.Size(757, 497)
         Me.SplitContainer3.SplitterDistance = 376
         Me.SplitContainer3.TabIndex = 0
@@ -1824,395 +1826,6 @@ Partial Class frmPrincipal
         Me.tvClients.ShowRootLines = False
         Me.tvClients.Size = New System.Drawing.Size(372, 493)
         Me.tvClients.TabIndex = 2
-        '
-        'pnlClients
-        '
-        Me.pnlClients.AutoScroll = True
-        Me.pnlClients.Controls.Add(Clients_observacionsLabel)
-        Me.pnlClients.Controls.Add(Me.Clients_observacionsTextBox)
-        Me.pnlClients.Controls.Add(Clients_emailLabel)
-        Me.pnlClients.Controls.Add(Me.Clients_emailTextBox)
-        Me.pnlClients.Controls.Add(Clients_cccLabel)
-        Me.pnlClients.Controls.Add(Me.Clients_cccTextBox)
-        Me.pnlClients.Controls.Add(Clients_xecsLabel)
-        Me.pnlClients.Controls.Add(Me.Clients_xecsCheckBox)
-        Me.pnlClients.Controls.Add(Clients_data_altaLabel)
-        Me.pnlClients.Controls.Add(Me.Clients_data_altaTextBox)
-        Me.pnlClients.Controls.Add(Clients_telefonsLabel)
-        Me.pnlClients.Controls.Add(Me.Clients_telefonsTextBox)
-        Me.pnlClients.Controls.Add(Clients_codi_postalLabel)
-        Me.pnlClients.Controls.Add(Me.Clients_codi_postalMaskedTextBox)
-        Me.pnlClients.Controls.Add(Clients_poblacioLabel)
-        Me.pnlClients.Controls.Add(Me.Clients_poblacioTextBox)
-        Me.pnlClients.Controls.Add(Clients_adreçaLabel)
-        Me.pnlClients.Controls.Add(Me.Clients_adreçaTextBox)
-        Me.pnlClients.Controls.Add(Clients_NIFLabel)
-        Me.pnlClients.Controls.Add(Me.Clients_NIFTextBox)
-        Me.pnlClients.Controls.Add(Clients_nomLabel)
-        Me.pnlClients.Controls.Add(Me.Clients_nomTextBox)
-        Me.pnlClients.Controls.Add(Me.lblClient)
-        Me.pnlClients.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pnlClients.Location = New System.Drawing.Point(0, 0)
-        Me.pnlClients.Name = "pnlClients"
-        Me.pnlClients.Size = New System.Drawing.Size(373, 493)
-        Me.pnlClients.TabIndex = 0
-        Me.pnlClients.Visible = False
-        '
-        'Clients_observacionsTextBox
-        '
-        Me.Clients_observacionsTextBox.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Clients_observacionsTextBox.DataBindings.Add(New System.Windows.Forms.Binding("Text", Me.ClientsBindingSource, "clients_observacions", True))
-        Me.Clients_observacionsTextBox.Location = New System.Drawing.Point(98, 299)
-        Me.Clients_observacionsTextBox.Multiline = True
-        Me.Clients_observacionsTextBox.Name = "Clients_observacionsTextBox"
-        Me.Clients_observacionsTextBox.Size = New System.Drawing.Size(261, 181)
-        Me.Clients_observacionsTextBox.TabIndex = 11
-        '
-        'Clients_emailTextBox
-        '
-        Me.Clients_emailTextBox.DataBindings.Add(New System.Windows.Forms.Binding("Text", Me.ClientsBindingSource, "clients_email", True))
-        Me.Clients_emailTextBox.Location = New System.Drawing.Point(98, 267)
-        Me.Clients_emailTextBox.MaxLength = 50
-        Me.Clients_emailTextBox.Name = "Clients_emailTextBox"
-        Me.Clients_emailTextBox.Size = New System.Drawing.Size(264, 20)
-        Me.Clients_emailTextBox.TabIndex = 10
-        '
-        'Clients_cccTextBox
-        '
-        Me.Clients_cccTextBox.DataBindings.Add(New System.Windows.Forms.Binding("Text", Me.ClientsBindingSource, "clients_ccc", True))
-        Me.Clients_cccTextBox.Location = New System.Drawing.Point(98, 239)
-        Me.Clients_cccTextBox.MaxLength = 23
-        Me.Clients_cccTextBox.Name = "Clients_cccTextBox"
-        Me.Clients_cccTextBox.Size = New System.Drawing.Size(175, 20)
-        Me.Clients_cccTextBox.TabIndex = 9
-        '
-        'Clients_xecsCheckBox
-        '
-        Me.Clients_xecsCheckBox.DataBindings.Add(New System.Windows.Forms.Binding("CheckState", Me.ClientsBindingSource, "clients_xecs", True))
-        Me.Clients_xecsCheckBox.Location = New System.Drawing.Point(98, 209)
-        Me.Clients_xecsCheckBox.Name = "Clients_xecsCheckBox"
-        Me.Clients_xecsCheckBox.Size = New System.Drawing.Size(23, 24)
-        Me.Clients_xecsCheckBox.TabIndex = 8
-        Me.Clients_xecsCheckBox.UseVisualStyleBackColor = True
-        '
-        'Clients_data_altaTextBox
-        '
-        Me.Clients_data_altaTextBox.DataBindings.Add(New System.Windows.Forms.Binding("Text", Me.ClientsBindingSource, "clients_data_alta", True))
-        Me.Clients_data_altaTextBox.Location = New System.Drawing.Point(97, 27)
-        Me.Clients_data_altaTextBox.Name = "Clients_data_altaTextBox"
-        Me.Clients_data_altaTextBox.ReadOnly = True
-        Me.Clients_data_altaTextBox.Size = New System.Drawing.Size(100, 20)
-        Me.Clients_data_altaTextBox.TabIndex = 14
-        Me.Clients_data_altaTextBox.TabStop = False
-        '
-        'Clients_telefonsTextBox
-        '
-        Me.Clients_telefonsTextBox.DataBindings.Add(New System.Windows.Forms.Binding("Text", Me.ClientsBindingSource, "clients_telefons", True))
-        Me.Clients_telefonsTextBox.Location = New System.Drawing.Point(98, 184)
-        Me.Clients_telefonsTextBox.MaxLength = 50
-        Me.Clients_telefonsTextBox.Name = "Clients_telefonsTextBox"
-        Me.Clients_telefonsTextBox.Size = New System.Drawing.Size(175, 20)
-        Me.Clients_telefonsTextBox.TabIndex = 7
-        '
-        'Clients_codi_postalMaskedTextBox
-        '
-        Me.Clients_codi_postalMaskedTextBox.AllowPromptAsInput = False
-        Me.Clients_codi_postalMaskedTextBox.DataBindings.Add(New System.Windows.Forms.Binding("Text", Me.ClientsBindingSource, "clients_codi_postal", True))
-        Me.Clients_codi_postalMaskedTextBox.HidePromptOnLeave = True
-        Me.Clients_codi_postalMaskedTextBox.Location = New System.Drawing.Point(98, 158)
-        Me.Clients_codi_postalMaskedTextBox.Mask = "00000"
-        Me.Clients_codi_postalMaskedTextBox.Name = "Clients_codi_postalMaskedTextBox"
-        Me.Clients_codi_postalMaskedTextBox.PromptChar = Global.Microsoft.VisualBasic.ChrW(32)
-        Me.Clients_codi_postalMaskedTextBox.Size = New System.Drawing.Size(54, 20)
-        Me.Clients_codi_postalMaskedTextBox.TabIndex = 6
-        '
-        'Clients_poblacioTextBox
-        '
-        Me.Clients_poblacioTextBox.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Clients_poblacioTextBox.DataBindings.Add(New System.Windows.Forms.Binding("Text", Me.ClientsBindingSource, "clients_poblacio", True))
-        Me.Clients_poblacioTextBox.Location = New System.Drawing.Point(98, 132)
-        Me.Clients_poblacioTextBox.MaxLength = 50
-        Me.Clients_poblacioTextBox.Name = "Clients_poblacioTextBox"
-        Me.Clients_poblacioTextBox.Size = New System.Drawing.Size(261, 20)
-        Me.Clients_poblacioTextBox.TabIndex = 5
-        '
-        'Clients_adreçaTextBox
-        '
-        Me.Clients_adreçaTextBox.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Clients_adreçaTextBox.DataBindings.Add(New System.Windows.Forms.Binding("Text", Me.ClientsBindingSource, "clients_adreça", True))
-        Me.Clients_adreçaTextBox.Location = New System.Drawing.Point(98, 106)
-        Me.Clients_adreçaTextBox.MaxLength = 50
-        Me.Clients_adreçaTextBox.Name = "Clients_adreçaTextBox"
-        Me.Clients_adreçaTextBox.Size = New System.Drawing.Size(261, 20)
-        Me.Clients_adreçaTextBox.TabIndex = 4
-        '
-        'Clients_NIFTextBox
-        '
-        Me.Clients_NIFTextBox.DataBindings.Add(New System.Windows.Forms.Binding("Text", Me.ClientsBindingSource, "clients_NIF", True))
-        Me.Clients_NIFTextBox.Location = New System.Drawing.Point(98, 80)
-        Me.Clients_NIFTextBox.MaxLength = 10
-        Me.Clients_NIFTextBox.Name = "Clients_NIFTextBox"
-        Me.Clients_NIFTextBox.Size = New System.Drawing.Size(100, 20)
-        Me.Clients_NIFTextBox.TabIndex = 3
-        '
-        'Clients_nomTextBox
-        '
-        Me.Clients_nomTextBox.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Clients_nomTextBox.DataBindings.Add(New System.Windows.Forms.Binding("Text", Me.ClientsBindingSource, "clients_nom", True))
-        Me.Clients_nomTextBox.Location = New System.Drawing.Point(98, 54)
-        Me.Clients_nomTextBox.MaxLength = 50
-        Me.Clients_nomTextBox.Name = "Clients_nomTextBox"
-        Me.Clients_nomTextBox.Size = New System.Drawing.Size(261, 20)
-        Me.Clients_nomTextBox.TabIndex = 2
-        '
-        'lblClient
-        '
-        Me.lblClient.AutoSize = True
-        Me.lblClient.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblClient.Location = New System.Drawing.Point(4, 4)
-        Me.lblClient.Name = "lblClient"
-        Me.lblClient.Size = New System.Drawing.Size(39, 13)
-        Me.lblClient.TabIndex = 0
-        Me.lblClient.Text = "Client"
-        '
-        'pnlServeis
-        '
-        Me.pnlServeis.AutoScroll = True
-        Me.pnlServeis.Controls.Add(Me.Llocs_serveis_preu_unTextBox)
-        Me.pnlServeis.Controls.Add(Me.Llocs_serveis_quantitatTextBox)
-        Me.pnlServeis.Controls.Add(Me.Label8)
-        Me.pnlServeis.Controls.Add(Llocs_serveis_preu_unLabel)
-        Me.pnlServeis.Controls.Add(Me.txtUnitat)
-        Me.pnlServeis.Controls.Add(Llocs_serveis_quantitatLabel)
-        Me.pnlServeis.Controls.Add(Serveis_nomLabel)
-        Me.pnlServeis.Controls.Add(Me.Serveis_nomComboBox)
-        Me.pnlServeis.Controls.Add(Llocs_nomLabel1)
-        Me.pnlServeis.Controls.Add(Me.Llocs_nomTextBox1)
-        Me.pnlServeis.Controls.Add(Me.lblServei)
-        Me.pnlServeis.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pnlServeis.Location = New System.Drawing.Point(0, 0)
-        Me.pnlServeis.Name = "pnlServeis"
-        Me.pnlServeis.Size = New System.Drawing.Size(373, 493)
-        Me.pnlServeis.TabIndex = 2
-        Me.pnlServeis.Visible = False
-        '
-        'Llocs_serveis_preu_unTextBox
-        '
-        Me.Llocs_serveis_preu_unTextBox.DataBindings.Add(New System.Windows.Forms.Binding("Text", Me.Llocs_ServeisBindingSource, "llocs_serveis_preu_un", True))
-        Me.Llocs_serveis_preu_unTextBox.Location = New System.Drawing.Point(82, 119)
-        Me.Llocs_serveis_preu_unTextBox.MaxLength = 12
-        Me.Llocs_serveis_preu_unTextBox.Name = "Llocs_serveis_preu_unTextBox"
-        Me.Llocs_serveis_preu_unTextBox.Size = New System.Drawing.Size(100, 20)
-        Me.Llocs_serveis_preu_unTextBox.TabIndex = 6
-        Me.Llocs_serveis_preu_unTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
-        '
-        'Llocs_ServeisBindingSource
-        '
-        Me.Llocs_ServeisBindingSource.DataMember = "LlocsLlocs_Serveis"
-        Me.Llocs_ServeisBindingSource.DataSource = Me.LlocsBindingSource
-        '
-        'Llocs_serveis_quantitatTextBox
-        '
-        Me.Llocs_serveis_quantitatTextBox.DataBindings.Add(New System.Windows.Forms.Binding("Text", Me.Llocs_ServeisBindingSource, "llocs_serveis_quantitat", True))
-        Me.Llocs_serveis_quantitatTextBox.Location = New System.Drawing.Point(82, 88)
-        Me.Llocs_serveis_quantitatTextBox.MaxLength = 12
-        Me.Llocs_serveis_quantitatTextBox.Name = "Llocs_serveis_quantitatTextBox"
-        Me.Llocs_serveis_quantitatTextBox.Size = New System.Drawing.Size(100, 20)
-        Me.Llocs_serveis_quantitatTextBox.TabIndex = 5
-        Me.Llocs_serveis_quantitatTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
-        '
-        'Label8
-        '
-        Me.Label8.AutoSize = True
-        Me.Label8.Location = New System.Drawing.Point(189, 122)
-        Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(13, 13)
-        Me.Label8.TabIndex = 10
-        Me.Label8.Text = "€"
-        '
-        'txtUnitat
-        '
-        Me.txtUnitat.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtUnitat.BorderStyle = System.Windows.Forms.BorderStyle.None
-        Me.txtUnitat.DataBindings.Add(New System.Windows.Forms.Binding("Text", Me.ServeisBindingSource, "serveis_unitat", True))
-        Me.txtUnitat.Location = New System.Drawing.Point(188, 91)
-        Me.txtUnitat.Name = "txtUnitat"
-        Me.txtUnitat.ReadOnly = True
-        Me.txtUnitat.Size = New System.Drawing.Size(171, 13)
-        Me.txtUnitat.TabIndex = 7
-        Me.txtUnitat.TabStop = False
-        '
-        'ServeisBindingSource
-        '
-        Me.ServeisBindingSource.DataMember = "Serveis"
-        Me.ServeisBindingSource.DataSource = Me.PlaniFeinesDataSet
-        '
-        'Serveis_nomComboBox
-        '
-        Me.Serveis_nomComboBox.DataBindings.Add(New System.Windows.Forms.Binding("Text", Me.Llocs_ServeisBindingSource, "serveis_nom", True))
-        Me.Serveis_nomComboBox.DataSource = Me.ServeisBindingSource
-        Me.Serveis_nomComboBox.DisplayMember = "serveis_nom"
-        Me.Serveis_nomComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.Serveis_nomComboBox.FormattingEnabled = True
-        Me.Serveis_nomComboBox.Location = New System.Drawing.Point(82, 57)
-        Me.Serveis_nomComboBox.Name = "Serveis_nomComboBox"
-        Me.Serveis_nomComboBox.Size = New System.Drawing.Size(144, 21)
-        Me.Serveis_nomComboBox.TabIndex = 4
-        Me.Serveis_nomComboBox.ValueMember = "serveis_nom"
-        '
-        'Llocs_nomTextBox1
-        '
-        Me.Llocs_nomTextBox1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Llocs_nomTextBox1.DataBindings.Add(New System.Windows.Forms.Binding("Text", Me.Llocs_ServeisBindingSource, "llocs_nom", True))
-        Me.Llocs_nomTextBox1.Location = New System.Drawing.Point(82, 28)
-        Me.Llocs_nomTextBox1.Name = "Llocs_nomTextBox1"
-        Me.Llocs_nomTextBox1.ReadOnly = True
-        Me.Llocs_nomTextBox1.Size = New System.Drawing.Size(277, 20)
-        Me.Llocs_nomTextBox1.TabIndex = 2
-        Me.Llocs_nomTextBox1.TabStop = False
-        '
-        'lblServei
-        '
-        Me.lblServei.AutoSize = True
-        Me.lblServei.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblServei.Location = New System.Drawing.Point(4, 4)
-        Me.lblServei.Name = "lblServei"
-        Me.lblServei.Size = New System.Drawing.Size(43, 13)
-        Me.lblServei.TabIndex = 0
-        Me.lblServei.Text = "Servei"
-        '
-        'pnlXecs
-        '
-        Me.pnlXecs.AutoScroll = True
-        Me.pnlXecs.Controls.Add(Me.Label11)
-        Me.pnlXecs.Controls.Add(Me.lblQuants)
-        Me.pnlXecs.Controls.Add(Me.txtQuants)
-        Me.pnlXecs.Controls.Add(Xecs_data_liquidatLabel)
-        Me.pnlXecs.Controls.Add(Me.Xecs_data_liquidatTextBox)
-        Me.pnlXecs.Controls.Add(Feines_idLabel)
-        Me.pnlXecs.Controls.Add(Me.Feines_idTextBox)
-        Me.pnlXecs.Controls.Add(Xecs_valorLabel)
-        Me.pnlXecs.Controls.Add(Me.Xecs_valorTextBox)
-        Me.pnlXecs.Controls.Add(Me.Xecs_idTextBox)
-        Me.pnlXecs.Controls.Add(Label9)
-        Me.pnlXecs.Controls.Add(Xecs_data_entregaLabel)
-        Me.pnlXecs.Controls.Add(Me.Xecs_data_entregaDateTimePicker)
-        Me.pnlXecs.Controls.Add(Me.Clients_nomTextBox2)
-        Me.pnlXecs.Controls.Add(Xecs_idLabel)
-        Me.pnlXecs.Controls.Add(Me.lblXec)
-        Me.pnlXecs.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pnlXecs.Location = New System.Drawing.Point(0, 0)
-        Me.pnlXecs.Name = "pnlXecs"
-        Me.pnlXecs.Size = New System.Drawing.Size(373, 493)
-        Me.pnlXecs.TabIndex = 3
-        Me.pnlXecs.Visible = False
-        '
-        'Label11
-        '
-        Me.Label11.AutoSize = True
-        Me.Label11.Location = New System.Drawing.Point(202, 109)
-        Me.Label11.Name = "Label11"
-        Me.Label11.Size = New System.Drawing.Size(13, 13)
-        Me.Label11.TabIndex = 15
-        Me.Label11.Text = "€"
-        '
-        'lblQuants
-        '
-        Me.lblQuants.AutoSize = True
-        Me.lblQuants.Location = New System.Drawing.Point(209, 53)
-        Me.lblQuants.Name = "lblQuants"
-        Me.lblQuants.Size = New System.Drawing.Size(44, 13)
-        Me.lblQuants.TabIndex = 14
-        Me.lblQuants.Text = "Quants:"
-        '
-        'txtQuants
-        '
-        Me.txtQuants.Location = New System.Drawing.Point(262, 50)
-        Me.txtQuants.MaxLength = 3
-        Me.txtQuants.Name = "txtQuants"
-        Me.txtQuants.Size = New System.Drawing.Size(40, 20)
-        Me.txtQuants.TabIndex = 6
-        '
-        'Xecs_data_liquidatTextBox
-        '
-        Me.Xecs_data_liquidatTextBox.DataBindings.Add(New System.Windows.Forms.Binding("Text", Me.XecsBindingSource, "xecs_data_liquidat", True))
-        Me.Xecs_data_liquidatTextBox.Location = New System.Drawing.Point(99, 158)
-        Me.Xecs_data_liquidatTextBox.Name = "Xecs_data_liquidatTextBox"
-        Me.Xecs_data_liquidatTextBox.ReadOnly = True
-        Me.Xecs_data_liquidatTextBox.Size = New System.Drawing.Size(100, 20)
-        Me.Xecs_data_liquidatTextBox.TabIndex = 12
-        Me.Xecs_data_liquidatTextBox.TabStop = False
-        '
-        'XecsBindingSource
-        '
-        Me.XecsBindingSource.DataMember = "Xecs"
-        Me.XecsBindingSource.DataSource = Me.PlaniFeinesDataSet
-        '
-        'Feines_idTextBox
-        '
-        Me.Feines_idTextBox.DataBindings.Add(New System.Windows.Forms.Binding("Text", Me.XecsBindingSource, "feines_id", True))
-        Me.Feines_idTextBox.Location = New System.Drawing.Point(99, 132)
-        Me.Feines_idTextBox.Name = "Feines_idTextBox"
-        Me.Feines_idTextBox.ReadOnly = True
-        Me.Feines_idTextBox.Size = New System.Drawing.Size(100, 20)
-        Me.Feines_idTextBox.TabIndex = 10
-        Me.Feines_idTextBox.TabStop = False
-        '
-        'Xecs_valorTextBox
-        '
-        Me.Xecs_valorTextBox.DataBindings.Add(New System.Windows.Forms.Binding("Text", Me.XecsBindingSource, "xecs_valor", True))
-        Me.Xecs_valorTextBox.Location = New System.Drawing.Point(98, 106)
-        Me.Xecs_valorTextBox.Name = "Xecs_valorTextBox"
-        Me.Xecs_valorTextBox.Size = New System.Drawing.Size(100, 20)
-        Me.Xecs_valorTextBox.TabIndex = 7
-        Me.Xecs_valorTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
-        '
-        'Xecs_idTextBox
-        '
-        Me.Xecs_idTextBox.DataBindings.Add(New System.Windows.Forms.Binding("Text", Me.XecsBindingSource, "xecs_id", True))
-        Me.Xecs_idTextBox.Location = New System.Drawing.Point(98, 51)
-        Me.Xecs_idTextBox.MaxLength = 5
-        Me.Xecs_idTextBox.Name = "Xecs_idTextBox"
-        Me.Xecs_idTextBox.Size = New System.Drawing.Size(100, 20)
-        Me.Xecs_idTextBox.TabIndex = 5
-        '
-        'Xecs_data_entregaDateTimePicker
-        '
-        Me.Xecs_data_entregaDateTimePicker.DataBindings.Add(New System.Windows.Forms.Binding("Value", Me.XecsBindingSource, "xecs_data_entrega", True))
-        Me.Xecs_data_entregaDateTimePicker.Format = System.Windows.Forms.DateTimePickerFormat.[Short]
-        Me.Xecs_data_entregaDateTimePicker.Location = New System.Drawing.Point(98, 77)
-        Me.Xecs_data_entregaDateTimePicker.Name = "Xecs_data_entregaDateTimePicker"
-        Me.Xecs_data_entregaDateTimePicker.Size = New System.Drawing.Size(99, 20)
-        Me.Xecs_data_entregaDateTimePicker.TabIndex = 6
-        '
-        'Clients_nomTextBox2
-        '
-        Me.Clients_nomTextBox2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Clients_nomTextBox2.DataBindings.Add(New System.Windows.Forms.Binding("Text", Me.XecsBindingSource, "clients_nom", True))
-        Me.Clients_nomTextBox2.Location = New System.Drawing.Point(99, 24)
-        Me.Clients_nomTextBox2.Name = "Clients_nomTextBox2"
-        Me.Clients_nomTextBox2.ReadOnly = True
-        Me.Clients_nomTextBox2.Size = New System.Drawing.Size(260, 20)
-        Me.Clients_nomTextBox2.TabIndex = 4
-        Me.Clients_nomTextBox2.TabStop = False
-        '
-        'lblXec
-        '
-        Me.lblXec.AutoSize = True
-        Me.lblXec.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblXec.Location = New System.Drawing.Point(4, 4)
-        Me.lblXec.Name = "lblXec"
-        Me.lblXec.Size = New System.Drawing.Size(29, 13)
-        Me.lblXec.TabIndex = 0
-        Me.lblXec.Text = "Xec"
         '
         'pnlLlocs
         '
@@ -2466,6 +2079,398 @@ Partial Class frmPrincipal
         Me.Llocs_dia_setmanaTextBox.Size = New System.Drawing.Size(25, 20)
         Me.Llocs_dia_setmanaTextBox.TabIndex = 30
         Me.Llocs_dia_setmanaTextBox.TabStop = False
+        '
+        'pnlClients
+        '
+        Me.pnlClients.AutoScroll = True
+        Me.pnlClients.Controls.Add(Clients_observacionsLabel)
+        Me.pnlClients.Controls.Add(Me.Clients_observacionsTextBox)
+        Me.pnlClients.Controls.Add(Clients_emailLabel)
+        Me.pnlClients.Controls.Add(Me.Clients_emailTextBox)
+        Me.pnlClients.Controls.Add(Clients_cccLabel)
+        Me.pnlClients.Controls.Add(Me.Clients_cccTextBox)
+        Me.pnlClients.Controls.Add(Clients_xecsLabel)
+        Me.pnlClients.Controls.Add(Me.Clients_xecsCheckBox)
+        Me.pnlClients.Controls.Add(Clients_data_altaLabel)
+        Me.pnlClients.Controls.Add(Me.Clients_data_altaTextBox)
+        Me.pnlClients.Controls.Add(Clients_telefonsLabel)
+        Me.pnlClients.Controls.Add(Me.Clients_telefonsTextBox)
+        Me.pnlClients.Controls.Add(Clients_codi_postalLabel)
+        Me.pnlClients.Controls.Add(Me.Clients_codi_postalMaskedTextBox)
+        Me.pnlClients.Controls.Add(Clients_poblacioLabel)
+        Me.pnlClients.Controls.Add(Me.Clients_poblacioTextBox)
+        Me.pnlClients.Controls.Add(Clients_adreçaLabel)
+        Me.pnlClients.Controls.Add(Me.Clients_adreçaTextBox)
+        Me.pnlClients.Controls.Add(Clients_NIFLabel)
+        Me.pnlClients.Controls.Add(Me.Clients_NIFTextBox)
+        Me.pnlClients.Controls.Add(Clients_nomLabel)
+        Me.pnlClients.Controls.Add(Me.Clients_nomTextBox)
+        Me.pnlClients.Controls.Add(Me.lblClient)
+        Me.pnlClients.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.pnlClients.Location = New System.Drawing.Point(0, 0)
+        Me.pnlClients.Name = "pnlClients"
+        Me.pnlClients.Size = New System.Drawing.Size(373, 493)
+        Me.pnlClients.TabIndex = 0
+        Me.pnlClients.Visible = False
+        '
+        'Clients_observacionsTextBox
+        '
+        Me.Clients_observacionsTextBox.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Clients_observacionsTextBox.DataBindings.Add(New System.Windows.Forms.Binding("Text", Me.ClientsBindingSource, "clients_observacions", True))
+        Me.Clients_observacionsTextBox.Location = New System.Drawing.Point(98, 299)
+        Me.Clients_observacionsTextBox.Multiline = True
+        Me.Clients_observacionsTextBox.Name = "Clients_observacionsTextBox"
+        Me.Clients_observacionsTextBox.Size = New System.Drawing.Size(261, 181)
+        Me.Clients_observacionsTextBox.TabIndex = 11
+        '
+        'Clients_emailTextBox
+        '
+        Me.Clients_emailTextBox.DataBindings.Add(New System.Windows.Forms.Binding("Text", Me.ClientsBindingSource, "clients_email", True))
+        Me.Clients_emailTextBox.Location = New System.Drawing.Point(98, 267)
+        Me.Clients_emailTextBox.MaxLength = 50
+        Me.Clients_emailTextBox.Name = "Clients_emailTextBox"
+        Me.Clients_emailTextBox.Size = New System.Drawing.Size(264, 20)
+        Me.Clients_emailTextBox.TabIndex = 10
+        '
+        'Clients_cccTextBox
+        '
+        Me.Clients_cccTextBox.DataBindings.Add(New System.Windows.Forms.Binding("Text", Me.ClientsBindingSource, "clients_ccc", True))
+        Me.Clients_cccTextBox.Location = New System.Drawing.Point(98, 239)
+        Me.Clients_cccTextBox.MaxLength = 23
+        Me.Clients_cccTextBox.Name = "Clients_cccTextBox"
+        Me.Clients_cccTextBox.Size = New System.Drawing.Size(175, 20)
+        Me.Clients_cccTextBox.TabIndex = 9
+        '
+        'Clients_xecsCheckBox
+        '
+        Me.Clients_xecsCheckBox.DataBindings.Add(New System.Windows.Forms.Binding("CheckState", Me.ClientsBindingSource, "clients_xecs", True))
+        Me.Clients_xecsCheckBox.Location = New System.Drawing.Point(98, 209)
+        Me.Clients_xecsCheckBox.Name = "Clients_xecsCheckBox"
+        Me.Clients_xecsCheckBox.Size = New System.Drawing.Size(23, 24)
+        Me.Clients_xecsCheckBox.TabIndex = 8
+        Me.Clients_xecsCheckBox.UseVisualStyleBackColor = True
+        '
+        'Clients_data_altaTextBox
+        '
+        Me.Clients_data_altaTextBox.DataBindings.Add(New System.Windows.Forms.Binding("Text", Me.ClientsBindingSource, "clients_data_alta", True))
+        Me.Clients_data_altaTextBox.Location = New System.Drawing.Point(97, 27)
+        Me.Clients_data_altaTextBox.Name = "Clients_data_altaTextBox"
+        Me.Clients_data_altaTextBox.ReadOnly = True
+        Me.Clients_data_altaTextBox.Size = New System.Drawing.Size(100, 20)
+        Me.Clients_data_altaTextBox.TabIndex = 14
+        Me.Clients_data_altaTextBox.TabStop = False
+        '
+        'Clients_telefonsTextBox
+        '
+        Me.Clients_telefonsTextBox.DataBindings.Add(New System.Windows.Forms.Binding("Text", Me.ClientsBindingSource, "clients_telefons", True))
+        Me.Clients_telefonsTextBox.Location = New System.Drawing.Point(98, 184)
+        Me.Clients_telefonsTextBox.MaxLength = 50
+        Me.Clients_telefonsTextBox.Name = "Clients_telefonsTextBox"
+        Me.Clients_telefonsTextBox.Size = New System.Drawing.Size(175, 20)
+        Me.Clients_telefonsTextBox.TabIndex = 7
+        '
+        'Clients_codi_postalMaskedTextBox
+        '
+        Me.Clients_codi_postalMaskedTextBox.AllowPromptAsInput = False
+        Me.Clients_codi_postalMaskedTextBox.DataBindings.Add(New System.Windows.Forms.Binding("Text", Me.ClientsBindingSource, "clients_codi_postal", True))
+        Me.Clients_codi_postalMaskedTextBox.HidePromptOnLeave = True
+        Me.Clients_codi_postalMaskedTextBox.Location = New System.Drawing.Point(98, 158)
+        Me.Clients_codi_postalMaskedTextBox.Mask = "00000"
+        Me.Clients_codi_postalMaskedTextBox.Name = "Clients_codi_postalMaskedTextBox"
+        Me.Clients_codi_postalMaskedTextBox.PromptChar = Global.Microsoft.VisualBasic.ChrW(32)
+        Me.Clients_codi_postalMaskedTextBox.Size = New System.Drawing.Size(54, 20)
+        Me.Clients_codi_postalMaskedTextBox.TabIndex = 6
+        '
+        'Clients_poblacioTextBox
+        '
+        Me.Clients_poblacioTextBox.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Clients_poblacioTextBox.DataBindings.Add(New System.Windows.Forms.Binding("Text", Me.ClientsBindingSource, "clients_poblacio", True))
+        Me.Clients_poblacioTextBox.Location = New System.Drawing.Point(98, 132)
+        Me.Clients_poblacioTextBox.MaxLength = 50
+        Me.Clients_poblacioTextBox.Name = "Clients_poblacioTextBox"
+        Me.Clients_poblacioTextBox.Size = New System.Drawing.Size(261, 20)
+        Me.Clients_poblacioTextBox.TabIndex = 5
+        '
+        'Clients_adreçaTextBox
+        '
+        Me.Clients_adreçaTextBox.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Clients_adreçaTextBox.DataBindings.Add(New System.Windows.Forms.Binding("Text", Me.ClientsBindingSource, "clients_adreça", True))
+        Me.Clients_adreçaTextBox.Location = New System.Drawing.Point(98, 106)
+        Me.Clients_adreçaTextBox.MaxLength = 50
+        Me.Clients_adreçaTextBox.Name = "Clients_adreçaTextBox"
+        Me.Clients_adreçaTextBox.Size = New System.Drawing.Size(261, 20)
+        Me.Clients_adreçaTextBox.TabIndex = 4
+        '
+        'Clients_NIFTextBox
+        '
+        Me.Clients_NIFTextBox.DataBindings.Add(New System.Windows.Forms.Binding("Text", Me.ClientsBindingSource, "clients_NIF", True))
+        Me.Clients_NIFTextBox.Location = New System.Drawing.Point(98, 80)
+        Me.Clients_NIFTextBox.MaxLength = 10
+        Me.Clients_NIFTextBox.Name = "Clients_NIFTextBox"
+        Me.Clients_NIFTextBox.Size = New System.Drawing.Size(100, 20)
+        Me.Clients_NIFTextBox.TabIndex = 3
+        '
+        'Clients_nomTextBox
+        '
+        Me.Clients_nomTextBox.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Clients_nomTextBox.DataBindings.Add(New System.Windows.Forms.Binding("Text", Me.ClientsBindingSource, "clients_nom", True))
+        Me.Clients_nomTextBox.Location = New System.Drawing.Point(98, 54)
+        Me.Clients_nomTextBox.MaxLength = 50
+        Me.Clients_nomTextBox.Name = "Clients_nomTextBox"
+        Me.Clients_nomTextBox.Size = New System.Drawing.Size(261, 20)
+        Me.Clients_nomTextBox.TabIndex = 2
+        '
+        'lblClient
+        '
+        Me.lblClient.AutoSize = True
+        Me.lblClient.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblClient.Location = New System.Drawing.Point(4, 4)
+        Me.lblClient.Name = "lblClient"
+        Me.lblClient.Size = New System.Drawing.Size(39, 13)
+        Me.lblClient.TabIndex = 0
+        Me.lblClient.Text = "Client"
+        '
+        'pnlServeis
+        '
+        Me.pnlServeis.AutoScroll = True
+        Me.pnlServeis.Controls.Add(Me.Llocs_serveis_preu_unTextBox)
+        Me.pnlServeis.Controls.Add(Me.Llocs_serveis_quantitatTextBox)
+        Me.pnlServeis.Controls.Add(Me.Label8)
+        Me.pnlServeis.Controls.Add(Llocs_serveis_preu_unLabel)
+        Me.pnlServeis.Controls.Add(Me.txtUnitat)
+        Me.pnlServeis.Controls.Add(Llocs_serveis_quantitatLabel)
+        Me.pnlServeis.Controls.Add(Serveis_nomLabel)
+        Me.pnlServeis.Controls.Add(Me.Serveis_nomComboBox)
+        Me.pnlServeis.Controls.Add(Llocs_nomLabel1)
+        Me.pnlServeis.Controls.Add(Me.Llocs_nomTextBox1)
+        Me.pnlServeis.Controls.Add(Me.lblServei)
+        Me.pnlServeis.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.pnlServeis.Location = New System.Drawing.Point(0, 0)
+        Me.pnlServeis.Name = "pnlServeis"
+        Me.pnlServeis.Size = New System.Drawing.Size(373, 493)
+        Me.pnlServeis.TabIndex = 2
+        Me.pnlServeis.Visible = False
+        '
+        'Llocs_serveis_preu_unTextBox
+        '
+        Me.Llocs_serveis_preu_unTextBox.DataBindings.Add(New System.Windows.Forms.Binding("Text", Me.Llocs_ServeisBindingSource, "llocs_serveis_preu_un", True))
+        Me.Llocs_serveis_preu_unTextBox.Location = New System.Drawing.Point(82, 119)
+        Me.Llocs_serveis_preu_unTextBox.MaxLength = 12
+        Me.Llocs_serveis_preu_unTextBox.Name = "Llocs_serveis_preu_unTextBox"
+        Me.Llocs_serveis_preu_unTextBox.Size = New System.Drawing.Size(100, 20)
+        Me.Llocs_serveis_preu_unTextBox.TabIndex = 6
+        Me.Llocs_serveis_preu_unTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        '
+        'Llocs_ServeisBindingSource
+        '
+        Me.Llocs_ServeisBindingSource.DataMember = "LlocsLlocs_Serveis"
+        Me.Llocs_ServeisBindingSource.DataSource = Me.LlocsBindingSource
+        Me.Llocs_ServeisBindingSource.Sort = "llocs_nom, serveis_nom"
+        '
+        'Llocs_serveis_quantitatTextBox
+        '
+        Me.Llocs_serveis_quantitatTextBox.DataBindings.Add(New System.Windows.Forms.Binding("Text", Me.Llocs_ServeisBindingSource, "llocs_serveis_quantitat", True))
+        Me.Llocs_serveis_quantitatTextBox.Location = New System.Drawing.Point(82, 88)
+        Me.Llocs_serveis_quantitatTextBox.MaxLength = 12
+        Me.Llocs_serveis_quantitatTextBox.Name = "Llocs_serveis_quantitatTextBox"
+        Me.Llocs_serveis_quantitatTextBox.Size = New System.Drawing.Size(100, 20)
+        Me.Llocs_serveis_quantitatTextBox.TabIndex = 5
+        Me.Llocs_serveis_quantitatTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        '
+        'Label8
+        '
+        Me.Label8.AutoSize = True
+        Me.Label8.Location = New System.Drawing.Point(189, 122)
+        Me.Label8.Name = "Label8"
+        Me.Label8.Size = New System.Drawing.Size(13, 13)
+        Me.Label8.TabIndex = 10
+        Me.Label8.Text = "€"
+        '
+        'txtUnitat
+        '
+        Me.txtUnitat.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtUnitat.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.txtUnitat.DataBindings.Add(New System.Windows.Forms.Binding("Text", Me.ServeisBindingSource, "serveis_unitat", True))
+        Me.txtUnitat.Location = New System.Drawing.Point(188, 91)
+        Me.txtUnitat.Name = "txtUnitat"
+        Me.txtUnitat.ReadOnly = True
+        Me.txtUnitat.Size = New System.Drawing.Size(171, 13)
+        Me.txtUnitat.TabIndex = 7
+        Me.txtUnitat.TabStop = False
+        '
+        'ServeisBindingSource
+        '
+        Me.ServeisBindingSource.DataMember = "Serveis"
+        Me.ServeisBindingSource.DataSource = Me.PlaniFeinesDataSet
+        Me.ServeisBindingSource.Sort = "serveis_nom"
+        '
+        'Serveis_nomComboBox
+        '
+        Me.Serveis_nomComboBox.DataBindings.Add(New System.Windows.Forms.Binding("Text", Me.Llocs_ServeisBindingSource, "serveis_nom", True))
+        Me.Serveis_nomComboBox.DataSource = Me.ServeisBindingSource
+        Me.Serveis_nomComboBox.DisplayMember = "serveis_nom"
+        Me.Serveis_nomComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.Serveis_nomComboBox.FormattingEnabled = True
+        Me.Serveis_nomComboBox.Location = New System.Drawing.Point(82, 57)
+        Me.Serveis_nomComboBox.Name = "Serveis_nomComboBox"
+        Me.Serveis_nomComboBox.Size = New System.Drawing.Size(144, 21)
+        Me.Serveis_nomComboBox.TabIndex = 4
+        Me.Serveis_nomComboBox.ValueMember = "serveis_nom"
+        '
+        'Llocs_nomTextBox1
+        '
+        Me.Llocs_nomTextBox1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Llocs_nomTextBox1.DataBindings.Add(New System.Windows.Forms.Binding("Text", Me.Llocs_ServeisBindingSource, "llocs_nom", True))
+        Me.Llocs_nomTextBox1.Location = New System.Drawing.Point(82, 28)
+        Me.Llocs_nomTextBox1.Name = "Llocs_nomTextBox1"
+        Me.Llocs_nomTextBox1.ReadOnly = True
+        Me.Llocs_nomTextBox1.Size = New System.Drawing.Size(277, 20)
+        Me.Llocs_nomTextBox1.TabIndex = 2
+        Me.Llocs_nomTextBox1.TabStop = False
+        '
+        'lblServei
+        '
+        Me.lblServei.AutoSize = True
+        Me.lblServei.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblServei.Location = New System.Drawing.Point(4, 4)
+        Me.lblServei.Name = "lblServei"
+        Me.lblServei.Size = New System.Drawing.Size(43, 13)
+        Me.lblServei.TabIndex = 0
+        Me.lblServei.Text = "Servei"
+        '
+        'pnlXecs
+        '
+        Me.pnlXecs.AutoScroll = True
+        Me.pnlXecs.Controls.Add(Me.Label11)
+        Me.pnlXecs.Controls.Add(Me.lblQuants)
+        Me.pnlXecs.Controls.Add(Me.txtQuants)
+        Me.pnlXecs.Controls.Add(Xecs_data_liquidatLabel)
+        Me.pnlXecs.Controls.Add(Me.Xecs_data_liquidatTextBox)
+        Me.pnlXecs.Controls.Add(Feines_idLabel)
+        Me.pnlXecs.Controls.Add(Me.Feines_idTextBox)
+        Me.pnlXecs.Controls.Add(Xecs_valorLabel)
+        Me.pnlXecs.Controls.Add(Me.Xecs_valorTextBox)
+        Me.pnlXecs.Controls.Add(Me.Xecs_idTextBox)
+        Me.pnlXecs.Controls.Add(Label9)
+        Me.pnlXecs.Controls.Add(Xecs_data_entregaLabel)
+        Me.pnlXecs.Controls.Add(Me.Xecs_data_entregaDateTimePicker)
+        Me.pnlXecs.Controls.Add(Me.Clients_nomTextBox2)
+        Me.pnlXecs.Controls.Add(Xecs_idLabel)
+        Me.pnlXecs.Controls.Add(Me.lblXec)
+        Me.pnlXecs.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.pnlXecs.Location = New System.Drawing.Point(0, 0)
+        Me.pnlXecs.Name = "pnlXecs"
+        Me.pnlXecs.Size = New System.Drawing.Size(373, 493)
+        Me.pnlXecs.TabIndex = 3
+        Me.pnlXecs.Visible = False
+        '
+        'Label11
+        '
+        Me.Label11.AutoSize = True
+        Me.Label11.Location = New System.Drawing.Point(202, 109)
+        Me.Label11.Name = "Label11"
+        Me.Label11.Size = New System.Drawing.Size(13, 13)
+        Me.Label11.TabIndex = 15
+        Me.Label11.Text = "€"
+        '
+        'lblQuants
+        '
+        Me.lblQuants.AutoSize = True
+        Me.lblQuants.Location = New System.Drawing.Point(209, 53)
+        Me.lblQuants.Name = "lblQuants"
+        Me.lblQuants.Size = New System.Drawing.Size(44, 13)
+        Me.lblQuants.TabIndex = 14
+        Me.lblQuants.Text = "Quants:"
+        '
+        'txtQuants
+        '
+        Me.txtQuants.Location = New System.Drawing.Point(262, 50)
+        Me.txtQuants.MaxLength = 3
+        Me.txtQuants.Name = "txtQuants"
+        Me.txtQuants.Size = New System.Drawing.Size(40, 20)
+        Me.txtQuants.TabIndex = 6
+        '
+        'Xecs_data_liquidatTextBox
+        '
+        Me.Xecs_data_liquidatTextBox.DataBindings.Add(New System.Windows.Forms.Binding("Text", Me.XecsBindingSource, "xecs_data_liquidat", True))
+        Me.Xecs_data_liquidatTextBox.Location = New System.Drawing.Point(99, 158)
+        Me.Xecs_data_liquidatTextBox.Name = "Xecs_data_liquidatTextBox"
+        Me.Xecs_data_liquidatTextBox.ReadOnly = True
+        Me.Xecs_data_liquidatTextBox.Size = New System.Drawing.Size(100, 20)
+        Me.Xecs_data_liquidatTextBox.TabIndex = 12
+        Me.Xecs_data_liquidatTextBox.TabStop = False
+        '
+        'XecsBindingSource
+        '
+        Me.XecsBindingSource.DataMember = "Xecs"
+        Me.XecsBindingSource.DataSource = Me.PlaniFeinesDataSet
+        Me.XecsBindingSource.Sort = "xecs_id"
+        '
+        'Feines_idTextBox
+        '
+        Me.Feines_idTextBox.DataBindings.Add(New System.Windows.Forms.Binding("Text", Me.XecsBindingSource, "feines_id", True))
+        Me.Feines_idTextBox.Location = New System.Drawing.Point(99, 132)
+        Me.Feines_idTextBox.Name = "Feines_idTextBox"
+        Me.Feines_idTextBox.ReadOnly = True
+        Me.Feines_idTextBox.Size = New System.Drawing.Size(100, 20)
+        Me.Feines_idTextBox.TabIndex = 10
+        Me.Feines_idTextBox.TabStop = False
+        '
+        'Xecs_valorTextBox
+        '
+        Me.Xecs_valorTextBox.DataBindings.Add(New System.Windows.Forms.Binding("Text", Me.XecsBindingSource, "xecs_valor", True))
+        Me.Xecs_valorTextBox.Location = New System.Drawing.Point(98, 106)
+        Me.Xecs_valorTextBox.Name = "Xecs_valorTextBox"
+        Me.Xecs_valorTextBox.Size = New System.Drawing.Size(100, 20)
+        Me.Xecs_valorTextBox.TabIndex = 7
+        Me.Xecs_valorTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        '
+        'Xecs_idTextBox
+        '
+        Me.Xecs_idTextBox.DataBindings.Add(New System.Windows.Forms.Binding("Text", Me.XecsBindingSource, "xecs_id", True))
+        Me.Xecs_idTextBox.Location = New System.Drawing.Point(98, 51)
+        Me.Xecs_idTextBox.MaxLength = 5
+        Me.Xecs_idTextBox.Name = "Xecs_idTextBox"
+        Me.Xecs_idTextBox.Size = New System.Drawing.Size(100, 20)
+        Me.Xecs_idTextBox.TabIndex = 5
+        '
+        'Xecs_data_entregaDateTimePicker
+        '
+        Me.Xecs_data_entregaDateTimePicker.DataBindings.Add(New System.Windows.Forms.Binding("Value", Me.XecsBindingSource, "xecs_data_entrega", True))
+        Me.Xecs_data_entregaDateTimePicker.Format = System.Windows.Forms.DateTimePickerFormat.[Short]
+        Me.Xecs_data_entregaDateTimePicker.Location = New System.Drawing.Point(98, 77)
+        Me.Xecs_data_entregaDateTimePicker.Name = "Xecs_data_entregaDateTimePicker"
+        Me.Xecs_data_entregaDateTimePicker.Size = New System.Drawing.Size(99, 20)
+        Me.Xecs_data_entregaDateTimePicker.TabIndex = 6
+        '
+        'Clients_nomTextBox2
+        '
+        Me.Clients_nomTextBox2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Clients_nomTextBox2.DataBindings.Add(New System.Windows.Forms.Binding("Text", Me.XecsBindingSource, "clients_nom", True))
+        Me.Clients_nomTextBox2.Location = New System.Drawing.Point(99, 24)
+        Me.Clients_nomTextBox2.Name = "Clients_nomTextBox2"
+        Me.Clients_nomTextBox2.ReadOnly = True
+        Me.Clients_nomTextBox2.Size = New System.Drawing.Size(260, 20)
+        Me.Clients_nomTextBox2.TabIndex = 4
+        Me.Clients_nomTextBox2.TabStop = False
+        '
+        'lblXec
+        '
+        Me.lblXec.AutoSize = True
+        Me.lblXec.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblXec.Location = New System.Drawing.Point(4, 4)
+        Me.lblXec.Name = "lblXec"
+        Me.lblXec.Size = New System.Drawing.Size(29, 13)
+        Me.lblXec.TabIndex = 0
+        Me.lblXec.Text = "Xec"
         '
         'TabPageRecursosIServeis
         '
@@ -2749,7 +2754,7 @@ Partial Class frmPrincipal
         Me.PlaniMonthViewFins.MaximumSize = New System.Drawing.Size(234, 150)
         Me.PlaniMonthViewFins.MinimumSize = New System.Drawing.Size(234, 150)
         Me.PlaniMonthViewFins.Name = "PlaniMonthViewFins"
-        Me.PlaniMonthViewFins.SelectedDate = New Date(2019, 4, 18, 0, 0, 0, 0)
+        Me.PlaniMonthViewFins.SelectedDate = New Date(2019, 4, 22, 0, 0, 0, 0)
         Me.PlaniMonthViewFins.Size = New System.Drawing.Size(234, 150)
         Me.PlaniMonthViewFins.TabIndex = 10
         '
@@ -2763,7 +2768,7 @@ Partial Class frmPrincipal
         Me.PlaniMonthViewDesDe.MaximumSize = New System.Drawing.Size(234, 150)
         Me.PlaniMonthViewDesDe.MinimumSize = New System.Drawing.Size(234, 150)
         Me.PlaniMonthViewDesDe.Name = "PlaniMonthViewDesDe"
-        Me.PlaniMonthViewDesDe.SelectedDate = New Date(2019, 4, 18, 0, 0, 0, 0)
+        Me.PlaniMonthViewDesDe.SelectedDate = New Date(2019, 4, 22, 0, 0, 0, 0)
         Me.PlaniMonthViewDesDe.Size = New System.Drawing.Size(234, 150)
         Me.PlaniMonthViewDesDe.TabIndex = 9
         '
@@ -2790,11 +2795,13 @@ Partial Class frmPrincipal
         Me.LlocsClientBindingSource.AllowNew = True
         Me.LlocsClientBindingSource.DataMember = "ClientsLlocs"
         Me.LlocsClientBindingSource.DataSource = Me.ClientsBindingSource
+        Me.LlocsClientBindingSource.Sort = "clients_nom, llocs_nom"
         '
         'Recursos_ComponentsBindingSource
         '
         Me.Recursos_ComponentsBindingSource.DataMember = "RecursosRecursos_Components"
         Me.Recursos_ComponentsBindingSource.DataSource = Me.RecursosBindingSource
+        Me.Recursos_ComponentsBindingSource.Sort = "recursos_nom, recursos_component_nom"
         '
         'StatusStrip1
         '
@@ -2866,7 +2873,7 @@ Partial Class frmPrincipal
         '
         'ClientsTableAdapter
         '
-        Me.ClientsTableAdapter.ClearBeforeFill = False
+        Me.ClientsTableAdapter.ClearBeforeFill = True
         '
         'TableAdapterManager
         '
@@ -2890,7 +2897,7 @@ Partial Class frmPrincipal
         '
         'LlocsTableAdapter
         '
-        Me.LlocsTableAdapter.ClearBeforeFill = False
+        Me.LlocsTableAdapter.ClearBeforeFill = True
         '
         'Recursos_ComponentsTableAdapter
         '
@@ -2898,7 +2905,7 @@ Partial Class frmPrincipal
         '
         'RecursosTableAdapter
         '
-        Me.RecursosTableAdapter.ClearBeforeFill = False
+        Me.RecursosTableAdapter.ClearBeforeFill = True
         '
         'ServeisTableAdapter
         '
@@ -2956,6 +2963,8 @@ Partial Class frmPrincipal
         Me.SplitContainer3.Panel2.ResumeLayout(False)
         CType(Me.SplitContainer3, System.ComponentModel.ISupportInitialize).EndInit()
         Me.SplitContainer3.ResumeLayout(False)
+        Me.pnlLlocs.ResumeLayout(False)
+        Me.pnlLlocs.PerformLayout()
         Me.pnlClients.ResumeLayout(False)
         Me.pnlClients.PerformLayout()
         Me.pnlServeis.ResumeLayout(False)
@@ -2965,8 +2974,6 @@ Partial Class frmPrincipal
         Me.pnlXecs.ResumeLayout(False)
         Me.pnlXecs.PerformLayout()
         CType(Me.XecsBindingSource, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.pnlLlocs.ResumeLayout(False)
-        Me.pnlLlocs.PerformLayout()
         Me.TabPageRecursosIServeis.ResumeLayout(False)
         Me.SplitContainer6.Panel1.ResumeLayout(False)
         Me.SplitContainer6.Panel2.ResumeLayout(False)

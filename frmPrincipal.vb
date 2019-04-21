@@ -306,12 +306,14 @@
             Catch ex As Exception
                 auxTsIni = New TimeSpan(0)
             End Try
+
             Try
                 auxTsFi = TimeSpan.Parse(Convert.ToString(RDSelFeinesRecurs.Item("feines_hora_fi")))
             Catch ex As Exception
                 auxTsFi = New TimeSpan(auxTsIni.Ticks)
                 auxTsFi += New TimeSpan(0, AgendaGrid.MinutesGap, 0)
             End Try
+
             auxDataHoraIni = Convert.ToDateTime(RDSelFeinesRecurs.Item("feines_data")) + auxTsIni
             auxDataHoraFi = Convert.ToDateTime(RDSelFeinesRecurs.Item("feines_data")) + auxTsFi
 
@@ -342,7 +344,7 @@
             CMDServeisFeina.Parameters.Item("@feina").Value = auxId
             RDServeisFeina = CMDServeisFeina.ExecuteReader
             While RDServeisFeina.Read
-                If RDServeisFeina.Item("serveis_comu_per_recursos") Then
+                If Not RDServeisFeina.Item("serveis_comu_per_recursos") Then
                     auxDuradaNoComp += New TimeSpan(0, RDServeisFeina.Item("feines_detall_quantitat") * RDServeisFeina.Item("serveis_minuts_per_unitat"), 0)
                     'Else
                     'auxDuradaComp += New TimeSpan(0, RDServeisFeina.Item("feines_detall_quantitat") * RDServeisFeina.Item("serveis_minuts_per_unitat"), 0)
@@ -413,7 +415,7 @@
         Dim auxRecurs As String
         Dim auxColor As Color
         Dim auxColorRecursFeina As Color
-        Dim auxDuradaComp As TimeSpan
+        'Dim auxDuradaComp As TimeSpan
         Dim auxDuradaNoComp As TimeSpan
 
         'If Not ConnexioConfigurada() Then Return Nothing
@@ -501,14 +503,14 @@
 
         'obtenim els serveis de la feina per calcular les durades
         auxDuradaNoComp = TimeSpan.Zero
-        auxDuradaComp = TimeSpan.Zero
+        'auxDuradaComp = TimeSpan.Zero
         CMDServeis.Parameters.Item("@feina").Value = pFeinaId
         RDServeis = CMDServeis.ExecuteReader
         While RDServeis.Read
-            If RDServeis.Item("serveis_comu_per_recursos") Then
+            If Not RDServeis.Item("serveis_comu_per_recursos") Then
                 auxDuradaNoComp += New TimeSpan(0, RDServeis.Item("feines_detall_quantitat") * RDServeis.Item("serveis_minuts_per_unitat"), 0)
-            Else
-                auxDuradaComp += New TimeSpan(0, RDServeis.Item("feines_detall_quantitat") * RDServeis.Item("serveis_minuts_per_unitat"), 0)
+                'Else
+                'auxDuradaComp += New TimeSpan(0, RDServeis.Item("feines_detall_quantitat") * RDServeis.Item("serveis_minuts_per_unitat"), 0)
             End If
         End While
         RDServeis.Close()
@@ -1923,10 +1925,10 @@
             For Each s In auxServeisLloc
                 auxServei = PlaniFeinesDataSet.Serveis.FindByserveis_nom(s.serveis_nom)
                 If Not IsDBNull(auxServei) Then
-                    If Not auxServei.serveis_comu_per_recursos Then
-                        Calcular_minuts_serveis = Calcular_minuts_serveis + (s.llocs_serveis_quantitat * auxServei.serveis_minuts_per_unitat)
-                    Else
+                    If auxServei.serveis_comu_per_recursos Then
                         Calcular_minuts_serveis = Calcular_minuts_serveis + ((s.llocs_serveis_quantitat * auxServei.serveis_minuts_per_unitat) / pNRecursos)
+                    Else
+                        Calcular_minuts_serveis = Calcular_minuts_serveis + (s.llocs_serveis_quantitat * auxServei.serveis_minuts_per_unitat)
                     End If
                 End If
             Next
@@ -2473,11 +2475,13 @@
         filtreServeis = PlaniFeinesDataSet.Llocs_Serveis.DefaultView
         filtreXecs = PlaniFeinesDataSet.Xecs.DefaultView
 
+        PlaniFeinesDataSet.Clients.DefaultView.Sort = "clients_nom ASC"
+
         auxNodeClient = tvClients.Nodes.Add(NOUCLIENT)
         auxNodeClient.ToolTipText = "Fés click per afegir un client."
         auxNodeClient.NodeFont = auxFontBold
 
-        For Each regClient In PlaniFeinesDataSet.Clients
+        For Each regClient In PlaniFeinesDataSet.Clients.DefaultView
             auxNodeClient = tvClients.Nodes.Add(Trim(regClient("clients_nom")))
             auxNodeLlocs = auxNodeClient.Nodes.Add(LLOCS)
             auxNodeLlocs.ToolTipText = "Fés click per afegir un lloc al client."
@@ -2542,11 +2546,13 @@
                 If e.Node.Text = NOUCLIENT Then
                     lblClient.Text = "Afegir client"
                     ClientsBindingSource.AddNew()
+                    Clients_nomTextBox.Enabled = True
                     pnlClients.Visible = True
                     Clients_nomTextBox.Focus()
                 Else
                     auxClient = e.Node.Text
                     lblClient.Text = "Modificar client"
+                    'ens posicionem al client
                     ClientsBindingSource.Position = ClientsBindingSource.Find("clients_nom", auxClient)
                     'no es pot modificar el client festius
                     If Clients_nomTextBox.Text = FESTIU Then
@@ -2562,11 +2568,18 @@
                 auxClient = e.Node.Parent.Text
                 If e.Node.Text = LLOCS Then
                     lblLloc.Text = "Afegir lloc"
+                    'ens posicionem al client
+                    ClientsBindingSource.Position = ClientsBindingSource.Find("clients_nom", auxClient)
                     LlocsBindingSource.AddNew()
                     pnlLlocs.Visible = True
                     Clients_nomTextBox1.Text = auxClient
+                    cmbDiesSetmana.SelectedIndex = 0
+                    Llocs_dia_setmanaTextBox.Text = "0"
+                    Llocs_nomTextBox.Focus()
                 Else 'xecs
                     lblXec.Text = "Afegir xec"
+                    'ens posicionem al client
+                    ClientsBindingSource.Position = ClientsBindingSource.Find("clients_nom", auxClient)
                     XecsBindingSource.AddNew()
                     pnlXecs.Visible = True
                     Clients_nomTextBox2.Text = auxClient
@@ -2642,7 +2655,7 @@
 
     End Sub
 
-    Private Sub tvClients_BeforeSelect(ByVal sender As Object, ByVal e As System.Windows.Forms.TreeViewCancelEventArgs) Handles tvClients.BeforeSelect
+    Private Sub tvClients_BeforeSelect(ByVal sender As Object, ByVal e As TreeViewCancelEventArgs) Handles tvClients.BeforeSelect
         Dim auxnode2 As TreeNode  'node seleccionat abans
 
         'si seleccionem un node client, colapsem l'altre client que hi hagi seleccionat
@@ -2689,12 +2702,16 @@
                 Exit Sub
             End Try
 
-            'actualitzem controls associats
-            ClientsBindingSource.ResetBindings(False)
-
             'recarreguem taules filles per si s'ha canviat el nom del client
             Me.LlocsTableAdapter.Fill(Me.PlaniFeinesDataSet.Llocs)
+            Me.Llocs_ServeisTableAdapter.Fill(Me.PlaniFeinesDataSet.Llocs_Serveis)
             Me.XecsTableAdapter.Fill(Me.PlaniFeinesDataSet.Xecs)
+
+            'actualitzem controls associats
+            ClientsBindingSource.ResetBindings(False)
+            LlocsBindingSource.ResetBindings(False)
+            Llocs_ServeisBindingSource.ResetBindings(False)
+            XecsBindingSource.ResetBindings(False)
 
             'ens posicionem al node creat o actualitzem el nom del node modificat
             If tvClients.SelectedNode.Text = NOUCLIENT Then
@@ -2766,8 +2783,10 @@
 
         If e.KeyCode = Keys.Delete Then
 
+            'borrat de client
             If pnlClients.Visible And tvClients.SelectedNode.Text <> NOUCLIENT And tvClients.SelectedNode.Text <> FESTIU Then
                 If MsgBox("Eliminar client '" & tvClients.SelectedNode.Text & "' ?", MsgBoxStyle.YesNo, "CONFIRMACIÓ") = MsgBoxResult.Yes Then
+
                     'borrem el registre 
                     ClientsBindingSource.RemoveCurrent()
 
@@ -2782,21 +2801,27 @@
                         Exit Sub
                     End Try
 
-                    'actualitzem controls associats
-                    ClientsBindingSource.ResetBindings(False)
-
                     'recarreguem taules filles perque s'ha eliminat el client
                     Me.LlocsTableAdapter.Fill(Me.PlaniFeinesDataSet.Llocs)
+                    Me.Llocs_ServeisTableAdapter.Fill(Me.PlaniFeinesDataSet.Llocs_Serveis)
                     Me.XecsTableAdapter.Fill(Me.PlaniFeinesDataSet.Xecs)
-                    'falte fill pagaments
+                    'falte fill pagaments??
+
+                    'actualitzem controls associats
+                    ClientsBindingSource.ResetBindings(False)
+                    LlocsBindingSource.ResetBindings(False)
+                    Llocs_ServeisBindingSource.ResetBindings(False)
+                    XecsBindingSource.ResetBindings(False)
 
                     'borrem el node
                     tvClients.SelectedNode.Remove()
                 End If
             End If
 
+            'borrat de lloc
             If pnlLlocs.Visible And tvClients.SelectedNode.Text <> LLOCS And tvClients.SelectedNode.Text <> FESTIU Then
                 If MsgBox("Eliminar lloc '" & tvClients.SelectedNode.Text & "' ?", MsgBoxStyle.YesNo, "CONFIRMACIÓ") = MsgBoxResult.Yes Then
+
                     'borrem el registre
                     LlocsBindingSource.RemoveCurrent()
 
@@ -2814,13 +2839,19 @@
                     'recarreguem llocs_serveis perque s'ha eliminat el lloc
                     Me.Llocs_ServeisTableAdapter.Fill(Me.PlaniFeinesDataSet.Llocs_Serveis)
 
+                    'actualitzem controls associats
+                    LlocsBindingSource.ResetBindings(False)
+                    Llocs_ServeisBindingSource.ResetBindings(False)
+
                     'borrem node
                     tvClients.SelectedNode.Remove()
                 End If
             End If
 
+            'borrat de servei de lloc
             If pnlServeis.Visible And tvClients.SelectedNode.Text <> SERVEIS And tvClients.SelectedNode.Text <> FESTIU Then
                 If MsgBox("Eliminar servei '" & tvClients.SelectedNode.Text & "' del lloc '" & Llocs_nomTextBox1.Text & "'?", MsgBoxStyle.YesNo, "CONFIRMACIÓ") = MsgBoxResult.Yes Then
+
                     'borrem el registre
                     Llocs_ServeisBindingSource.RemoveCurrent()
 
@@ -2834,12 +2865,19 @@
                         Carrega_TreeView_Clients()
                         Exit Sub
                     End Try
+
                     Actualitzar_minuts_previst_lloc_actual()
+
+                    'actualitzem controls associats
+                    LlocsBindingSource.ResetBindings(False)
+                    Llocs_ServeisBindingSource.ResetBindings(False)
+
                     'borrem el node
                     tvClients.SelectedNode.Remove()
                 End If
             End If
 
+            'borrat de xec de client
             If pnlXecs.Visible And tvClients.SelectedNode.Text <> XECS Then
                 If MsgBox("Eliminar xec '" & tvClients.SelectedNode.Text & "' del client '" & Clients_nomTextBox2.Text & "'?", MsgBoxStyle.YesNo, "CONFIRMACIÓ") = MsgBoxResult.Yes Then
 
@@ -2862,6 +2900,9 @@
                         Carrega_TreeView_Clients()
                         Exit Sub
                     End Try
+                    'actualitzem controls associats
+                    XecsBindingSource.ResetBindings(False)
+
                     'borrem el node
                     tvClients.SelectedNode.Remove()
                 End If
@@ -2872,7 +2913,7 @@
     End Sub
 
     Private Sub cmbDiesSetmana_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmbDiesSetmana.SelectedIndexChanged
-        Llocs_dia_setmanaTextBox.Text = cmbDiesSetmana.SelectedIndex
+        Llocs_dia_setmanaTextBox.Text = IIf(cmbDiesSetmana.SelectedIndex < 0, 0, cmbDiesSetmana.SelectedIndex)
     End Sub
 
     Private Sub Llocs_dia_setmanaTextBox_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Llocs_dia_setmanaTextBox.TextChanged
@@ -2904,11 +2945,12 @@
                 Exit Sub
             End Try
 
-            'actualitzem controls associats
-            LlocsBindingSource.ResetBindings(False)
-
             'recarreguem llocs_serveis per si s'ha canviat el nom del lloc
             Me.Llocs_ServeisTableAdapter.Fill(Me.PlaniFeinesDataSet.Llocs_Serveis)
+
+            'actualitzem controls associats
+            LlocsBindingSource.ResetBindings(False)
+            Llocs_ServeisBindingSource.ResetBindings(False)
 
             'recarreguem per crear node i fills o actualitzem el nom del node modificat
             If tvClients.SelectedNode.Level = 1 Then    'nou lloc
@@ -2934,7 +2976,6 @@
 
         ToolStripStatusLabel2.Text = ""
         eCancel = False
-
 
         Llocs_nomTextBox.Text = Trim(Llocs_nomTextBox.Text)
 
@@ -3684,6 +3725,9 @@
         auxlloc = Trim(LlocsSelDataGridView.Item("llocs_nom", e.RowIndex).Value.ToString)
         auxclient = Trim(LlocsSelDataGridView.Item("clients_nom", e.RowIndex).Value.ToString)
 
+        'canviem a la pestanya clients
+        TabControl1.SelectedTab = TabControl1.TabPages("TabPageClients")
+
         'ens posicionem al treeview 
         tvClients.CollapseAll()
         For Each n1 In tvClients.Nodes
@@ -3708,8 +3752,6 @@
             End If
         Next
 
-        'canviem a la pestanya clients
-        TabControl1.SelectedTab = TabControl1.TabPages("TabPageClients")
 
     End Sub
 
@@ -3787,9 +3829,9 @@
             RDSel = CMDSel.ExecuteReader
             While RDSel.Read
                 If RDSel.GetBoolean(RDSel.GetOrdinal("serveis_comu_per_recursos")) Then
-                    auxNonShared += New TimeSpan(0, CInt(RDSel.GetFloat(RDSel.GetOrdinal("llocs_serveis_quantitat")) * RDSel.GetInt16(RDSel.GetOrdinal("serveis_minuts_per_unitat"))), 0)
-                Else
                     auxShared += New TimeSpan(0, CInt(RDSel.GetFloat(RDSel.GetOrdinal("llocs_serveis_quantitat")) * RDSel.GetInt16(RDSel.GetOrdinal("serveis_minuts_per_unitat"))), 0)
+                Else
+                    auxNonShared += New TimeSpan(0, CInt(RDSel.GetFloat(RDSel.GetOrdinal("llocs_serveis_quantitat")) * RDSel.GetInt16(RDSel.GetOrdinal("serveis_minuts_per_unitat"))), 0)
                 End If
             End While
             TancarConnexio()
@@ -4860,8 +4902,19 @@
     Private Sub ServeisDataGridView_CellFormatting(sender As Object, e As DataGridViewCellFormattingEventArgs) Handles ServeisDataGridView.CellFormatting
         'columna comú per recursos
         If e.ColumnIndex = 4 Then
-            ServeisDataGridView.Rows(e.RowIndex).Cells(e.ColumnIndex).ToolTipText = "Fés click si la duració del servei no depén de la quantitat de recursos."
+            ServeisDataGridView.Rows(e.RowIndex).Cells(e.ColumnIndex).ToolTipText = "Marca'l si la duració del servei depén de la quantitat de recursos assignats."
         End If
+    End Sub
+
+    Private Sub TabPageClients_Enter(sender As Object, e As EventArgs) Handles TabPageClients.Enter
+        'des-ordenem els llocs pel nom (si no dona error LlocsBindingSource.EndEdit)
+        LlocsBindingSource.RemoveSort()
+    End Sub
+
+    Private Sub TabPageClients_Leave(sender As Object, e As EventArgs) Handles TabPageClients.Leave
+        'ordenem els llocs pel nom
+        LlocsBindingSource.Sort = "llocs_nom"
+        LlocsBindingSource.MoveFirst()
     End Sub
 
     'Private Sub frmPrincipal_SizeChanged(sender As Object, e As EventArgs) Handles Me.SizeChanged
