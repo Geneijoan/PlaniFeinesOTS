@@ -965,7 +965,7 @@ Partial Public Class PlaniFeinesDataSet
             Me.columnclients_telefons.MaxLength = 50
             Me.columnclients_observacions.MaxLength = 536870910
             Me.columnclients_xecs.DefaultValue = CType(false,Boolean)
-            Me.columnclients_ccc.MaxLength = 23
+            Me.columnclients_ccc.MaxLength = 50
             Me.columnclients_email.MaxLength = 50
         End Sub
         
