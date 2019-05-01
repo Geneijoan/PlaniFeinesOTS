@@ -329,8 +329,8 @@ Public Class frmFeina
         If e.KeyChar = Microsoft.VisualBasic.ChrW(Keys.Return) And Not pModeConsulta Then
 
             'no permet servei festiu si el lloc no és festiu
-            If txtLloc.Text <> frmPrincipal.FESTIU And cmbServeis.Text = frmPrincipal.FESTIU Then
-                MsgBox("El servei " & frmPrincipal.FESTIU & " només és pel lloc " & frmPrincipal.FESTIU, MsgBoxStyle.OkOnly, "ERROR")
+            If Not EsFestiu(txtLloc.Text) And EsFestiu(cmbServeis.Text) Then
+                MsgBox("Els serveis no treballats només son pels llocs festius/varis.", MsgBoxStyle.OkOnly, "ERROR")
                 cmbServeis.SelectedIndex = -1
                 txtQuantitat.Text = ""
                 txtPreu.Text = ""
@@ -338,8 +338,8 @@ Public Class frmFeina
             End If
 
             'només permet servei festiu si el lloc és festiu
-            If txtLloc.Text = frmPrincipal.FESTIU And cmbServeis.Text <> frmPrincipal.FESTIU Then
-                MsgBox("El lloc " & frmPrincipal.FESTIU & " només permet el servei " & frmPrincipal.FESTIU, MsgBoxStyle.OkOnly, "ERROR")
+            If EsFestiu(txtLloc.Text) And Not EsFestiu(cmbServeis.Text) Then
+                MsgBox("En llocs festius/varis només es permet serveis no treballats.", MsgBoxStyle.OkOnly, "ERROR")
                 cmbServeis.SelectedIndex = -1
                 txtQuantitat.Text = ""
                 txtPreu.Text = ""

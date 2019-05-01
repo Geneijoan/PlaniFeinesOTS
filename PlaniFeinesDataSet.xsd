@@ -855,7 +855,7 @@
         <xs:element name="Clients" msprop:Generator_TableClassName="ClientsDataTable" msprop:Generator_TableVarName="tableClients" msprop:Generator_RowChangedName="ClientsRowChanged" msprop:Generator_TablePropName="Clients" msprop:Generator_RowDeletingName="ClientsRowDeleting" msprop:Generator_RowChangingName="ClientsRowChanging" msprop:Generator_RowEvHandlerName="ClientsRowChangeEventHandler" msprop:Generator_RowDeletedName="ClientsRowDeleted" msprop:Generator_RowClassName="ClientsRow" msprop:Generator_UserTableName="Clients" msprop:Generator_RowEvArgName="ClientsRowChangeEvent">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="clients_nom" msprop:nullValue="_empty" msprop:Generator_ColumnPropNameInRow="clients_nom" msprop:Generator_ColumnVarNameInTable="columnclients_nom" msprop:Generator_ColumnPropNameInTable="clients_nomColumn" msprop:Generator_UserColumnName="clients_nom">
+              <xs:element name="clients_nom" msprop:nullValue="_empty" msprop:Generator_ColumnPropNameInRow="clients_nom" msprop:Generator_ColumnVarNameInTable="columnclients_nom" msprop:Generator_ColumnPropNameInTable="clients_nomColumn" msprop:Generator_UserColumnName="clients_nom" minOccurs="0">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="50" />

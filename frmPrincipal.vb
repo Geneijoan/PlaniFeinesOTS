@@ -11,7 +11,6 @@
     Public COSTHORAXEC As Decimal            'cost de l'hora amb xec assignat
     Public NMAXXECSMES As Integer            'nro. maxim de xec/mes per client
     Public SERVEIXECS As String              'nom del servei al que apliquen els xecs
-    Public FESTIU As String                  'nom del servei pels dies festius
 
     'auxiliar per components de recurs
     Private Structure RecursComponent
@@ -127,7 +126,6 @@
         NMAXXECSMES = CInt(mINI.IniGet(ficINI, "Parametres", "MaxXecsMes"))
 
         SERVEIXECS = mINI.IniGet(ficINI, "Parametres", "ServeiXecs")
-        FESTIU = mINI.IniGet(ficINI, "Parametres", "Festius")
 
         ULTDIAGENERAT = CDate(mINI.IniGet(ficINI, "Estat", "UltimDiaGen"))
 
@@ -1604,7 +1602,7 @@
 
         While RDSelFeines.Read
             'no comptem els festius
-            If RDSelFeines.Item("llocs_nom") <> FESTIU Then
+            If Not EsFestiu(RDSelFeines.Item("llocs_nom")) Then
                 Try
                     HoraIniFeina = TimeSpan.Parse(Convert.ToString(RDSelFeines.Item("feines_hora_inici")))
                 Catch ex As Exception
@@ -1707,7 +1705,7 @@
             While RDSelFeines.Read
 
                 'no comptem els festius
-                If RDSelFeines.Item("llocs_nom") <> FESTIU Then
+                If Not EsFestiu(RDSelFeines.Item("llocs_nom")) Then
 
                     If auxdate = Date.MinValue Then
                         auxdate = RDSelFeines.Item("feines_data")
@@ -2360,10 +2358,13 @@
 
     Private Sub ServeisDataGridView_RowValidating(ByVal sender As Object, ByVal e As System.Windows.Forms.DataGridViewCellCancelEventArgs) Handles ServeisDataGridView.RowValidating
         Dim auxNomServei As String
+        Dim auxComptaFestius As Integer
 
         ServeisDataGridView.Rows(e.RowIndex).ErrorText = String.Empty
 
-        If ServeisDataGridView.CurrentRow.IsNewRow Then Exit Sub
+        If ServeisDataGridView.CurrentRow.IsNewRow Then
+            Exit Sub
+        End If
 
         auxNomServei = ServeisDataGridView.Item("cNomServei", e.RowIndex).Value
 
@@ -2374,14 +2375,24 @@
             Exit Sub
         End If
 
-        'El nom del servei ha de ser unic
         For i = 0 To ServeisDataGridView.RowCount - 1
+            'El nom del servei ha de ser unic
             If i <> e.RowIndex And auxNomServei = ServeisDataGridView.Item("cNomServei", i).Value Then
                 ServeisDataGridView.Rows(e.RowIndex).ErrorText = "ERROR: El nom del servei ha de ser únic."
                 e.Cancel = True
                 Exit Sub
             End If
+            'només hi pot haver un servei festiu
+            If EsFestiu(ServeisDataGridView.Item("cNomServei", i).Value) Then
+                auxComptaFestius = auxComptaFestius + 1
+            End If
         Next
+
+        If auxComptaFestius > 1 Then
+            ServeisDataGridView.Rows(e.RowIndex).ErrorText = "ERROR: Només hi pot haver un servei no treballat (que comenci amb '*')."
+            e.Cancel = True
+            Exit Sub
+        End If
 
         'cal informar la unitat del servei
         If ServeisDataGridView.Item("cUnitatServei", e.RowIndex).Value = "" Then
@@ -2409,8 +2420,8 @@
         Dim RDDetallFeines As OleDbDataReader
 
         'no es pot borrar festius
-        If e.Row.Cells("cNomServei").Value = FESTIU Then
-            ServeisDataGridView.Rows(e.Row.Index).ErrorText = "El servei " & FESTIU & " no es pot eliminar."
+        If EsFestiu(e.Row.Cells("cNomServei").Value) Then
+            ServeisDataGridView.Rows(e.Row.Index).ErrorText = "Els serveis no treballats no es poden eliminar."
             e.Cancel = True
             Exit Sub
         End If
@@ -2554,8 +2565,8 @@
                     lblClient.Text = "Modificar client"
                     'ens posicionem al client
                     ClientsBindingSource.Position = ClientsBindingSource.Find("clients_nom", auxClient)
-                    'no es pot modificar el client festius
-                    If Clients_nomTextBox.Text = FESTIU Then
+                    'no es poden modificar els clients festius
+                    If EsFestiu(Clients_nomTextBox.Text) Then
                         Clients_nomTextBox.Enabled = False
                     Else
                         Clients_nomTextBox.Enabled = True
@@ -2754,8 +2765,8 @@
         Clients_nomTextBox.Text = Trim(Clients_nomTextBox.Text)
 
         'no es pot modificar el client festius
-        If Clients_nomTextBox.Text = FESTIU Then
-            ToolStripStatusLabel2.Text = "ERROR: No es poden modificar els " & FESTIU
+        If EsFestiu(Clients_nomTextBox.Text) Then
+            ToolStripStatusLabel2.Text = "ERROR: No es pot modificar el client " & Clients_nomTextBox.Text
             'e.Cancel = True
             eCancel = True
             Exit Sub
@@ -2784,7 +2795,7 @@
         If e.KeyCode = Keys.Delete Then
 
             'borrat de client
-            If pnlClients.Visible And tvClients.SelectedNode.Text <> NOUCLIENT And tvClients.SelectedNode.Text <> FESTIU Then
+            If pnlClients.Visible And tvClients.SelectedNode.Text <> NOUCLIENT And Not EsFestiu(tvClients.SelectedNode.Text) Then
                 If MsgBox("Eliminar client '" & tvClients.SelectedNode.Text & "' ?", MsgBoxStyle.YesNo, "CONFIRMACIÓ") = MsgBoxResult.Yes Then
 
                     'borrem el registre 
@@ -2819,7 +2830,7 @@
             End If
 
             'borrat de lloc
-            If pnlLlocs.Visible And tvClients.SelectedNode.Text <> LLOCS And tvClients.SelectedNode.Text <> FESTIU Then
+            If pnlLlocs.Visible And tvClients.SelectedNode.Text <> LLOCS And Not EsFestiu(tvClients.SelectedNode.Text) Then
                 If MsgBox("Eliminar lloc '" & tvClients.SelectedNode.Text & "' ?", MsgBoxStyle.YesNo, "CONFIRMACIÓ") = MsgBoxResult.Yes Then
 
                     'borrem el registre
@@ -2849,7 +2860,7 @@
             End If
 
             'borrat de servei de lloc
-            If pnlServeis.Visible And tvClients.SelectedNode.Text <> SERVEIS And tvClients.SelectedNode.Text <> FESTIU Then
+            If pnlServeis.Visible And tvClients.SelectedNode.Text <> SERVEIS And Not EsFestiu(tvClients.SelectedNode.Text) Then
                 If MsgBox("Eliminar servei '" & tvClients.SelectedNode.Text & "' del lloc '" & Llocs_nomTextBox1.Text & "'?", MsgBoxStyle.YesNo, "CONFIRMACIÓ") = MsgBoxResult.Yes Then
 
                     'borrem el registre
@@ -2979,9 +2990,9 @@
 
         Llocs_nomTextBox.Text = Trim(Llocs_nomTextBox.Text)
 
-        'no es pot modificar el lloc festius
-        If Clients_nomTextBox1.Text = FESTIU Then
-            ToolStripStatusLabel2.Text = "ERROR: No es poden modificar els " & FESTIU
+        'no es pot modificar els festius
+        If EsFestiu(Clients_nomTextBox1.Text) Then
+            ToolStripStatusLabel2.Text = "ERROR: No es pot modificar el client " & Clients_nomTextBox1.Text
             'e.Cancel = True
             eCancel = True
             Exit Sub
@@ -3131,8 +3142,8 @@
         eCancel = False
 
         'no es pot modificar el servei festius
-        If Llocs_nomTextBox1.Text = FESTIU Then
-            ToolStripStatusLabel2.Text = "ERROR: No es poden modificar els " & FESTIU
+        If EsFestiu(Llocs_nomTextBox1.Text) Then
+            ToolStripStatusLabel2.Text = "ERROR: No es pot modificar el lloc " & Llocs_nomTextBox1.Text
             'e.Cancel = True
             eCancel = True
             Exit Sub
@@ -3168,9 +3179,9 @@
             '    Exit Sub
             'End If
 
-            'el servei festiu només es pot seleccionar en el lloc festiu
-            If Serveis_nomComboBox.Text = FESTIU Then
-                ToolStripStatusLabel2.Text = "ERROR: El servei " & FESTIU & " només és pel lloc " & FESTIU
+            'el servei festiu només es pot seleccionar en llocs festius
+            If EsFestiu(Serveis_nomComboBox.Text) Then
+                ToolStripStatusLabel2.Text = "ERROR: Els serveis no treballats només son pels llocs festius/varis."
                 'e.Cancel = True
                 eCancel = True
                 Exit Sub
@@ -4537,7 +4548,7 @@
             cmbSelClients.SelectedIndex = i
 
             'no tractem festius
-            If cmbSelClients.SelectedValue.ToString <> FESTIU Then
+            If Not EsFestiu(cmbSelClients.SelectedValue.ToString) Then
 
                 frmMissatges.txtMissatges.Text = frmMissatges.txtMissatges.Text & "Client: " & cmbSelClients.SelectedValue & vbCrLf
                 frmMissatges.txtMissatges.SelectionStart = frmMissatges.txtMissatges.Text.Length

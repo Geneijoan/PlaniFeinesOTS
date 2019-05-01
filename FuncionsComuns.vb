@@ -96,5 +96,9 @@
         ColorToInteger = ColorTranslator.ToWin32(pcolor)
     End Function
 
+    Public Function EsFestiu(ByVal pconcepte As String) As Boolean
+        Return Left(pconcepte, 1) = "*"
+    End Function
+
 End Module
 
